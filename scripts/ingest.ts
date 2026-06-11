@@ -212,6 +212,15 @@ async function parsePending(limit: number | null, concurrency: number): Promise<
         }
       } catch (e) {
         const message = e instanceof Error ? e.message : String(e);
+        // 429 = daily/minute token cap, not a bad posting — leave it pending
+        // for the next run and stop burning requests against a closed window.
+        if (message.includes("429") || /rate limit/i.test(message)) {
+          console.log(
+            `[${done}/${total}] rate-limited at hn-${row.hnId} — leaving ${queue.length + 1} postings pending; re-run when the window resets`,
+          );
+          queue.length = 0;
+          return;
+        }
         await db
           .update(postings)
           .set({
