@@ -178,8 +178,8 @@ export function Topbar({ sweep, lastSweep, months, onOpenPalette }: TopbarProps)
 
       <button
         type="button"
-        title="Naomi Mercer"
-        aria-label="Account — Naomi Mercer"
+        title="Nico Mastakas"
+        aria-label="Account — Nico Mastakas"
         className={cn(
           "flex shrink-0 cursor-pointer items-center justify-center",
           "[transition:border-color_var(--dur-fast)]",
