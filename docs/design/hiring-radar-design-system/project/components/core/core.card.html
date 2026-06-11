@@ -1,0 +1,76 @@
+<!-- @dsCard group="Components" viewport="700x520" name="Core — Buttons, IconButtons, Icons" subtitle="Actions, icon controls, the Lucide-style glyph set" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-void); color: var(--text-body); padding: 22px; }
+  .row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+  .col { display: flex; flex-direction: column; gap: 10px; }
+  .lbl { font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--text-label); margin-bottom: 10px; }
+  .iconrow { display: grid; grid-template-columns: repeat(11, 1fr); gap: 14px; color: var(--text-mid); }
+  .iconrow > div { display: flex; align-items: center; justify-content: center; }
+  hr { border: 0; border-top: 1px solid var(--divider); margin: 20px 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+  const { Button, IconButton, Icon, Kbd, SectionLabel } = window.HiringRadarDesignSystem_e283cd;
+  const ICONS = ['search','radar','list','bookmark','bot','user','server','settings','play','pause','retry','external-link','copy','kebab','filter','close','check','alert-triangle','signal','database','command','map-pin'];
+  function Demo() {
+    return (
+      <div className="col" style={{ gap: 20 }}>
+        <div>
+          <div className="lbl">Button — variants</div>
+          <div className="row" style={{ marginBottom: 0 }}>
+            <Button variant="primary" iconLeft="play">Run sweep</Button>
+            <Button variant="secondary" iconLeft="filter">Filters</Button>
+            <Button variant="ghost" iconLeft="copy">Copy</Button>
+            <Button variant="destructive" iconLeft="alert-triangle">Discard</Button>
+            <Button variant="primary" loading>Scanning</Button>
+            <Button variant="secondary" disabled>Disabled</Button>
+          </div>
+        </div>
+        <div>
+          <div className="lbl">Button — sizes</div>
+          <div className="row" style={{ marginBottom: 0 }}>
+            <Button size="sm" variant="secondary">Small</Button>
+            <Button size="md" variant="secondary">Medium</Button>
+            <Button size="lg" variant="primary" iconRight="arrow-right">Large</Button>
+          </div>
+        </div>
+        <div>
+          <div className="lbl">IconButton</div>
+          <div className="row" style={{ marginBottom: 0 }}>
+            <IconButton icon="play" label="Run" variant="solid" />
+            <IconButton icon="bookmark" label="Save" active />
+            <IconButton icon="kebab" label="More" />
+            <IconButton icon="retry" label="Retry" loading />
+            <IconButton icon="close" label="Close" variant="danger" />
+            <IconButton icon="settings" label="Settings" disabled />
+            <span style={{ marginLeft: 12, display: 'inline-flex', gap: 4, alignItems: 'center' }}>
+              <Kbd>⌘</Kbd><Kbd>K</Kbd>
+              <span style={{ color: 'var(--text-low-content)', font: 'var(--text-xs)', marginLeft: 6 }}>command palette</span>
+            </span>
+          </div>
+        </div>
+        <div>
+          <div className="lbl">Icon set — 1.5px stroke, currentColor</div>
+          <div className="iconrow">
+            {ICONS.map(n => <div key={n} title={n}><Icon name={n} size={20} /></div>)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

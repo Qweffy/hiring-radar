@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@keyframes hr-think { 0%,100%{opacity:0.45} 50%{opacity:1} }
+.hr-think { animation: hr-think 1.4s ease-in-out infinite; }
+@keyframes hr-livepulse { 0%,100%{box-shadow:inset 3px 0 0 var(--violet), 0 0 0 rgba(167,139,250,0);} 50%{box-shadow:inset 3px 0 0 var(--violet), 0 0 20px rgba(167,139,250,0.22);} }
+.hr-livecard { animation: hr-livepulse 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce){ .hr-think,.hr-livecard{animation:none;} }
+</style>
+</helmet>
+<div style="display:flex; gap:14px; font-family:var(--font-ui);">
+  <div style="position:relative; width:22px; flex-shrink:0;">
+    <div style="position:absolute; left:10px; top:0; bottom:-14px; width:2px; background:rgba(167,139,250,0.26);"></div>
+    <div style="{{ dotStyle }}"></div>
+  </div>
+  <div style="{{ cardStyle }}" class="{{ cardClass }}">
+
+    <!-- TOOL -->
+    <sc-if value="{{ isTool }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; align-items:center; gap:9px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+        <span style="font:var(--mono-base); color:var(--text-hi);">{{ name }}</span>
+        <span style="font:600 9px/1 var(--font-mono); letter-spacing:0.12em; color:var(--text-low); border:1px solid var(--border); border-radius:var(--radius-sm); padding:3px 5px;">TOOL</span>
+      </div>
+      <sc-if value="{{ hasArgs }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ toggle }}" style="display:flex; align-items:center; gap:7px; margin-top:9px; cursor:pointer;" style-hover="opacity:0.85">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="{{ caretStyle }}"><path d="m9 18 6-6-6-6"></path></svg>
+          <span style="font:var(--mono-sm); color:var(--text-low-content); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ argsLine }}</span>
+        </div>
+        <sc-if value="{{ expanded }}" hint-placeholder-val="{{ false }}">
+          <pre style="margin:8px 0 0; padding:11px 13px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--cyan); white-space:pre; overflow:auto;">{{ argsJson }}</pre>
+        </sc-if>
+      </sc-if>
+      <div style="margin-top:11px; display:inline-flex; align-items:center; gap:7px; padding:5px 9px; background:var(--phosphor-08); border:1px solid var(--border); border-radius:var(--radius-sm);">
+        <span style="font:var(--mono-sm); color:var(--phosphor);">{{ obs }}</span>
+      </div>
+    </sc-if>
+
+    <!-- REASONING -->
+    <sc-if value="{{ isReasoning }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:flex-start; gap:10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        <p style="margin:0; font:italic 14px/1.55 var(--font-ui); color:var(--text-mid);">{{ text }}</p>
+      </div>
+      <sc-if value="{{ live }}" hint-placeholder-val="{{ false }}">
+        <div class="hr-think" style="display:inline-flex; align-items:center; gap:7px; margin-top:10px; font:600 10px/1 var(--font-mono); letter-spacing:0.12em; text-transform:uppercase; color:var(--violet);"><span style="width:6px; height:6px; border-radius:50%; background:var(--violet);"></span>Thinking…</div>
+      </sc-if>
+    </sc-if>
+
+    <!-- DECISION -->
+    <sc-if value="{{ isDecision }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:flex-start; gap:10px;">
+        <span style="{{ decIconStyle }}">{{ decMark }}</span>
+        <div style="flex:1; min-width:0;">
+          <p style="margin:0; font:500 14px/1.45 var(--font-ui); color:var(--text-hi);">{{ text }}</p>
+          <div style="display:inline-flex; align-items:center; gap:9px; margin-top:9px; padding:6px 10px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-control); cursor:pointer;" style-hover="border-color: var(--border-strong)">
+            <span style="font:600 12px/1.2 var(--font-ui); color:var(--text-hi);">{{ chipCompany }}</span>
+            <span style="{{ chipScoreStyle }}">{{ chipScore }}</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ERROR -->
+    <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+        <span style="font:var(--mono-sm); color:var(--red);">{{ text }}</span>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:560,&quot;height&quot;:140},&quot;step&quot;:{&quot;editor&quot;:null},&quot;live&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false}}">
+class Component extends DCLogic {
+  state = { expanded: false };
+  renderVals() {
+    const s = this.props.step || {};
+    const t = s.type;
+    const live = !!s.live;
+    const dotColor = t === 'tool' ? 'var(--cyan)' : t === 'reasoning' ? 'var(--violet)'
+      : t === 'error' ? 'var(--red)' : (s.decision === 'no' ? 'var(--text-low)' : 'var(--phosphor)');
+
+    const tints = {
+      tool: { bg: 'var(--bg-raised)', bd: 'var(--border)', ac: 'transparent' },
+      reasoning: { bg: 'var(--violet-12)', bd: 'rgba(167,139,250,0.28)', ac: 'var(--violet)' },
+      error: { bg: 'var(--red-14)', bd: 'rgba(255,93,93,0.32)', ac: 'var(--red)' },
+      decisionYes: { bg: 'var(--phosphor-08)', bd: 'var(--border-strong)', ac: 'var(--phosphor)' },
+      decisionNo: { bg: 'var(--bg-raised)', bd: 'var(--border)', ac: 'var(--text-low)' },
+    };
+    let key = t;
+    if (t === 'decision') key = s.decision === 'no' ? 'decisionNo' : 'decisionYes';
+    const tn = tints[key] || tints.tool;
+    const dimmed = t === 'decision' && s.decision === 'no';
+
+    const cardStyle = {
+      flex: 1, minWidth: 0, marginBottom: '14px', padding: '13px 16px',
+      background: tn.bg, border: '1px solid ' + tn.bd,
+      borderLeft: (tn.ac === 'transparent' ? '1px solid ' + tn.bd : '3px solid ' + tn.ac),
+      borderRadius: 'var(--radius-card)', boxShadow: 'var(--shadow-card)',
+      opacity: dimmed ? 0.62 : 1,
+    };
+
+    return {
+      isTool: t === 'tool', isReasoning: t === 'reasoning', isDecision: t === 'decision', isError: t === 'error',
+      name: s.name, argsLine: s.argsLine, argsJson: s.argsJson, hasArgs: !!s.argsLine, obs: s.obs, text: s.text,
+      live, chipCompany: s.chipCompany, chipScore: s.chipScore,
+      decMark: s.decision === 'no' ? '✗' : '✓',
+      expanded: this.state.expanded,
+      toggle: () => this.setState((st) => ({ expanded: !st.expanded })),
+      caretStyle: { transform: this.state.expanded ? 'rotate(90deg)' : 'none', transition: 'transform var(--dur-fast)', flexShrink: 0 },
+      cardStyle,
+      cardClass: live ? 'hr-livecard' : '',
+      dotStyle: {
+        position: 'absolute', left: '4px', top: '15px', width: '14px', height: '14px', borderRadius: '50%',
+        background: dotColor, border: '2px solid var(--bg-void)', boxShadow: '0 0 8px ' + dotColor, zIndex: 1,
+      },
+      decIconStyle: {
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        width: '20px', height: '20px', borderRadius: 'var(--radius-sm)', font: '700 13px/1 var(--font-mono)',
+        color: s.decision === 'no' ? 'var(--text-low)' : 'var(--phosphor)',
+        background: s.decision === 'no' ? 'transparent' : 'var(--phosphor-12)',
+        border: '1px solid ' + (s.decision === 'no' ? 'var(--border)' : 'var(--border-strong)'),
+      },
+      chipScoreStyle: {
+        font: '600 11px/1 var(--font-mono)',
+        color: s.decision === 'no' ? 'var(--text-low-content)' : 'var(--violet)',
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <defs><filter id="ls_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.2"></feGaussianBlur></filter></defs>
+  <path d="M60 14 A46 46 0 0 0 60 106" stroke="#3DFFA2" stroke-opacity="0.22" stroke-width="1.5"></path>
+  <path d="M60 29 A31 31 0 0 0 60 91" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"></path>
+  <line x1="14" y1="60" x2="46" y2="60" stroke="#3DFFA2" stroke-opacity="0.14" stroke-width="1.5"></line>
+  <path d="M64 15 A46 46 0 0 1 104 56" stroke="#FF5D5D" stroke-opacity="0.55" stroke-width="1.5" stroke-dasharray="6 5" transform="translate(3 -2)"></path>
+  <path d="M62 30 A31 31 0 0 1 90 70" stroke="#FF5D5D" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="4 5" transform="translate(5 1)"></path>
+  <path d="M84 92 A46 46 0 0 0 105 64" stroke="#FF5D5D" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="5 6" transform="translate(-2 3)"></path>
+  <rect x="58" y="56" width="52" height="8" fill="#FF5D5D" fill-opacity="0.07"></rect>
+  <line x1="44" y1="56" x2="112" y2="56" stroke="#FFC857" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="3 4"></line>
+  <line x1="50" y1="64" x2="106" y2="64" stroke="#FF5D5D" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 4" transform="translate(6 0)"></line>
+  <rect x="92" y="38" width="9" height="3" fill="#FFC857" fill-opacity="0.6"></rect>
+  <rect x="86" y="78" width="13" height="3" fill="#FF5D5D" fill-opacity="0.55"></rect>
+  <circle cx="82" cy="46" r="7" fill="#FF5D5D" opacity="0.45" filter="url(#ls_g)"></circle>
+  <circle cx="82" cy="46" r="3.2" fill="#FF5D5D"></circle>
+  <circle cx="60" cy="60" r="2" fill="#3DFFA2" fill-opacity="0.5"></circle>
+  </svg>

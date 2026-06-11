@@ -1,0 +1,149 @@
+<!-- @dsCard group="Brand" viewport="1000x680" name="Style Guide — full specimen page" subtitle="The complete instrument: tokens, type, icons, and every component in its states" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hiring Radar — Design System</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  html, body { margin: 0; }
+  body { background: var(--bg-void); color: var(--text-body); }
+  .void { background-color: var(--bg-void); background-image: radial-gradient(rgba(61,255,162,0.04) 1px, transparent 1px); background-size: 24px 24px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px 120px; }
+  header.top { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px; background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+  header.top .left { display: flex; align-items: center; gap: 14px; }
+  header.top img { height: 26px; }
+  .pill { font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--text-low); border: 1px solid var(--border); border-radius: 5px; padding: 4px 8px; }
+  .hero { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center; padding: 48px 0 32px; }
+  .hero h1 { font: var(--text-display); color: var(--text-hi); letter-spacing: var(--tracking-display); margin: 0 0 14px; }
+  .hero p { font: var(--text-lg); color: var(--text-body); max-width: 460px; margin: 0; }
+  section { padding: 30px 0; border-top: 1px solid var(--divider); }
+  .seclbl { font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--phosphor); margin: 0 0 4px; }
+  .secsub { font: var(--text-sm); color: var(--text-low-content); margin: 0 0 22px; }
+  h2.sec { font: var(--text-h2); color: var(--text-hi); margin: 0 0 18px; }
+  .grp { margin-bottom: 22px; }
+  .grplbl { font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--text-label); margin-bottom: 12px; }
+  .row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .col { display: flex; flex-direction: column; gap: 12px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; }
+  .iconrow { display: grid; grid-template-columns: repeat(16, 1fr); gap: 16px; color: var(--text-mid); }
+  .iconrow > div { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .iconrow .nm { font: 9px var(--font-mono); color: var(--text-low); }
+  pre.tokens { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 24px; overflow: auto;
+    font: 12.5px/1.7 var(--font-mono); color: var(--text-mid); }
+  pre.tokens .c { color: var(--phosphor); }
+  pre.tokens .k { color: var(--cyan); }
+  /* radar */
+  .scope { position: relative; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(61,255,162,0.05), transparent 70%); }
+  .ring { position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--phosphor-dim); }
+  .sweep { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+  .sweep::before { content:""; position: absolute; inset: 0; background: conic-gradient(from 0deg, rgba(61,255,162,0.4) 0deg, rgba(61,255,162,0.08) 26deg, transparent 60deg); animation: sweep 4s linear infinite; }
+  @keyframes sweep { to { transform: rotate(360deg); } }
+  .blip { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--phosphor); box-shadow: var(--glow-phosphor-sm); }
+  .blip::after { content:""; position: absolute; inset:0; border-radius: 50%; background: var(--phosphor); animation: ping 1.8s var(--ease-out) infinite; }
+  @keyframes ping { 0%{transform:scale(1);opacity:.7} 80%,100%{transform:scale(3);opacity:0} }
+  @media (prefers-reduced-motion: reduce){ .sweep::before, .blip::after { animation: none; } }
+  .toaststack { position: fixed; right: 22px; bottom: 22px; z-index: 400; display: flex; flex-direction: column; gap: 10px; }
+</style>
+</head>
+<body class="void">
+<header class="top">
+  <div class="left">
+    <img src="assets/logo.svg" alt="Hiring Radar" />
+    <span class="pill">Design System v1</span>
+  </div>
+  <span class="pill" id="clock">LAST SWEEP 06:00 UTC</span>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <p class="seclbl" style="margin-bottom:14px">Mission Control · Job Hunt</p>
+      <h1>An instrument that scans the market while you sleep.</h1>
+      <p>Phosphor on near-black. Data-dense but disciplined. Every number is mono; the flash comes from glow, motion, and the radar — never clutter.</p>
+    </div>
+    <div class="scope">
+      <div class="ring"></div><div class="ring" style="inset:30px"></div><div class="ring" style="inset:60px"></div>
+      <div class="sweep"></div>
+      <div class="blip" style="top:32%;left:64%"></div>
+      <div class="blip" style="top:62%;left:38%;background:var(--violet);box-shadow:var(--glow-violet)"></div>
+    </div>
+  </div>
+
+  <div id="app"></div>
+
+  <section>
+    <p class="seclbl">Foundation</p>
+    <h2 class="sec">:root tokens — copy into every artifact</h2>
+    <p class="secsub">This block plus the Google Fonts import below is the canonical foundation. Every later screen embeds it verbatim.</p>
+    <pre class="tokens" id="tokenblock"></pre>
+  </section>
+</div>
+
+<div class="toaststack" id="toaststack"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="_ds_bundle.js"></script>
+
+<!-- Token block + clock: independent of React/the bundle so the brief's
+     most critical deliverable always renders. -->
+<script>
+(function () {
+  var TOKENS = `/* Google Fonts \u2014 embed verbatim in every artifact */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* surfaces */
+  --bg-void: #06080C; --bg-surface: #0B1018; --bg-raised: #111826;
+  --glass: rgba(17,24,38,0.55);            /* backdrop-blur: 16px */
+  /* accents */
+  --phosphor: #3DFFA2; --phosphor-dim: rgba(61,255,162,0.16);
+  --cyan: #4CC9F0; --violet: #A78BFA; --amber: #FFC857; --red: #FF5D5D;
+  /* text */
+  --text-hi: #E8F0F2; --text-mid: #93A4B3; --text-low: #5C6B7A;
+  --text-low-content: #6E7E8F;             /* readable low (use over --text-low for content) */
+  /* type */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-ui: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  /* radius & border */
+  --radius-card: 10px; --radius-control: 6px; --radius-sm: 4px;
+  --border: 1px solid var(--phosphor-dim);
+  /* glow & elevation */
+  --glow-phosphor: 0 0 24px rgba(61,255,162,0.25);
+  --glow-violet: 0 0 24px rgba(167,139,250,0.22);
+  --shadow-card: 0 8px 24px rgba(0,0,0,0.45);
+  /* motion */
+  --ease-out: cubic-bezier(0.22,1,0.36,1);
+  --dur: 200ms; --radar-spin: 4s;
+}`;
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  var el = document.getElementById('tokenblock');
+  if (el) {
+    el.innerHTML = esc(TOKENS)
+      .replace(/(\/\*[^*]*\*\/)/g, '<span class="c">$1</span>')
+      .replace(/(--[a-z0-9-]+)(?=:)/g, '<span class="k">$1</span>');
+  }
+  function tick(){ var d=new Date(); var h=String(d.getUTCHours()).padStart(2,'0'); var m=String(d.getUTCMinutes()).padStart(2,'0'); var c=document.getElementById('clock'); if(c) c.textContent='LAST SWEEP '+h+':'+m+' UTC'; }
+  tick(); setInterval(tick, 30000);
+
+  // Graceful fallback if the compiled bundle is missing (e.g. not yet built).
+  if (!window.HiringRadarDesignSystem_e283cd) {
+    var app = document.getElementById('app');
+    if (app) app.innerHTML = '<section style="padding:30px 0;border-top:1px solid var(--divider)">' +
+      '<p class="seclbl">Component showcase</p>' +
+      '<p class="secsub" style="color:var(--amber)">The compiled design-system bundle (_ds_bundle.js) is not available yet \u2014 reopen this page once it has built to see every component live. Tokens and the radar hero above are unaffected.</p>' +
+      '</section>';
+  }
+})();
+</script>
+
+<script type="text/babel" src="styleguide.jsx"></script>
+</body>
+</html>

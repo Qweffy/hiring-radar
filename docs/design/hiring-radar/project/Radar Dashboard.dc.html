@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-rotate { to { transform: rotate(360deg); } }
+  @keyframes hr-blip-ping { 0% { transform: scale(0.6); opacity:0.7; } 80%,100% { transform: scale(2.4); opacity:0; } }
+  @media (prefers-reduced-motion: reduce) { .hr-sweep, .hr-ping { animation: none !important; } }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1440px; margin:0 auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Route · radar</span>
+    <span style="font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--text-hi);">Dashboard</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">The hero screen — your job market, scanned and scored.</span>
+  </div>
+
+  <!-- ============ MAIN SCREEN ============ -->
+  <div style="position:relative; width:1440px; max-width:1440px; height:932px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <dc-import name="RadarShell" active-nav="radar" sweep="healthy" last-sweep="06:00 UTC" month="JUN 2026" hint-size="100%,100%" style="display:block; width:100%; height:100%;">
+
+      <div style="position:absolute; inset:0; overflow:auto; padding:24px;">
+
+        <!-- ROW 1 -->
+        <div style="display:grid; grid-template-columns:minmax(0,1.42fr) minmax(0,1fr); gap:24px; align-items:stretch; margin-bottom:24px;">
+
+          <!-- HERO RADAR -->
+          <div style="position:relative; display:flex; flex-direction:column; padding:20px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden;">
+
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Live scope</span>
+              <span style="display:inline-flex; align-items:center; gap:7px; font:var(--mono-sm); color:var(--phosphor);"><span style="width:7px; height:7px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 8px var(--phosphor);"></span>SWEEPING</span>
+            </div>
+
+            <!-- scope -->
+            <div style="position:relative; width:560px; height:560px; margin:6px auto 0;">
+              <svg width="560" height="560" viewBox="0 0 560 560" style="position:absolute; left:0; top:0; pointer-events:none;">
+                <circle cx="280" cy="280" r="236" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle>
+                <circle cx="280" cy="280" r="177" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle>
+                <circle cx="280" cy="280" r="118" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle>
+                <circle cx="280" cy="280" r="59" fill="none" stroke="rgba(61,255,162,0.22)" stroke-width="1"></circle>
+                <line x1="280" y1="44" x2="280" y2="516" stroke="rgba(61,255,162,0.07)" stroke-width="1"></line>
+                <line x1="44" y1="280" x2="516" y2="280" stroke="rgba(61,255,162,0.07)" stroke-width="1"></line>
+                <sc-for list="{{ spokes }}" as="s" hint-placeholder-count="6"><line x1="{{ s.x1 }}" y1="{{ s.y1 }}" x2="{{ s.x2 }}" y2="{{ s.y2 }}" stroke="rgba(61,255,162,0.06)" stroke-width="1"></line></sc-for>
+                <sc-for list="{{ ticks }}" as="t" hint-placeholder-count="36"><line x1="{{ t.x1 }}" y1="{{ t.y1 }}" x2="{{ t.x2 }}" y2="{{ t.y2 }}" stroke="{{ t.color }}" stroke-width="{{ t.w }}"></line></sc-for>
+              </svg>
+
+              <!-- rotating sweep beam -->
+              <div class="hr-sweep" style="position:absolute; left:44px; top:44px; width:472px; height:472px; border-radius:50%; background:conic-gradient(from 0deg, rgba(61,255,162,0.20) 0deg, rgba(61,255,162,0.05) 22deg, transparent 46deg, transparent 360deg); animation:hr-rotate 4s linear infinite; pointer-events:none;"></div>
+              <div class="hr-sweep" style="position:absolute; left:280px; top:48px; width:1.5px; height:232px; background:linear-gradient(to bottom, rgba(61,255,162,0.7), transparent); transform-origin:bottom center; animation:hr-rotate 4s linear infinite; pointer-events:none;"></div>
+
+              <!-- center -->
+              <div style="position:absolute; left:280px; top:280px; width:8px; height:8px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 10px var(--phosphor); transform:translate(-50%,-50%);"></div>
+
+              <!-- category labels -->
+              <sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+                <span style="{{ c.style }}">{{ c.key }}</span>
+              </sc-for>
+
+              <!-- blips -->
+              <sc-for list="{{ blips }}" as="b" hint-placeholder-count="38">
+                <div style="{{ b.wrapStyle }}" onMouseEnter="{{ b.onEnter }}">
+                  <sc-if value="{{ b.halo }}" hint-placeholder-val="{{ false }}"><span style="{{ b.haloStyle }}"></span></sc-if>
+                  <span style="{{ b.dotStyle }}"></span>
+                </div>
+              </sc-for>
+
+              <!-- tooltip -->
+              <div style="{{ tipStyle }}">
+                <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px;">
+                  <div style="min-width:0;">
+                    <div style="font:600 13px/1.3 var(--font-ui); color:var(--text-hi);">{{ tip.company }}</div>
+                    <div style="font:var(--text-xs); color:var(--text-mid); margin-top:2px;">{{ tip.role }}</div>
+                    <div style="font:var(--mono-sm); color:var(--phosphor); margin-top:8px;">{{ tip.salary }}</div>
+                    <div style="font:var(--mono-sm); color:var(--text-low-content); margin-top:3px;">{{ tip.region }}</div>
+                  </div>
+                  <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.ScoreGauge" score="{{ tip.match }}" size="48" hint-size="48px,48px"></x-import>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:10px; border-top:1px solid var(--divider);">
+                  <span style="{{ tip.tagStyle }}">{{ tip.tag }}</span>
+                  <span style="display:inline-flex; align-items:center; gap:4px; font:600 12px/1 var(--font-ui); color:var(--cyan); cursor:pointer;">View <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
+                </div>
+              </div>
+
+              <!-- legend -->
+              <div style="position:absolute; left:0; bottom:0; display:flex; flex-direction:column; gap:6px; padding:10px 12px; background:rgba(11,16,24,0.72); backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:var(--radius-control);">
+                <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:1px;">Legend</span>
+                <span style="display:flex; align-items:center; gap:8px; font:var(--mono-sm); color:var(--text-mid);"><span style="width:7px; height:7px; border-radius:50%; background:var(--phosphor);"></span>closer = stronger match</span>
+                <span style="display:flex; align-items:center; gap:8px; font:var(--mono-sm); color:var(--text-mid);"><span style="display:inline-flex; gap:3px; align-items:center;"><span style="width:5px; height:5px; border-radius:50%; background:var(--phosphor);"></span><span style="width:9px; height:9px; border-radius:50%; background:var(--phosphor);"></span></span>size = salary band</span>
+                <span style="display:flex; align-items:center; gap:8px; font:var(--mono-sm); color:var(--text-mid);"><span style="width:9px; height:9px; border-radius:50%; background:transparent; box-shadow:0 0 0 2px rgba(167,139,250,0.6);"></span>halo = agent-shortlisted</span>
+              </div>
+            </div>
+
+            <!-- caption -->
+            <div style="margin-top:14px; text-align:center; font:var(--mono-sm); color:var(--text-low-content); letter-spacing:0.06em;">SWEEP: JUN 2026 · 512 POSTINGS · <span style="color:var(--phosphor);">38 NEW</span></div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Scorecard" label="New this month" value="{{ vNew }}" delta="{{ dNew }}" spark="{{ sparkNew }}" hint-size="100%,118px"></x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Scorecard" label="Match ≥ 80" value="{{ vMatch }}" tone="violet" spark="{{ sparkMatch }}" hint-size="100%,118px"></x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Scorecard" label="Remote share" value="{{ vRemote }}" suffix="%" tone="cyan" spark="{{ sparkRemote }}" hint-size="100%,118px"></x-import>
+              <div style="display:flex; flex-direction:column; gap:10px; padding:16px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+                <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Median salary</span>
+                <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:10px;">
+                  <span style="font:var(--mono-xl); color:var(--text-hi); letter-spacing:-0.01em;">$165k</span>
+                  <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Sparkline" data="{{ sparkSalary }}" tone="cyan" hint-size="72px,22px"></x-import>
+                </div>
+                <span style="font:var(--mono-sm); color:var(--phosphor);">+$6k <span style="color:var(--text-low-content);">vs last sweep</span></span>
+              </div>
+            </div>
+
+            <!-- AGENT DIGEST -->
+            <div style="flex:1; display:flex; flex-direction:column; padding:18px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-idle" size="34" hint-size="34px,34px"></x-import>
+                <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--violet);">Agent digest</span>
+                <span style="flex:1;"></span>
+                <span style="font:var(--mono-sm); color:var(--text-low-content);">2h ago</span>
+              </div>
+              <div style="font:var(--mono-sm); color:var(--text-mid); line-height:1.7; margin-bottom:16px;">Run #23 · Shortlisted <span style="color:var(--text-hi);">5</span> of 512 · 14 steps · <span style="color:var(--text-hi);">$0.43</span></div>
+
+              <div style="display:flex; align-items:center; gap:14px; padding:14px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-control); margin-bottom:16px;">
+                <div style="flex:1; min-width:0;">
+                  <div style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:6px;">Top match</div>
+                  <div style="font:600 14px/1.3 var(--font-ui); color:var(--text-hi);">Meridian Labs</div>
+                  <div style="font:var(--text-xs); color:var(--text-mid); margin-top:2px;">Senior Full-Stack Engineer</div>
+                  <div style="font:var(--mono-sm); color:var(--phosphor); margin-top:6px;">$160k–$195k</div>
+                </div>
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.ScoreGauge" score="{{ topMatch }}" size="58" label="match" hint-size="58px,80px"></x-import>
+              </div>
+
+              <div style="display:flex; gap:10px; margin-top:auto;">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-left="external-link" hint-size="auto,36px">Open run</x-import>
+                <span style="flex:1;"></span>
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="play" hint-size="auto,36px">Run again</x-import>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 2 — SIGNAL FEED -->
+        <div style="background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--divider);">
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Signal feed</span>
+            <span style="display:inline-flex; align-items:center; gap:5px; font:600 12px/1 var(--font-ui); color:var(--cyan); cursor:pointer;">View all <span style="color:var(--text-low-content);">→ Pipeline</span></span>
+          </div>
+          <sc-for list="{{ feed }}" as="f" hint-placeholder-count="6">
+            <div style="display:flex; align-items:center; gap:16px; padding:12px 18px; border-bottom:1px solid var(--divider);" style-hover="background: rgba(147,164,179,0.03)">
+              <span style="font:var(--mono-sm); color:var(--text-low); width:74px; flex-shrink:0; white-space:nowrap;">{{ f.time }}</span>
+              <span style="{{ f.dotStyle }}"></span>
+              <span style="flex:1; font:var(--text-sm); color:var(--text-mid);">{{ f.text }}</span>
+              <sc-if value="{{ f.badge }}" hint-placeholder-val="{{ false }}"><span style="{{ f.badgeStyle }}">{{ f.badge }}</span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+      </div>
+    </dc-import>
+  </div>
+
+  <!-- ============ STATES GALLERY ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Dashboard states</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Each widget degrades on its own — one failure never blanks the screen.</span>
+  </div>
+
+  <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+    <!-- 1 LOADING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">01 · Loading</span>
+      <div style="display:flex; gap:20px; align-items:center; padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <div style="position:relative; width:220px; height:220px; flex-shrink:0;">
+          <svg width="220" height="220" viewBox="0 0 220 220" style="position:absolute; inset:0;">
+            <circle cx="110" cy="110" r="108" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle>
+            <circle cx="110" cy="110" r="82" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle>
+            <circle cx="110" cy="110" r="52" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle>
+            <circle cx="110" cy="110" r="26" fill="none" stroke="rgba(61,255,162,0.22)" stroke-width="1"></circle>
+            <line x1="110" y1="6" x2="110" y2="214" stroke="rgba(61,255,162,0.06)" stroke-width="1"></line>
+            <line x1="6" y1="110" x2="214" y2="110" stroke="rgba(61,255,162,0.06)" stroke-width="1"></line>
+          </svg>
+          <div class="hr-sweep" style="position:absolute; left:12px; top:12px; width:196px; height:196px; border-radius:50%; background:conic-gradient(from 0deg, rgba(61,255,162,0.20) 0deg, rgba(61,255,162,0.05) 22deg, transparent 46deg, transparent 360deg); animation:hr-rotate 4s linear infinite;"></div>
+          <div style="position:absolute; left:110px; top:110px; width:6px; height:6px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 8px var(--phosphor); transform:translate(-50%,-50%);"></div>
+        </div>
+        <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="card" hint-size="100%,112px"></x-import>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="card" hint-size="100%,112px"></x-import>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="card" hint-size="100%,112px"></x-import>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="card" hint-size="100%,112px"></x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 EMPTY -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">02 · Empty — new user</span>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:14px;">Radar quiet</span>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="empty-radar" size="120" hint-size="120px,120px"></x-import>
+        <h3 style="margin:16px 0 6px; font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-hi);">No postings on the scope yet</h3>
+        <p style="margin:0 0 18px; max-width:320px; font:var(--text-sm); color:var(--text-mid);">Ingest a “Who is hiring?” thread and the radar starts scanning.</p>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="inbox" hint-size="auto,36px">Ingest June 2026 thread</x-import>
+      </div>
+    </div>
+
+    <!-- 3 PARTIAL ERROR -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">03 · Partial error — radar widget failed</span>
+      <div style="display:flex; gap:18px; padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); padding:20px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="84" hint-size="84px,84px"></x-import>
+          <span style="font:600 14px/1.3 var(--font-ui); color:var(--text-hi);">Couldn't load the radar</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content);">render timed out · scorecards are fine</span>
+          <div style="margin-top:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" hint-size="auto,36px">Retry</x-import></div>
+        </div>
+        <div style="width:170px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Scorecard" label="New this month" value="{{ vNew }}" hint-size="100%,86px"></x-import>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Scorecard" label="Match ≥ 80" value="{{ vMatch }}" tone="violet" hint-size="100%,86px"></x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 AGENT NEVER RAN -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">04 · Agent never ran</span>
+      <div style="display:flex; flex-direction:column; padding:18px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-idle" size="34" hint-size="34px,34px"></x-import>
+          <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--violet);">Agent digest</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:8px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-idle" size="86" hint-size="86px,86px"></x-import>
+          <h3 style="margin:8px 0 0; font-family:var(--font-display); font-weight:600; font-size:17px; color:var(--text-hi);">The agent hasn't scanned for you yet</h3>
+          <p style="margin:0 0 14px; max-width:320px; font:var(--text-sm); color:var(--text-mid);">Set up your profile, then run a first scan to get a shortlist.</p>
+          <div style="display:flex; gap:10px;">
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-right="arrow-right" hint-size="auto,36px">Set up profile</x-import>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="play" hint-size="auto,36px">Run first scan</x-import>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 STALE -->
+    <div style="grid-column:1 / -1;">
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">05 · Stale — last sweep failed</span>
+      <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; align-items:center; gap:16px;">
+          <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Topbar pulse</span>
+          <span style="display:inline-flex; align-items:center; gap:9px; height:34px; padding:0 12px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-control);">
+            <span style="position:relative; width:8px; height:8px;">
+              <span style="position:absolute; inset:0; border-radius:50%; background:var(--red);"></span>
+              <span class="hr-ping" style="position:absolute; inset:0; border-radius:50%; background:var(--red); animation:hr-blip-ping 1.8s var(--ease-out) infinite;"></span>
+            </span>
+            <span style="display:flex; flex-direction:column; gap:1px; line-height:1.1;">
+              <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Last sweep</span>
+              <span style="font:var(--mono-sm); color:var(--red);">SYNC FAILED · 14:32</span>
+            </span>
+          </span>
+          <span style="font:var(--text-sm); color:var(--text-low-content);">— the pipeline dot goes red when the latest run failed.</span>
+        </div>
+
+        <div style="border-top:1px solid var(--divider); padding-top:16px;">
+          <div style="font:var(--mono-sm); color:var(--text-low-content); letter-spacing:0.06em; margin-bottom:8px;">SWEEP: <span style="color:var(--text-mid);">MAY 2026</span> · 498 POSTINGS · 0 NEW</div>
+          <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--amber-14); border:1px solid rgba(255,200,87,0.30); border-radius:var(--radius-sm);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+            <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Showing <span style="font:var(--mono-sm);">MAY 2026</span> — June sweep failed.</span>
+            <span style="display:inline-flex; align-items:center; gap:5px; font:600 12px/1 var(--font-ui); color:var(--amber); cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><polyline points="21 3 21 9 15 9"></polyline></svg>Retry sync</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1010}}">
+class Component extends DCLogic {
+  state = { hovered: 0 };
+
+  buildBlips() {
+    const C = 280, Rmax = 236;
+    const polar = (ang, rad) => {
+      const a = ang * Math.PI / 180;
+      return { x: C + rad * Math.sin(a), y: C - rad * Math.cos(a) };
+    };
+    const radFromMatch = (m) => 200 - (m / 100) * 160;
+    const tierR = { small: 4.5, med: 6, large: 7.5 };
+    const salaryByTier = { small: '$120k–$140k', med: '$150k–$175k', large: '$185k–$220k' };
+    const regions = ['Remote (US)', 'Remote (global)', 'Remote (EU)', 'Hybrid', 'Onsite (US)'];
+
+    const cats = {
+      Frontend: 315, 'Full-stack': 30, 'AI · ML': 92, Backend: 150, DevOps: 212, Other: 272,
+    };
+
+    const named = [
+      { company: 'Meridian Labs', role: 'Senior Full-Stack Engineer (TypeScript)', salary: '$160k–$195k', match: 91, cat: 'Full-stack', ang: 30, tier: 'med', halo: true, region: 'Remote (US/EU overlap)' },
+      { company: 'Quietwire', role: 'Senior Product Engineer, AI', salary: '$140k–$170k', match: 88, cat: 'AI · ML', ang: 95, tier: 'med', halo: true, region: 'Remote (global)' },
+      { company: 'DataForge', role: 'Founding Engineer', salary: '$150k–$180k + 0.5–1.5%', match: 86, cat: 'Full-stack', ang: 48, tier: 'med', halo: true, region: 'Remote (Americas)' },
+      { company: 'PendulumPay', role: 'Senior Product Engineer', salary: '$145k–$175k', match: 81, cat: 'Full-stack', ang: 16, tier: 'med', halo: false, edited: true, region: 'Remote (Americas)' },
+      { company: 'Helios Grid', role: 'Staff Frontend Engineer', salary: '€95k–€120k', match: 78, cat: 'Frontend', ang: 318, tier: 'small', halo: false, region: 'Berlin or Remote EU' },
+      { company: 'Northbeam Systems', role: 'Platform Engineer (Go/K8s)', salary: '$185k–$220k', match: 42, cat: 'Backend', ang: 150, tier: 'large', halo: false, region: 'NYC onsite' },
+    ];
+
+    const gen = [
+      // cluster, names with matches; high matches placed in full-stack & ai-ml
+      { cat: 'Full-stack', names: ['Brightloop', 'Tessera', 'Cobalt', 'Driftwood', 'Verge', 'Halcyon', 'Mainline'], matches: [84, 82, 80, 83, 72, 66, 59], role: 'Senior Full-Stack Engineer' },
+      { cat: 'AI · ML', names: ['Synthesis', 'Vector Foundry', 'Nimbus AI', 'Coactive', 'Inferra', 'Loomwork', 'Parabol', 'Glyph'], matches: [83, 82, 80, 76, 70, 64, 58, 52], role: 'ML Engineer', haloIdx: 0 },
+      { cat: 'Backend', names: ['Ironclad', 'Substrate', 'Conduit', 'Keelhaul', 'Baserock', 'Throughline'], matches: [74, 68, 61, 55, 49, 46], role: 'Backend Engineer (Go)' },
+      { cat: 'Frontend', names: ['Pixelbloom', 'Framecast', 'Lumen', 'Crayon', 'Ardent'], matches: [73, 67, 60, 54, 50], role: 'Frontend Engineer' },
+      { cat: 'DevOps', names: ['Helmsman', 'Cargo', 'Relay9'], matches: [63, 57, 48], role: 'Platform / DevOps Engineer' },
+      { cat: 'Other', names: ['Quanta', 'Outpost', 'Sundial'], matches: [59, 52, 45], role: 'Software Engineer' },
+    ];
+
+    const blips = [];
+    named.forEach((n) => {
+      const p = polar(n.ang, radFromMatch(n.match));
+      blips.push({ ...n, x: p.x, y: p.y });
+    });
+
+    let tCycle = 0;
+    gen.forEach((g) => {
+      const center = cats[g.cat];
+      const spread = g.cat === 'DevOps' || g.cat === 'Other' ? 18 : 26;
+      const N = g.names.length;
+      g.names.forEach((nm, i) => {
+        const ang = center - spread + ((i + 0.5) / N) * 2 * spread;
+        const m = g.matches[i];
+        const tier = ['small', 'med', 'large', 'med'][tCycle % 4]; tCycle++;
+        const p = polar(ang, radFromMatch(m));
+        blips.push({
+          company: nm, role: g.role, match: m, cat: g.cat, tier,
+          salary: salaryByTier[tier], region: regions[(i + tCycle) % regions.length],
+          halo: g.haloIdx === i, x: p.x, y: p.y,
+        });
+      });
+    });
+
+    return blips.map((b) => ({ ...b, dr: tierR[b.tier] || 5.5 }));
+  }
+
+  renderVals() {
+    const blips = this.buildBlips();
+    const hovered = Math.min(this.state.hovered, blips.length - 1);
+
+    const dotColor = (b) => {
+      if (b.edited) return 'var(--amber)';
+      const op = 0.55 + (b.match / 100) * 0.45;
+      return 'rgba(61,255,162,' + op.toFixed(2) + ')';
+    };
+
+    const blipVals = blips.map((b, i) => {
+      const on = i === hovered;
+      const d = b.dr * 2;
+      const col = dotColor(b);
+      const wrapStyle = {
+        position: 'absolute', left: b.x + 'px', top: b.y + 'px',
+        width: '20px', height: '20px', transform: 'translate(-50%,-50%)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer', zIndex: on ? 30 : 10,
+      };
+      const dotStyle = {
+        width: d + 'px', height: d + 'px', borderRadius: '50%',
+        background: col,
+        boxShadow: on
+          ? '0 0 0 2px rgba(232,240,242,0.9), 0 0 14px ' + (b.edited ? 'rgba(255,200,87,0.7)' : 'rgba(61,255,162,0.7)')
+          : '0 0 6px ' + (b.edited ? 'rgba(255,200,87,0.5)' : 'rgba(61,255,162,0.45)'),
+        transition: 'box-shadow 120ms, transform 120ms',
+        transform: on ? 'scale(1.25)' : 'none',
+      };
+      const haloStyle = {
+        position: 'absolute', width: (d + 10) + 'px', height: (d + 10) + 'px',
+        borderRadius: '50%', boxShadow: '0 0 0 2px rgba(167,139,250,0.6), 0 0 12px rgba(167,139,250,0.4)',
+      };
+      return {
+        wrapStyle, dotStyle, haloStyle, halo: !!b.halo,
+        onEnter: () => this.setState({ hovered: i }),
+      };
+    });
+
+    // category rim labels
+    const C = 280;
+    const catList = [
+      { key: 'Frontend', ang: 315 }, { key: 'Full-stack', ang: 30 }, { key: 'AI · ML', ang: 92 },
+      { key: 'Backend', ang: 150 }, { key: 'DevOps', ang: 212 }, { key: 'Other', ang: 272 },
+    ];
+    const cats = catList.map((c) => {
+      const a = c.ang * Math.PI / 180;
+      const x = C + 264 * Math.sin(a), y = C - 264 * Math.cos(a);
+      return {
+        key: c.key,
+        style: {
+          position: 'absolute', left: x + 'px', top: y + 'px', transform: 'translate(-50%,-50%)',
+          font: '600 11px/1 var(--font-mono)', letterSpacing: '0.12em', textTransform: 'uppercase',
+          color: 'var(--text-low-content)', whiteSpace: 'nowrap', pointerEvents: 'none',
+        },
+      };
+    });
+
+    // spokes + ticks
+    const spokes = catList.map((c) => {
+      const a = c.ang * Math.PI / 180;
+      return { x1: C, y1: C, x2: C + 236 * Math.sin(a), y2: C - 236 * Math.cos(a) };
+    });
+    const ticks = [];
+    for (let i = 0; i < 36; i++) {
+      const a = (i * 10) * Math.PI / 180;
+      const major = i % 9 === 0;
+      const r1 = 236, r2 = 236 - (major ? 11 : 6);
+      ticks.push({
+        x1: C + r1 * Math.sin(a), y1: C - r1 * Math.cos(a),
+        x2: C + r2 * Math.sin(a), y2: C - r2 * Math.cos(a),
+        color: major ? 'rgba(61,255,162,0.4)' : 'rgba(61,255,162,0.18)', w: major ? 1.5 : 1,
+      });
+    }
+
+    // tooltip
+    const b = blips[hovered];
+    let tipLeft = b.x > 280 ? b.x - 18 - 250 : b.x + 18;
+    if (tipLeft < 0) tipLeft = 0;
+    if (tipLeft > 310) tipLeft = 310;
+    let tipTop = b.y - 60; if (tipTop < 0) tipTop = 0; if (tipTop > 392) tipTop = 392;
+    const tipStyle = {
+      position: 'absolute', left: tipLeft + 'px', top: tipTop + 'px', width: '250px', zIndex: 40,
+      padding: '14px', background: 'var(--glass)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+      border: '1px solid var(--border-strong)', borderRadius: 'var(--radius-card)',
+      boxShadow: 'var(--shadow-pop), var(--glow-phosphor-sm)', pointerEvents: 'none',
+    };
+    const tag = b.edited ? 'EDITED' : b.halo ? 'SHORTLISTED' : b.cat.toUpperCase();
+    const tagStyle = {
+      display: 'inline-flex', alignItems: 'center', height: '20px', padding: '0 7px',
+      font: '600 10px/1 var(--font-mono)', letterSpacing: '0.1em', textTransform: 'uppercase',
+      borderRadius: 'var(--radius-sm)',
+      color: b.edited ? 'var(--amber)' : b.halo ? 'var(--violet)' : 'var(--text-mid)',
+      background: b.edited ? 'var(--amber-14)' : b.halo ? 'var(--violet-12)' : 'transparent',
+      border: '1px solid ' + (b.edited ? 'rgba(255,200,87,0.38)' : b.halo ? 'rgba(167,139,250,0.4)' : 'var(--border)'),
+    };
+
+    const feed = [
+      { time: '06:00', text: 'Sweep completed — 38 new postings ingested.', badge: 'COMPLETED', tone: 'phosphor' },
+      { time: '06:14', text: 'Agent run #23 finished — 5 roles shortlisted.', badge: 'AGENT', tone: 'violet' },
+      { time: '06:21', text: 'PendulumPay edited their posting — salary range added.', badge: 'EDITED', tone: 'amber' },
+      { time: '05:58', text: 'Ingested Ask HN “Who is hiring?” — Jun 2026 (512 postings).', badge: null, tone: 'cyan' },
+      { time: '05:42', text: 'Reindex completed — semantic vectors rebuilt.', badge: null, tone: 'cyan' },
+      { time: 'yest.', text: 'Agent run #22 finished — 3 roles shortlisted.', badge: 'AGENT', tone: 'violet' },
+    ];
+    const toneColor = { phosphor: 'var(--phosphor)', violet: 'var(--violet)', amber: 'var(--amber)', cyan: 'var(--cyan)' };
+    const feedVals = feed.map((f) => ({
+      time: f.time, text: f.text, badge: f.badge,
+      dotStyle: { width: '7px', height: '7px', flexShrink: 0, borderRadius: '50%', background: toneColor[f.tone], boxShadow: '0 0 6px ' + toneColor[f.tone] },
+      badgeStyle: {
+        display: 'inline-flex', alignItems: 'center', height: '20px', padding: '0 7px', flexShrink: 0,
+        font: '600 10px/1 var(--font-mono)', letterSpacing: '0.1em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+        color: toneColor[f.tone], background: f.tone === 'phosphor' ? 'var(--phosphor-08)' : f.tone === 'violet' ? 'var(--violet-12)' : 'var(--amber-14)',
+        border: '1px solid ' + (f.tone === 'phosphor' ? 'var(--border)' : f.tone === 'violet' ? 'rgba(167,139,250,0.4)' : 'rgba(255,200,87,0.38)'),
+        borderRadius: 'var(--radius-sm)',
+      },
+    }));
+
+    return {
+      blips: blipVals, cats, spokes, ticks,
+      tip: { company: b.company, role: b.role, salary: b.salary, region: b.region, match: b.match, tag, tagStyle },
+      tipStyle,
+      vNew: 38, dNew: 12, sparkNew: [18, 22, 19, 26, 24, 31, 29, 38],
+      vMatch: 11, sparkMatch: [4, 6, 5, 8, 7, 9, 10, 11],
+      vRemote: 64, sparkRemote: [58, 60, 59, 62, 61, 63, 64],
+      sparkSalary: [150, 158, 155, 162, 159, 166, 165],
+      topMatch: 91,
+      feed: feedVals,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-dotping { 0%{transform:scale(1);opacity:0.6} 80%,100%{transform:scale(2.6);opacity:0} }
+  @keyframes hr-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  @media (prefers-reduced-motion: reduce){ .hr-dotr{animation:none;} }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1440px; margin:0 auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Route · agent runs</span>
+    <span style="font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--text-hi);">Agent run #24</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Watch the agent decide, step by step — live.</span>
+  </div>
+
+  <!-- ============ MAIN SCREEN ============ -->
+  <div style="position:relative; width:1440px; max-width:1440px; height:980px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <dc-import name="RadarShell" active-nav="agent" sweep="syncing" last-sweep="running…" month="JUN 2026" hint-size="100%,100%" style="display:block; width:100%; height:100%;">
+      <div style="position:absolute; inset:0; display:flex; gap:22px; padding:22px 24px;">
+
+        <!-- LEFT — TRACE -->
+        <div style="flex:1; min-width:0; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px; flex-shrink:0;">
+            <span style="font-family:var(--font-display); font-weight:600; font-size:17px; color:var(--text-hi);">Trace</span>
+            <span style="flex:1;"></span>
+            <span style="display:inline-flex; align-items:center; gap:7px; font:var(--mono-sm); color:var(--text-low-content);">auto-scroll<span style="position:relative; width:34px; height:18px; border-radius:9px; background:var(--phosphor-12); border:1px solid var(--border-strong);"><span style="position:absolute; right:2px; top:1px; width:14px; height:14px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 8px var(--phosphor);"></span></span></span>
+            <span style="display:inline-flex; align-items:center; gap:7px; font:600 11px/1 var(--font-mono); letter-spacing:0.14em; color:var(--phosphor); padding:5px 10px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-sm);"><span style="position:relative; width:7px; height:7px;"><span style="position:absolute; inset:0; border-radius:50%; background:var(--phosphor);"></span><span class="hr-dotr" style="position:absolute; inset:0; border-radius:50%; background:var(--phosphor); animation:hr-dotping 1.8s var(--ease-out) infinite;"></span></span>LIVE</span>
+          </div>
+          <div ref="{{ setTrace }}" style="flex:1; min-height:0; overflow:auto; padding-right:6px;">
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="13">
+              <dc-import name="TraceStep" step="{{ s }}" live="{{ s.live }}" hint-size="100%,90px" style="display:block; width:100%;"></dc-import>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- RIGHT — STATUS -->
+        <div style="width:372px; flex-shrink:0; overflow:auto; display:flex; flex-direction:column; gap:16px;">
+
+          <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+              <span style="font:var(--mono-lg); color:var(--text-hi);">#24</span>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="RUNNING" hint-size="auto,20px"></x-import>
+            </div>
+            <div style="display:flex; gap:24px; margin-bottom:18px;">
+              <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Started</span><span style="font:var(--mono-sm); color:var(--text-mid);">06:00:14 UTC</span></div>
+              <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Elapsed</span><span style="font:var(--mono-sm); color:var(--text-mid);">{{ elapsed }}</span></div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:18px; padding:14px 0; border-top:1px solid var(--divider);">
+              <div style="position:relative; width:64px; height:64px; flex-shrink:0;">
+                <svg width="64" height="64" style="transform:rotate(-90deg);"><circle cx="32" cy="32" r="27" fill="none" stroke="rgba(61,255,162,0.14)" stroke-width="6"></circle><circle cx="32" cy="32" r="27" fill="none" stroke="var(--phosphor)" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="108.5" style="filter:drop-shadow(0 0 5px rgba(61,255,162,0.4));"></circle></svg>
+                <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0;"><span style="font:600 15px/1 var(--font-mono); color:var(--text-hi);">9</span><span style="font:600 9px/1 var(--font-mono); color:var(--text-low);">/25</span></div>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Step budget</span>
+                <div style="font:var(--mono-sm); color:var(--text-mid); margin-top:4px;">9 of 25 steps</div>
+                <div style="margin-top:12px; display:flex; align-items:center; justify-content:space-between;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Cost</span><span style="font:var(--mono-sm); color:var(--text-hi);">$0.27 <span style="color:var(--text-low-content);">/ $1.00</span></span></div>
+                <div style="margin-top:7px; height:4px; border-radius:2px; background:rgba(147,164,179,0.16); overflow:hidden;"><div style="height:100%; width:27%; background:var(--phosphor); border-radius:2px;"></div></div>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:8px; padding-top:12px; border-top:1px solid var(--divider);">
+              <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Model</span>
+              <span style="font:var(--mono-sm); color:var(--text-mid);">claude-sonnet-4.5</span>
+            </div>
+          </div>
+
+          <!-- picks so far -->
+          <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+              <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Picks so far</span>
+              <span style="font:var(--mono-sm); color:var(--phosphor);">2</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <sc-for list="{{ picks }}" as="p" hint-placeholder-count="2">
+                <div style="display:flex; align-items:center; gap:12px; padding:11px 12px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-control);">
+                  <div style="flex:1; min-width:0;"><div style="font:600 13px/1.3 var(--font-ui); color:var(--text-hi);">{{ p.company }}</div><div style="font:var(--text-xs); color:var(--text-mid); margin-top:2px;">{{ p.role }}</div></div>
+                  <div style="position:relative; width:38px; height:38px; flex-shrink:0;"><svg width="38" height="38" style="transform:rotate(-90deg);"><circle cx="19" cy="19" r="16" fill="none" stroke="rgba(167,139,250,0.16)" stroke-width="4"></circle><circle cx="19" cy="19" r="16" fill="none" stroke="var(--violet)" stroke-width="4" stroke-linecap="round" stroke-dasharray="100.5" stroke-dashoffset="{{ p.offset }}"></circle></svg><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:600 12px/1 var(--font-mono); color:var(--text-hi);">{{ p.score }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:16px;">
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-left="pause" style="flex:1;" hint-size="100%,36px">Pause</x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="destructive" onClick="{{ openCancel }}" hint-size="auto,36px">Cancel</x-import>
+            </div>
+          </div>
+
+          <!-- history -->
+          <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Run history</span>
+            <div style="display:flex; flex-direction:column; gap:2px; margin-top:10px;">
+              <div style="display:flex; align-items:center; gap:10px; padding:9px 8px; border-radius:var(--radius-sm); cursor:pointer;" style-hover="background: var(--phosphor-08)">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="COMPLETED" hint-size="auto,20px"></x-import>
+                <span style="flex:1; font:var(--mono-sm); color:var(--text-mid);">#23 · 5 picks · $0.43</span>
+                <span style="font:var(--mono-sm); color:var(--text-low);">2h ago</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:9px 8px; border-radius:var(--radius-sm); cursor:pointer;" style-hover="background: var(--phosphor-08)">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="FAILED" hint-size="auto,20px"></x-import>
+                <span style="flex:1; font:var(--mono-sm); color:var(--text-mid);">#22 · resumed as #23</span>
+                <span style="font:var(--mono-sm); color:var(--text-low);">5h ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- cancel confirm -->
+      <sc-if value="{{ cancelOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; background:rgba(3,5,8,0.62); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);">
+          <div style="width:420px; max-width:90%; background:var(--bg-raised); border:1px solid var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-panel); overflow:hidden;">
+            <div style="padding:20px 20px 0;">
+              <h3 style="margin:0 0 8px; font:var(--text-h3); color:var(--text-hi);">Cancel run #24?</h3>
+              <p style="margin:0; font:var(--text-sm); color:var(--text-mid);">Scanning stops now. The 2 picks already found are kept; the run is marked cancelled.</p>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; padding:18px 20px;">
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" onClick="{{ closeCancel }}" hint-size="auto,36px">Keep running</x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="destructive" icon-left="close" onClick="{{ closeCancel }}" hint-size="auto,36px">Cancel run</x-import>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </dc-import>
+  </div>
+
+  <!-- ============ STATES GALLERY ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Run states</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">State is persisted every step — a failed run resumes exactly where it stopped.</span>
+  </div>
+  <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+    <!-- COMPLETED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">02 · Completed (#23)</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <div style="display:flex; justify-content:flex-end; margin-bottom:16px;"><span style="display:inline-flex; align-items:center; gap:7px; font:600 11px/1 var(--font-mono); letter-spacing:0.1em; color:var(--phosphor); padding:5px 10px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-sm);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>COMPLETED IN 3m12s</span></div>
+        <div style="display:flex; gap:14px;">
+          <div style="position:relative; width:22px; flex-shrink:0;"><div style="position:absolute; left:10px; top:-20px; bottom:50%; width:2px; background:rgba(167,139,250,0.26);"></div><div style="position:absolute; left:4px; top:16px; width:14px; height:14px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 8px var(--phosphor); border:2px solid var(--bg-void);"></div></div>
+          <div style="flex:1; padding:16px 18px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-left:3px solid var(--phosphor); border-radius:var(--radius-card);">
+            <div style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi); margin-bottom:6px;">Run complete</div>
+            <div style="font:var(--mono-sm); color:var(--text-mid); margin-bottom:14px;">5 shortlisted of 512 scanned · 14 steps · $0.43</div>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="bookmark" hint-size="auto,36px">View shortlist</x-import>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAILED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">03 · Failed mid-run — resume</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px; display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; gap:14px;">
+          <div style="position:relative; width:22px; flex-shrink:0;"><div style="position:absolute; left:10px; top:-20px; bottom:50%; width:2px; background:rgba(167,139,250,0.26);"></div><div style="position:absolute; left:4px; top:16px; width:14px; height:14px; border-radius:50%; background:var(--red); box-shadow:0 0 8px var(--red); border:2px solid var(--bg-void);"></div></div>
+          <div style="flex:1; padding:14px 16px; background:var(--red-14); border:1px solid rgba(255,93,93,0.32); border-left:3px solid var(--red); border-radius:var(--radius-card); display:flex; align-items:center; gap:10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+            <span style="font:var(--mono-sm); color:var(--red);">LLM provider 500 after 3 retries — run halted at step 11</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; padding:14px 16px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-control);">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="FAILED" hint-size="auto,20px"></x-import>
+          <span style="flex:1; font:var(--mono-sm); color:var(--text-low-content);">state persisted · step 11/25</span>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="play" hint-size="auto,36px">Resume from step 11</x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESUMED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">04 · Resumed</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px; display:flex; flex-direction:column; gap:0;">
+        <div style="display:flex; gap:14px;"><div style="position:relative; width:22px; flex-shrink:0;"><div style="position:absolute; left:10px; top:0; bottom:-14px; width:2px; background:rgba(167,139,250,0.26);"></div><div style="position:absolute; left:4px; top:15px; width:14px; height:14px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); border:2px solid var(--bg-void);"></div></div><div style="flex:1; margin-bottom:14px; padding:13px 16px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card);"><span style="font:var(--mono-base); color:var(--text-hi);">read_posting</span> <span style="font:var(--mono-sm); color:var(--text-low-content);">→ DataForge · parsed ok</span></div></div>
+        <div style="display:flex; align-items:center; gap:14px; padding:6px 0 18px 8px;"><div style="flex:1; height:1px; background:repeating-linear-gradient(90deg, rgba(167,139,250,0.4) 0 6px, transparent 6px 12px);"></div><span style="font:var(--mono-sm); color:var(--violet); white-space:nowrap;">— resumed from step 11 (run #22) —</span><div style="flex:1; height:1px; background:repeating-linear-gradient(90deg, rgba(167,139,250,0.4) 0 6px, transparent 6px 12px);"></div></div>
+        <div style="display:flex; gap:14px;"><div style="position:relative; width:22px; flex-shrink:0;"><div style="position:absolute; left:10px; top:-14px; bottom:0; width:2px; background:rgba(167,139,250,0.26);"></div><div style="position:absolute; left:4px; top:15px; width:14px; height:14px; border-radius:50%; background:var(--violet); box-shadow:0 0 8px var(--violet); border:2px solid var(--bg-void);"></div></div><div style="flex:1; padding:13px 16px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.28); border-left:3px solid var(--violet); border-radius:var(--radius-card);"><p style="margin:0; font:italic 14px/1.5 var(--font-ui); color:var(--text-mid);">Picking up where #22 stopped — 4 postings still unread.</p></div></div>
+      </div>
+    </div>
+
+    <!-- BUDGET EXHAUSTED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">05 · Budget exhausted</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px; display:flex; align-items:center;">
+        <div style="display:flex; gap:14px; width:100%;">
+          <div style="position:relative; width:22px; flex-shrink:0;"><div style="position:absolute; left:10px; top:-20px; bottom:50%; width:2px; background:rgba(167,139,250,0.26);"></div><div style="position:absolute; left:4px; top:16px; width:14px; height:14px; border-radius:50%; background:var(--amber); box-shadow:0 0 8px var(--amber); border:2px solid var(--bg-void);"></div></div>
+          <div style="flex:1; padding:16px 18px; background:var(--amber-14); border:1px solid rgba(255,200,87,0.32); border-left:3px solid var(--amber); border-radius:var(--radius-card); display:flex; align-items:flex-start; gap:12px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+            <div><div style="font:600 14px/1.4 var(--font-ui); color:var(--text-hi);">Step budget reached (25/25) — stopping with 3 picks.</div><div style="font:var(--mono-sm); color:var(--text-low-content); margin-top:6px;">Raise the cap in Settings to scan deeper.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAUSED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">06 · Paused</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <div style="display:flex; justify-content:flex-end; margin-bottom:16px;"><span style="display:inline-flex; align-items:center; gap:7px; font:600 11px/1 var(--font-mono); letter-spacing:0.1em; color:var(--amber); padding:5px 10px; background:var(--amber-14); border:1px solid rgba(255,200,87,0.38); border-radius:var(--radius-sm);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="4" width="4" height="16" rx="1"></rect><rect x="6" y="4" width="4" height="16" rx="1"></rect></svg>PAUSED</span></div>
+        <div style="display:flex; align-items:center; gap:12px; padding:14px 16px; background:var(--amber-14); border:1px solid rgba(255,200,87,0.32); border-radius:var(--radius-control); margin-bottom:16px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="14" y="4" width="4" height="16" rx="1"></rect><rect x="6" y="4" width="4" height="16" rx="1"></rect></svg>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Run paused at step 14.</span>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="play" hint-size="auto,36px">Resume</x-import>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="destructive" hint-size="auto,36px">Cancel</x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- CANCELLED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">07 · Cancelled</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <div style="display:flex; justify-content:flex-end; margin-bottom:16px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="CANCELLED" hint-size="auto,20px"></x-import></div>
+        <div style="display:flex; gap:14px;">
+          <div style="position:relative; width:22px; flex-shrink:0;"><div style="position:absolute; left:10px; top:-20px; bottom:50%; width:2px; background:rgba(167,139,250,0.26);"></div><div style="position:absolute; left:4px; top:16px; width:14px; height:14px; border-radius:50%; background:var(--text-low); border:2px solid var(--bg-void);"></div></div>
+          <div style="flex:1; padding:14px 16px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); opacity:0.6;">
+            <span style="font:var(--mono-sm); color:var(--text-mid);">Cancelled by user at step 14 — 2 picks kept.</span>
+          </div>
+        </div>
+        <div style="font:var(--mono-sm); color:var(--text-low-content); margin-top:14px; padding-left:36px;">Picks so far remain in your shortlist.</div>
+      </div>
+    </div>
+
+    <!-- FEED LOST -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">08 · Feed lost — reconnecting</span>
+      <div style="padding:0; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px; overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:10px; padding:11px 16px; background:var(--amber-14); border-bottom:1px solid rgba(255,200,87,0.3);">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Spinner" size="16" color="var(--amber)" hint-size="16px,16px"></x-import>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Live feed lost — reconnecting…</span>
+          <span style="font:var(--mono-sm); color:var(--amber);">retry 2</span>
+        </div>
+        <div style="padding:18px; opacity:0.5; filter:saturate(0.6); display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; gap:14px;"><div style="position:relative; width:22px; flex-shrink:0;"><div style="position:absolute; left:10px; top:0; bottom:-12px; width:2px; background:rgba(167,139,250,0.26);"></div><div style="position:absolute; left:4px; top:14px; width:14px; height:14px; border-radius:50%; background:var(--cyan); border:2px solid var(--bg-void);"></div></div><div style="flex:1; padding:13px 16px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card);"><span style="font:var(--mono-base); color:var(--text-hi);">read_posting</span> <span style="font:var(--mono-sm); color:var(--text-low-content);">→ frozen at 14:31:08</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPTY -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">09 · Empty — no runs</span>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:14px;">The agent is idle</span>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-idle" size="100" hint-size="100px,100px"></x-import>
+        <h3 style="margin:14px 0 6px; font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-hi);">No scans yet</h3>
+        <p style="margin:0 0 18px; max-width:320px; font:var(--text-sm); color:var(--text-mid);">Complete your profile, then run a first scan to get matched picks.</p>
+        <div style="display:flex; gap:10px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-right="arrow-right" hint-size="auto,36px">Complete your profile first</x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">10 · Loading old run</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px; display:flex; flex-direction:column; gap:0;">
+        <sc-for list="{{ rng4 }}" as="x" hint-placeholder-count="4">
+          <div style="display:flex; gap:14px;">
+            <div style="position:relative; width:22px; flex-shrink:0;"><div style="position:absolute; left:10px; top:0; bottom:0; width:2px; background:rgba(167,139,250,0.18);"></div><div style="position:absolute; left:4px; top:15px; width:14px; height:14px; border-radius:50%; background:rgba(167,139,250,0.3); border:2px solid var(--bg-void);"></div></div>
+            <div style="flex:1; margin-bottom:12px; padding:14px 16px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); display:flex; flex-direction:column; gap:9px;">
+              <div style="width:40%; height:13px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+              <div style="width:70%; height:10px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1060}}">
+class Component extends DCLogic {
+  state = { sec: 138, cancelOpen: false };
+  componentDidMount() {
+    this._t = setInterval(() => this.setState((s) => ({ sec: s.sec + 1 })), 1000);
+  }
+  componentWillUnmount() { clearInterval(this._t); }
+  setTrace = (el) => { if (el) el.scrollTop = el.scrollHeight; };
+
+  renderVals() {
+    const m = Math.floor(this.state.sec / 60), s = this.state.sec % 60;
+    const steps = [
+      { type: 'tool', name: 'get_profile', obs: '→ profile v4 · 23 skills' },
+      { type: 'reasoning', text: 'Salary floor $150k and remote-only cut the space — starting wide on TS+AI.' },
+      { type: 'tool', name: 'search_jobs', argsLine: '{ "query": "typescript ai remote", "salary_min": 150000 }', argsJson: '{\n  "query": "typescript ai remote",\n  "salary_min": 150000\n}', obs: '→ 42 results · 180ms' },
+      { type: 'reasoning', text: 'Too broad — narrowing to AI-focused roles with stated salary.' },
+      { type: 'tool', name: 'search_jobs', argsLine: '{ "query": "llm product engineer", "remote": true }', argsJson: '{\n  "query": "llm product engineer",\n  "remote": true\n}', obs: '→ 17 results · 142ms' },
+      { type: 'tool', name: 'read_posting', argsLine: '{ "id": "hn-48357801" }', argsJson: '{\n  "id": "hn-48357801"\n}', obs: '→ Meridian Labs · parsed ok' },
+      { type: 'decision', decision: 'yes', text: 'Shortlisted Meridian Labs — score 91', chipCompany: 'Meridian Labs', chipScore: '91' },
+      { type: 'error', text: 'read_posting failed (timeout) — retrying (2/3)' },
+      { type: 'tool', name: 'read_posting', argsLine: '{ "id": "hn-48361002" }  · retry', argsJson: '{\n  "id": "hn-48361002"\n}', obs: '→ Quietwire · parsed ok' },
+      { type: 'decision', decision: 'yes', text: 'Shortlisted Quietwire — score 88', chipCompany: 'Quietwire', chipScore: '88' },
+      { type: 'tool', name: 'read_posting', argsLine: '{ "id": "hn-48359417" }', argsJson: '{\n  "id": "hn-48359417"\n}', obs: '→ Northbeam Systems · parsed ok' },
+      { type: 'decision', decision: 'no', text: 'Dismissed Northbeam — onsite NYC conflicts with remote-only (score 42)', chipCompany: 'Northbeam Systems', chipScore: '42' },
+      { type: 'reasoning', live: true, text: 'Three strong picks; 11 candidates left in queue.' },
+    ];
+    return {
+      steps,
+      elapsed: m + 'm ' + (s < 10 ? '0' + s : s) + 's',
+      picks: [
+        { company: 'Meridian Labs', role: 'Senior Full-Stack Engineer', score: '91', offset: (100.5 * (1 - 0.91)).toFixed(1) },
+        { company: 'Quietwire', role: 'Senior Product Engineer, AI', score: '88', offset: (100.5 * (1 - 0.88)).toFixed(1) },
+      ],
+      rng4: [0, 1, 2, 3],
+      cancelOpen: this.state.cancelOpen,
+      openCancel: () => this.setState({ cancelOpen: true }),
+      closeCancel: () => this.setState({ cancelOpen: false }),
+      setTrace: this.setTrace,
+    };
+  }
+}
+</script>
+</body>
+</html>

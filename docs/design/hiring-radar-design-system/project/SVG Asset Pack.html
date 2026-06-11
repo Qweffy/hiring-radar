@@ -1,0 +1,365 @@
+<!-- @dsCard group="Brand" viewport="1100x1400" name="SVG Asset Pack — the only illustrations allowed" subtitle="14 self-contained radar/blueprint SVGs. Reference these by name in every screen." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hiring Radar — SVG Asset Pack</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  html, body { margin: 0; }
+  body { background-color: #06080C;
+    background-image: radial-gradient(rgba(61,255,162,0.04) 1px, transparent 1px);
+    background-size: 24px 24px; color: #93A4B3; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 28px 100px; }
+  header { display: flex; align-items: flex-end; flex-wrap: wrap; justify-content: space-between; gap: 20px; margin-bottom: 6px; }
+  .seclbl { font: 600 11px/1.2 'JetBrains Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6B7A; margin: 0; }
+  h1 { font: 600 30px/1.1 'Space Grotesk', sans-serif; letter-spacing: -0.02em; color: #E8F0F2; margin: 6px 0 0; white-space: nowrap; }
+  .intro { font: 400 14px/1.55 'Inter', sans-serif; color: #93A4B3; max-width: 620px; margin: 14px 0 34px; }
+  .intro b { color: #3DFFA2; font-weight: 500; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 16px; }
+  .grid.row2 { grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); }
+  .cell { display: flex; flex-direction: column; background: #0B1018; border: 1px solid rgba(61,255,162,0.16); border-radius: 10px; overflow: hidden; }
+  .cell.wide { grid-column: span 2; }
+  .frame { display: flex; align-items: center; justify-content: center; height: 168px; padding: 14px;
+    background:
+      linear-gradient(rgba(61,255,162,0.022) 1px, transparent 1px) 0 0 / 16px 16px,
+      linear-gradient(90deg, rgba(61,255,162,0.022) 1px, transparent 1px) 0 0 / 16px 16px,
+      #06080C;
+    border-bottom: 1px solid rgba(147,164,179,0.10); }
+  .frame svg { display: block; max-height: 132px; width: auto; }
+  .frame.tall svg { max-height: 140px; }
+  .meta { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+  .name { font: 600 12px/1.2 'JetBrains Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase; color: #E8F0F2; }
+  .name .id { color: #3DFFA2; }
+  .use { font: 400 11.5px/1.45 'Inter', sans-serif; color: #6E7E8F; }
+  .grouphdr { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; margin: 26px 0 2px; }
+  .grouphdr span { font: 600 11px/1.2 'JetBrains Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6B7A; }
+  .grouphdr .ln { flex: 1; height: 1px; background: rgba(147,164,179,0.12); }
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(147,164,179,0.10); font: 400 12px/1.6 'Inter', sans-serif; color: #6E7E8F; }
+  footer code { font-family: 'JetBrains Mono', monospace; color: #93A4B3; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <p class="seclbl">Hiring Radar · Brand</p>
+      <h1>SVG Asset Pack</h1>
+    </div>
+    <!-- wordmark, inline so Space Grotesk applies -->
+    <svg data-name="wordmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" width="252" height="54" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="hiring-radar">
+      <g transform="translate(32 32)">
+        <circle r="24" fill="none" stroke="#3DFFA2" stroke-opacity="0.22" stroke-width="1.5"/>
+        <circle r="15.5" fill="none" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"/>
+        <circle r="7" fill="none" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"/>
+        <path d="M0 0 L0 -24 A24 24 0 0 1 18.4 -15.4 Z" fill="#3DFFA2" fill-opacity="0.12"/>
+        <line x1="0" y1="0" x2="0" y2="-24" stroke="#3DFFA2" stroke-opacity="0.55" stroke-width="1.5"/>
+        <circle r="2.4" fill="#3DFFA2"/>
+        <circle cx="18" cy="-12" r="2.2" fill="#3DFFA2"/>
+      </g>
+      <text x="72" y="42" font-family="'Space Grotesk', system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="-0.5" fill="#E8F0F2">hiring-radar</text>
+      <!-- phosphor blip dot over the first "i" -->
+      <circle cx="99.5" cy="14.5" r="3.1" fill="#3DFFA2"/>
+      <circle cx="99.5" cy="14.5" r="6" fill="#3DFFA2" opacity="0.28" filter="url(#wm_glow)"/>
+      <defs><filter id="wm_glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2"/></filter></defs>
+    </svg>
+  </header>
+  <p class="intro">The <b>only illustrations allowed</b> in Hiring Radar screens. Every asset is a self-contained, stroke-based SVG — technical and precise, blueprint-meets-radar-scope. 1.5px stroke throughout (favicon excepted), no gradients beyond phosphor glows, no people, no emoji. Reference each by its <b>name</b>.</p>
+
+  <div class="grid">
+
+    <!-- ============ IDENTITY ============ -->
+    <div class="grouphdr"><span>Identity</span><div class="ln"></div></div>
+
+    <!-- LOGO MARK -->
+    <div class="cell">
+      <div class="frame">
+        <svg data-name="mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="120" height="120" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <defs><filter id="mark_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.8"/></filter></defs>
+          <circle cx="32" cy="32" r="26" stroke="#3DFFA2" stroke-opacity="0.30" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="17" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="8" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"/>
+          <path d="M32 32 L32 6 A26 26 0 0 1 51.9 15.3 Z" fill="#3DFFA2" fill-opacity="0.12"/>
+          <line x1="32" y1="32" x2="32" y2="6" stroke="#3DFFA2" stroke-opacity="0.6" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="2.2" fill="#3DFFA2"/>
+          <circle cx="49" cy="22" r="6" fill="#3DFFA2" opacity="0.35" filter="url(#mark_g)"/>
+          <circle cx="49" cy="22" r="3" fill="#3DFFA2"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">mark</span></div><div class="use">Primary logo glyph · 64px · app icon, nav, splash</div></div>
+    </div>
+
+    <!-- FAVICON -->
+    <div class="cell">
+      <div class="frame">
+        <svg data-name="favicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="96" height="96" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9.5" stroke="#3DFFA2" stroke-opacity="0.45" stroke-width="2.5"/>
+          <path d="M12 12 L12 2.5 A9.5 9.5 0 0 1 19.8 6.6 Z" fill="#3DFFA2" fill-opacity="0.16"/>
+          <line x1="12" y1="12" x2="12" y2="2.5" stroke="#3DFFA2" stroke-opacity="0.7" stroke-width="2.5"/>
+          <circle cx="17.6" cy="8.8" r="2.1" fill="#3DFFA2"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">favicon</span></div><div class="use">16–24px · one ring + wedge + blip · 2.5px stroke</div></div>
+    </div>
+
+    <!-- WORDMARK (also shown small in cell) -->
+    <div class="cell wide">
+      <div class="frame">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" width="300" height="64" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <g transform="translate(32 32)">
+            <circle r="24" fill="none" stroke="#3DFFA2" stroke-opacity="0.22" stroke-width="1.5"/>
+            <circle r="15.5" fill="none" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"/>
+            <circle r="7" fill="none" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"/>
+            <path d="M0 0 L0 -24 A24 24 0 0 1 18.4 -15.4 Z" fill="#3DFFA2" fill-opacity="0.12"/>
+            <line x1="0" y1="0" x2="0" y2="-24" stroke="#3DFFA2" stroke-opacity="0.55" stroke-width="1.5"/>
+            <circle r="2.4" fill="#3DFFA2"/>
+            <circle cx="18" cy="-12" r="2.2" fill="#3DFFA2"/>
+          </g>
+          <text x="72" y="42" font-family="'Space Grotesk', system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="-0.5" fill="#E8F0F2">hiring-radar</text>
+          <circle cx="99.5" cy="14.5" r="3.1" fill="#3DFFA2"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">wordmark</span></div><div class="use">mark + “hiring-radar” (Space Grotesk 600) · phosphor blip dots the “i”</div></div>
+    </div>
+
+    <!-- ============ EMPTY & IDLE STATES ============ -->
+    <div class="grouphdr"><span>Empty &amp; idle states</span><div class="ln"></div></div>
+
+    <!-- EMPTY RADAR -->
+    <div class="cell">
+      <div class="frame tall">
+        <svg data-name="empty-radar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="132" height="132" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="60" cy="60" r="46" stroke="#5C8A77" stroke-opacity="0.34" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="31" stroke="#5C8A77" stroke-opacity="0.26" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="16" stroke="#5C8A77" stroke-opacity="0.26" stroke-width="1.5"/>
+          <line x1="60" y1="14" x2="60" y2="106" stroke="#5C8A77" stroke-opacity="0.18" stroke-width="1.5"/>
+          <line x1="14" y1="60" x2="106" y2="60" stroke="#5C8A77" stroke-opacity="0.18" stroke-width="1.5"/>
+          <path d="M60 60 L60 14 A46 46 0 0 1 93.1 28 Z" fill="#5C8A77" fill-opacity="0.07"/>
+          <line x1="60" y1="60" x2="60" y2="14" stroke="#5C8A77" stroke-opacity="0.4" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="2" fill="#5C8A77" fill-opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">empty-radar</span></div><div class="use">“Radar quiet” · zero blips, desaturated · empty lists</div></div>
+    </div>
+
+    <!-- LONELY BLIP -->
+    <div class="cell">
+      <div class="frame tall">
+        <svg data-name="lonely-blip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="132" height="132" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <defs><filter id="lb_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.4"/></filter></defs>
+          <circle cx="60" cy="60" r="46" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="31" stroke="#3DFFA2" stroke-opacity="0.16" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="16" stroke="#3DFFA2" stroke-opacity="0.16" stroke-width="1.5"/>
+          <line x1="60" y1="14" x2="60" y2="106" stroke="#3DFFA2" stroke-opacity="0.10" stroke-width="1.5"/>
+          <line x1="14" y1="60" x2="106" y2="60" stroke="#3DFFA2" stroke-opacity="0.10" stroke-width="1.5"/>
+          <!-- single blip with ping ripple -->
+          <circle cx="78" cy="44" r="20" stroke="#3DFFA2" stroke-opacity="0.16" stroke-width="1.5"/>
+          <circle cx="78" cy="44" r="12" stroke="#3DFFA2" stroke-opacity="0.34" stroke-width="1.5"/>
+          <circle cx="78" cy="44" r="7" fill="#3DFFA2" opacity="0.4" filter="url(#lb_g)"/>
+          <circle cx="78" cy="44" r="3.2" fill="#3DFFA2"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">lonely-blip</span></div><div class="use">Shortlist empty · one blip, ping ripple</div></div>
+    </div>
+
+    <!-- AGENT ORB IDLE -->
+    <div class="cell">
+      <div class="frame tall">
+        <svg data-name="agent-orb-idle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="124" height="124" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="60" cy="60" rx="48" ry="19" transform="rotate(-22 60 60)" stroke="#A78BFA" stroke-opacity="0.20" stroke-width="1.5"/>
+          <ellipse cx="60" cy="60" rx="48" ry="19" transform="rotate(34 60 60)" stroke="#A78BFA" stroke-opacity="0.16" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="26" stroke="#A78BFA" stroke-opacity="0.34" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="16" stroke="#A78BFA" stroke-opacity="0.24" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="6.5" fill="#A78BFA" fill-opacity="0.30"/>
+          <circle cx="98" cy="46" r="2.4" fill="#A78BFA" fill-opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">agent-orb-idle</span></div><div class="use">Agent avatar · idle/dim · agent not running</div></div>
+    </div>
+
+    <!-- AGENT ORB ACTIVE -->
+    <div class="cell">
+      <div class="frame tall">
+        <svg data-name="agent-orb-active" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="124" height="124" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <defs><filter id="orb_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/></filter></defs>
+          <ellipse cx="60" cy="60" rx="48" ry="19" transform="rotate(-22 60 60)" stroke="#A78BFA" stroke-opacity="0.45" stroke-width="1.5"/>
+          <ellipse cx="60" cy="60" rx="48" ry="19" transform="rotate(34 60 60)" stroke="#A78BFA" stroke-opacity="0.38" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="26" stroke="#A78BFA" stroke-opacity="0.7" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="16" stroke="#A78BFA" stroke-opacity="0.5" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="13" fill="#A78BFA" opacity="0.5" filter="url(#orb_g)"/>
+          <circle cx="60" cy="60" r="7" fill="#A78BFA"/>
+          <circle cx="98" cy="46" r="3.4" fill="#A78BFA" filter="url(#orb_g)"/>
+          <circle cx="98" cy="46" r="2.4" fill="#E8F0F2"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">agent-orb-active</span></div><div class="use">Agent avatar · active/glowing · agent shortlisting</div></div>
+    </div>
+
+    <!-- FLATLINE CALIBRATION -->
+    <div class="cell">
+      <div class="frame tall">
+        <svg data-name="flatline-calibration" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="132" height="132" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <line x1="20" y1="26" x2="20" y2="92" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"/>
+          <line x1="20" y1="92" x2="104" y2="92" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"/>
+          <!-- dotted target line -->
+          <line x1="22" y1="42" x2="104" y2="42" stroke="#4CC9F0" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="2 5"/>
+          <text x="104" y="38" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="8" fill="#4CC9F0" fill-opacity="0.7">target</text>
+          <!-- five flat-at-zero bars -->
+          <rect x="30" y="89" width="9" height="3" rx="1" fill="#3DFFA2" fill-opacity="0.5"/>
+          <rect x="44" y="89" width="9" height="3" rx="1" fill="#3DFFA2" fill-opacity="0.5"/>
+          <rect x="58" y="89" width="9" height="3" rx="1" fill="#3DFFA2" fill-opacity="0.5"/>
+          <rect x="72" y="89" width="9" height="3" rx="1" fill="#3DFFA2" fill-opacity="0.5"/>
+          <rect x="86" y="89" width="9" height="3" rx="1" fill="#3DFFA2" fill-opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">flatline-calibration</span></div><div class="use">Profile empty · bars at zero, dotted target above</div></div>
+    </div>
+
+    <!-- CLEAN SIGNAL -->
+    <div class="cell">
+      <div class="frame tall">
+        <svg data-name="clean-signal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="132" height="132" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <defs><filter id="cs_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.4"/></filter></defs>
+          <circle cx="60" cy="60" r="42" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="26" stroke="#3DFFA2" stroke-opacity="0.14" stroke-width="1.5"/>
+          <path d="M50 60 l7 7 l14 -17" stroke="#3DFFA2" stroke-width="3" opacity="0.5" filter="url(#cs_g)"/>
+          <path d="M50 60 l7 7 l14 -17" stroke="#3DFFA2" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">clean-signal</span></div><div class="use">Dead-letters empty · scope + phosphor check · “all clear”</div></div>
+    </div>
+
+    <!-- ============ ERROR STATES ============ -->
+    <div class="grouphdr"><span>Error states</span><div class="ln"></div></div>
+
+    <!-- LOST SIGNAL -->
+    <div class="cell wide">
+      <div class="frame tall">
+        <svg data-name="lost-signal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="140" height="140" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <defs><filter id="ls_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.2"/></filter></defs>
+          <!-- intact left half -->
+          <path d="M60 14 A46 46 0 0 0 60 106" stroke="#3DFFA2" stroke-opacity="0.22" stroke-width="1.5"/>
+          <path d="M60 29 A31 31 0 0 0 60 91" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"/>
+          <line x1="14" y1="60" x2="46" y2="60" stroke="#3DFFA2" stroke-opacity="0.14" stroke-width="1.5"/>
+          <!-- shattered right half: displaced red dashed arcs -->
+          <path d="M64 15 A46 46 0 0 1 104 56" stroke="#FF5D5D" stroke-opacity="0.55" stroke-width="1.5" stroke-dasharray="6 5" transform="translate(3 -2)"/>
+          <path d="M62 30 A31 31 0 0 1 90 70" stroke="#FF5D5D" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="4 5" transform="translate(5 1)"/>
+          <path d="M84 92 A46 46 0 0 0 105 64" stroke="#FF5D5D" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="5 6" transform="translate(-2 3)"/>
+          <!-- scanline tear -->
+          <rect x="58" y="56" width="52" height="8" fill="#FF5D5D" fill-opacity="0.07"/>
+          <line x1="44" y1="56" x2="112" y2="56" stroke="#FFC857" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <line x1="50" y1="64" x2="106" y2="64" stroke="#FF5D5D" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 4" transform="translate(6 0)"/>
+          <!-- glitch blocks -->
+          <rect x="92" y="38" width="9" height="3" fill="#FFC857" fill-opacity="0.6"/>
+          <rect x="86" y="78" width="13" height="3" fill="#FF5D5D" fill-opacity="0.55"/>
+          <!-- flickering red blip -->
+          <circle cx="82" cy="46" r="7" fill="#FF5D5D" opacity="0.45" filter="url(#ls_g)"/>
+          <circle cx="82" cy="46" r="3.2" fill="#FF5D5D"/>
+          <circle cx="60" cy="60" r="2" fill="#3DFFA2" fill-opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">lost-signal</span></div><div class="use">Full-page error boundary · broken instrument, scanline tear, flickering red blip</div></div>
+    </div>
+
+    <!-- OFF THE GRID -->
+    <div class="cell wide">
+      <div class="frame tall">
+        <svg data-name="off-the-grid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="140" height="140" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <defs>
+            <filter id="og_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.8"/></filter>
+            <clipPath id="og_clip"><path d="M6 14 H58 L54 26 L60 40 L52 54 L58 70 L50 84 L56 100 L6 106 Z"/></clipPath>
+          </defs>
+          <!-- map grid clipped to torn left region -->
+          <g clip-path="url(#og_clip)" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5">
+            <line x1="6" y1="26" x2="58" y2="26"/><line x1="6" y1="44" x2="58" y2="44"/>
+            <line x1="6" y1="62" x2="58" y2="62"/><line x1="6" y1="80" x2="58" y2="80"/>
+            <line x1="6" y1="98" x2="58" y2="98"/>
+            <line x1="20" y1="14" x2="20" y2="106"/><line x1="36" y1="14" x2="36" y2="106"/>
+            <line x1="52" y1="14" x2="52" y2="106"/>
+          </g>
+          <!-- torn edge -->
+          <path d="M58 14 L54 26 L60 40 L52 54 L58 70 L50 84 L56 100" stroke="#3DFFA2" stroke-opacity="0.5" stroke-width="1.5"/>
+          <!-- sweep origin + beam crossing into the void -->
+          <circle cx="40" cy="60" r="3" fill="#3DFFA2"/>
+          <circle cx="40" cy="60" r="9" stroke="#3DFFA2" stroke-opacity="0.3" stroke-width="1.5"/>
+          <line x1="40" y1="60" x2="108" y2="34" stroke="#3DFFA2" stroke-opacity="0.55" stroke-width="1.5"/>
+          <path d="M40 60 L108 34 L104 50 Z" fill="#3DFFA2" fill-opacity="0.06"/>
+          <!-- dotted nothingness beyond -->
+          <g fill="#3DFFA2" fill-opacity="0.45">
+            <circle cx="72" cy="48" r="1.3"/><circle cx="84" cy="40" r="1.3"/><circle cx="96" cy="60" r="1.3"/>
+            <circle cx="78" cy="72" r="1.3"/><circle cx="100" cy="44" r="1.3"/><circle cx="88" cy="86" r="1.3"/>
+            <circle cx="104" cy="74" r="1.3"/><circle cx="68" cy="86" r="1.3"/>
+          </g>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">off-the-grid</span></div><div class="use">404 · sweep runs past the torn map edge into dotted nothing</div></div>
+    </div>
+
+    <!-- STATIC INTERFERENCE -->
+    <div class="cell">
+      <div class="frame">
+        <svg data-name="static-interference" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="110" height="110" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <!-- broken scope fragment -->
+          <path d="M20 28 A38 38 0 0 1 76 30" stroke="#FF5D5D" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="7 5"/>
+          <path d="M28 64 A26 26 0 0 0 70 62" stroke="#FFC857" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="5 5"/>
+          <!-- scanline tear -->
+          <rect x="14" y="44" width="68" height="7" fill="#FF5D5D" fill-opacity="0.07"/>
+          <line x1="12" y1="44" x2="80" y2="44" stroke="#FFC857" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <line x1="18" y1="51" x2="84" y2="51" stroke="#FF5D5D" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="3 4" transform="translate(5 0)"/>
+          <!-- noise speckle -->
+          <g fill="#FFC857" fill-opacity="0.7">
+            <rect x="30" y="32" width="2" height="2"/><rect x="58" y="36" width="2" height="2"/>
+            <rect x="44" y="60" width="2" height="2"/><rect x="66" y="56" width="2" height="2"/>
+          </g>
+          <g fill="#FF5D5D" fill-opacity="0.7">
+            <rect x="38" y="38" width="2" height="2"/><rect x="52" y="64" width="2" height="2"/>
+            <rect x="24" y="56" width="2" height="2"/><rect x="70" y="40" width="2" height="2"/>
+          </g>
+          <circle cx="48" cy="48" r="2.4" fill="#FF5D5D"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">static-interference</span></div><div class="use">Compact inline error (~96px) · noise + tear inside widgets</div></div>
+    </div>
+
+    <!-- ============ UTILITY SPRITES ============ -->
+    <div class="grouphdr"><span>Utility sprites</span><div class="ln"></div></div>
+
+    <!-- BLIP SPRITE -->
+    <div class="cell">
+      <div class="frame">
+        <svg data-name="blip-sprite" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" width="100" height="100" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <defs><filter id="bs_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.4"/></filter></defs>
+          <circle cx="28" cy="28" r="22" stroke="#3DFFA2" stroke-opacity="0.16" stroke-width="1.5"/>
+          <circle cx="28" cy="28" r="13" stroke="#3DFFA2" stroke-opacity="0.34" stroke-width="1.5"/>
+          <circle cx="28" cy="28" r="8" fill="#3DFFA2" opacity="0.4" filter="url(#bs_g)"/>
+          <circle cx="28" cy="28" r="4" fill="#3DFFA2"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">blip-sprite</span></div><div class="use">Reusable blip + ping · plotted on the dashboard radar</div></div>
+    </div>
+
+    <!-- LOADING SWEEP -->
+    <div class="cell">
+      <div class="frame">
+        <svg data-name="loading-sweep" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="110" height="110" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="60" cy="60" r="46" stroke="#3DFFA2" stroke-opacity="0.14" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="31" stroke="#3DFFA2" stroke-opacity="0.10" stroke-width="1.5"/>
+          <!-- sweep beam (rotate this whole SVG via CSS) -->
+          <path d="M60 60 L60 14 A46 46 0 0 1 99 38 Z" fill="#3DFFA2" fill-opacity="0.12"/>
+          <line x1="60" y1="60" x2="60" y2="14" stroke="#3DFFA2" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="2.4" fill="#3DFFA2"/>
+        </svg>
+      </div>
+      <div class="meta"><div class="name"><span class="id">loading-sweep</span></div><div class="use">App spinner · rotate via CSS (<code>animation: spin 1s linear</code>)</div></div>
+    </div>
+
+  </div>
+
+  <footer>
+    Hardcoded system hex (no CSS-var dependency), 1.5px stroke, embedded glow filters — drop any of these into a screen with <code>&lt;img src="assets/illustrations/&lt;name&gt;.svg"&gt;</code> or inline. The <code>loading-sweep</code> and <code>blip-sprite</code> are meant to be animated (CSS rotate / ping); honor <code>prefers-reduced-motion</code> at the usage site.
+  </footer>
+</div>
+</body>
+</html>

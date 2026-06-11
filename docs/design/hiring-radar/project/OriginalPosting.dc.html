@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="font-family:var(--font-ui);">
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Source ·</span>
+    <a href="https://news.ycombinator.com/item?id=48357801" style="display:inline-flex; align-items:center; gap:5px; font:var(--mono-sm); color:var(--cyan); text-decoration:none;">news.ycombinator.com/item?id=48357801<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>
+  </div>
+
+  <div style="padding:18px 20px; background:var(--bg-surface); border:1px solid var(--border); border-left:3px solid var(--phosphor); border-radius:var(--radius-control); display:flex; flex-direction:column; gap:14px; font:14px/1.65 var(--font-ui); color:var(--text-mid);">
+    <div><span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Meridian Labs</span> (YC W25) | <span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Senior Full-Stack Engineer (TypeScript)</span> | <span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Remote (US/EU overlap)</span> | <span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">$160k–$195k</span> + equity</div>
+
+    <div>We're building the orchestration layer for clinical-trial data — think Airflow meets FHIR. Small team (9), profitable since March. Stack: <span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Next.js</span>, <span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">tRPC</span>, <span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Postgres</span>, <span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Temporal</span>; adding LLM-assisted chart review (<span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Claude</span>) and need someone who owns features end-to-end.</div>
+
+    <div>You: 5+ yrs shipping TypeScript in production, opinions about data modeling. Bonus: <span style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Rust</span> for our ingest workers.</div>
+
+    <div>Process: 30-min intro → 2h paired build (real ticket) → founder chat. No leetcode.</div>
+
+    <div><a href="{{ mailtoHref }}" style="text-decoration:underline; text-decoration-style:dotted; text-decoration-color:rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--cyan);">{{ contactEmail }}</a> — mention HN</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:600,&quot;height&quot;:300}}">class Component extends DCLogic {
+  renderVals() {
+    const contactEmail = 'jobs' + '@' + 'meridianlabs.dev';
+    return { contactEmail, mailtoHref: 'mailto:' + contactEmail };
+  }
+}</script>
+</body>
+</html>

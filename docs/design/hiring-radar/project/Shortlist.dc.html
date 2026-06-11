@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-progress { 0% { transform:translateX(-100%);} 100% { transform:translateX(100%);} }
+  @keyframes hr-shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
+  @keyframes hr-shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)} }
+  @keyframes hr-ping2 { 0%{transform:scale(0.6);opacity:0.7} 80%,100%{transform:scale(2.4);opacity:0} }
+  @media (prefers-reduced-motion: reduce){ .hr-prog,.hr-ping2{animation:none !important;} }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1440px; margin:0 auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Route · shortlist</span>
+    <span style="font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--text-hi);">Your shortlist</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Agent picks + saved roles, tracked like a pipeline.</span>
+  </div>
+
+  <!-- ============ MAIN SCREEN ============ -->
+  <div style="position:relative; width:1440px; max-width:1440px; height:1040px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <dc-import name="RadarShell" active-nav="shortlist" sweep="healthy" last-sweep="06:00 UTC" month="JUN 2026" hint-size="100%,100%" style="display:block; width:100%; height:100%;">
+      <div style="position:absolute; inset:0; overflow:auto;">
+        <div style="padding:26px 28px;">
+
+          <!-- header -->
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+            <h2 style="margin:0; font-family:var(--font-display); font-weight:600; font-size:22px; letter-spacing:-0.02em; color:var(--text-hi);">Shortlist</h2>
+            <span style="font:var(--mono-sm); color:var(--text-low-content);">8 TRACKED</span>
+            <span style="flex:1;"></span>
+            <button style="display:inline-flex; align-items:center; gap:8px; height:30px; padding:0 11px; background:transparent; border:1px solid var(--border); border-radius:var(--radius-control); color:var(--text-mid); font:var(--mono-sm); cursor:pointer;" style-hover="border-color: var(--border-strong)">Sort: Match<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <button onClick="{{ runScan }}" style="display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 16px; background:var(--violet); border:1px solid transparent; border-radius:var(--radius-control); color:#160A2E; font:600 13px/1 var(--font-ui); cursor:pointer; box-shadow:var(--glow-violet);" style-hover="background:#b9a2ff"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>Run agent scan</button>
+          </div>
+
+          <!-- tabs -->
+          <div style="display:flex; align-items:center; gap:4px; margin-bottom:18px; border-bottom:1px solid var(--divider);">
+            <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="6">
+              <button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}<span style="{{ t.countStyle }}">{{ t.n }}</span></button>
+            </sc-for>
+          </div>
+
+          <!-- review banner -->
+          <sc-if value="{{ showBanner }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; margin-bottom:18px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-control); box-shadow:0 0 20px rgba(167,139,250,0.08);">
+              <span class="hr-orb" style="display:inline-flex;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-active" size="28" hint-size="28px,28px"></x-import></span>
+              <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Run <span style="font:var(--mono-sm); color:var(--violet);">#23</span> added <span style="color:var(--violet);">5 picks</span> · 2h ago</span>
+              <button onClick="{{ reviewNew }}" style="display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; background:transparent; border:1px solid rgba(167,139,250,0.42); border-radius:var(--radius-control); color:var(--violet); font:600 12px/1 var(--font-ui); cursor:pointer;" style-hover="background: var(--violet-12)">Review them<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+            </div>
+          </sc-if>
+
+          <!-- list -->
+          <sc-if value="{{ hasCards }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <sc-for list="{{ cards }}" as="c" hint-placeholder-count="6">
+                <div style="{{ c.cardStyle }}">
+                  <div style="display:flex; gap:20px; align-items:flex-start; padding:18px 20px;">
+                    <!-- left -->
+                    <div style="width:300px; flex-shrink:0; display:flex; flex-direction:column; gap:8px;">
+                      <span style="{{ c.badgeStyle }}">{{ c.badgeLabel }}</span>
+                      <div style="font:600 16px/1.25 var(--font-ui); color:var(--text-hi);">{{ c.company }}</div>
+                      <div style="font:var(--text-sm); color:var(--text-mid);">{{ c.role }}</div>
+                      <div style="font:var(--mono-base); color:var(--phosphor);">{{ c.salary }}</div>
+                      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:2px;"><sc-for list="{{ c.stack }}" as="s" hint-placeholder-count="3"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">{{ s }}</x-import></sc-for></div>
+                    </div>
+                    <!-- center why -->
+                    <div style="flex:1; min-width:0; padding-top:24px;">
+                      <sc-if value="{{ c.why }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex; gap:9px; align-items:flex-start;">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+                          <p style="margin:0; font:italic 14px/1.5 var(--font-ui); color:var(--text-mid);">{{ c.why }}</p>
+                        </div>
+                      </sc-if>
+                    </div>
+                    <!-- right -->
+                    <div style="display:flex; align-items:center; gap:16px; flex-shrink:0; padding-top:18px;">
+                      <div style="position:relative; width:54px; height:54px;">
+                        <svg width="54" height="54" style="transform:rotate(-90deg);"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(167,139,250,0.16)" stroke-width="5"></circle><circle cx="27" cy="27" r="24" fill="none" stroke="var(--violet)" stroke-width="5" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="{{ c.gaugeOffset }}" style="filter:drop-shadow(0 0 5px rgba(167,139,250,0.45));"></circle></svg>
+                        <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:600 15px/1 var(--font-mono); color:var(--text-hi);">{{ c.match }}</div>
+                      </div>
+                      <select value="{{ c.stage }}" onChange="{{ c.onStage }}" style="{{ c.selectStyle }}">
+                        <option value="new">New</option>
+                        <option value="applied">Applied</option>
+                        <option value="interviewing">Interviewing</option>
+                        <option value="offer">Offer</option>
+                        <option value="archived">Archived</option>
+                      </select>
+                      <div style="position:relative;">
+                        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.IconButton" icon="kebab" label="More" onClick="{{ c.onKebab }}" hint-size="36px,36px"></x-import>
+                        <sc-if value="{{ c.kebabOpen }}" hint-placeholder-val="{{ false }}">
+                          <div style="position:absolute; right:0; top:40px; z-index:50; width:170px; padding:5px; background:var(--bg-raised); border:1px solid var(--border-strong); border-radius:var(--radius-control); box-shadow:var(--shadow-pop);">
+                            <div style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:var(--radius-sm); font:var(--text-sm); color:var(--text-mid); cursor:pointer;" style-hover="background: var(--phosphor-08)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>Open on HN</div>
+                            <div style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:var(--radius-sm); font:var(--text-sm); color:var(--text-mid); cursor:pointer;" style-hover="background: var(--phosphor-08)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><polyline points="21 3 21 9 15 9"></polyline></svg>Re-assess</div>
+                            <div onClick="{{ c.onRemove }}" style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-top:1px solid var(--divider); margin-top:3px; border-radius:var(--radius-sm); font:var(--text-sm); color:var(--red); cursor:pointer;" style-hover="background: var(--red-14)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>Remove</div>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- notes -->
+                  <div style="padding:0 20px 14px;">
+                    <div style="border-top:1px solid var(--divider); padding-top:12px;">
+                      <sc-if value="{{ c.note }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex; align-items:flex-start; gap:9px; margin-bottom:8px;">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;"><path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01"></path><path d="M3 12h.01"></path><path d="M3 18h.01"></path></svg>
+                          <span style="flex:1; font:var(--text-sm); color:var(--text-mid);">{{ c.note }}</span>
+                          <span style="font:var(--mono-sm); color:var(--text-low); white-space:nowrap;">{{ c.noteTs }}</span>
+                        </div>
+                      </sc-if>
+                      <span onClick="{{ c.onNote }}" style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; font:var(--mono-sm); color:var(--text-low-content); cursor:pointer;" style-hover="color: var(--phosphor)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Add note…</span>
+                      <sc-if value="{{ c.noteOpen }}" hint-placeholder-val="{{ false }}">
+                        <textarea placeholder="Write a note…" style="display:block; width:100%; margin-top:10px; min-height:60px; padding:10px 12px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); color:var(--text-hi); font:var(--mono-sm); resize:vertical; outline:none;"></textarea>
+                      </sc-if>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <!-- filtered empty -->
+          <sc-if value="{{ filteredEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; align-items:center; justify-content:center; padding:64px 24px;">
+              <span style="font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-low-content);">Nothing in {{ activeLabel }} — yet.</span>
+            </div>
+          </sc-if>
+
+        </div>
+
+        <!-- confirm modal -->
+        <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; background:rgba(3,5,8,0.62); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);">
+            <div style="width:420px; max-width:90%; background:var(--bg-raised); border:1px solid var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-panel); overflow:hidden;">
+              <div style="padding:20px 20px 0;">
+                <h3 style="margin:0 0 8px; font:var(--text-h3); color:var(--text-hi);">Remove from shortlist?</h3>
+                <p style="margin:0; font:var(--text-sm); color:var(--text-mid);">This removes <span style="color:var(--text-hi);">{{ confirmCompany }}</span> and its notes. This can't be undone.</p>
+              </div>
+              <div style="display:flex; justify-content:flex-end; gap:10px; padding:18px 20px;">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" onClick="{{ closeConfirm }}" hint-size="auto,36px">Cancel</x-import>
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="destructive" icon-left="close" onClick="{{ doRemove }}" hint-size="auto,36px">Remove</x-import>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </dc-import>
+  </div>
+
+  <!-- ============ STATES GALLERY ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Shortlist states</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Stage changes are optimistic and revert on failure; a load error never reads as empty.</span>
+  </div>
+  <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+    <!-- 1 LOADING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">01 · Loading</span>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <sc-for list="{{ rng4 }}" as="x" hint-placeholder-count="4">
+          <div style="display:flex; align-items:center; gap:16px; padding:18px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+              <div style="width:90px; height:16px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+              <div style="width:220px; height:12px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+              <div style="width:120px; height:12px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+            </div>
+            <div style="width:54px; height:54px; border-radius:50%; border:5px solid rgba(167,139,250,0.18); flex-shrink:0;"></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- 2 EMPTY never used -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">02 · Empty — never used</span>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:330px;">
+        <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:14px;">No targets acquired</span>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="lonely-blip" size="112" hint-size="112px,112px"></x-import>
+        <h3 style="margin:14px 0 6px; font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-hi);">Your shortlist is empty</h3>
+        <p style="margin:0 0 18px; max-width:320px; font:var(--text-sm); color:var(--text-mid);">Run a scan or browse the index to start tracking roles.</p>
+        <div style="display:flex; gap:10px;">
+          <button style="display:inline-flex; align-items:center; gap:7px; height:36px; padding:0 16px; background:var(--violet); border:1px solid transparent; border-radius:var(--radius-control); color:#160A2E; font:600 13px/1 var(--font-ui); cursor:pointer; box-shadow:var(--glow-violet);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>Run agent scan</button>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-left="search" hint-size="auto,36px">Browse postings</x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 EMPTY filtered -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">03 · Empty — filtered</span>
+      <div style="display:flex; align-items:center; justify-content:center; padding:32px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:330px;">
+        <span style="font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-low-content);">Nothing in Interviewing — yet.</span>
+      </div>
+    </div>
+
+    <!-- 4 AGENT RUN IN PROGRESS -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">04 · Agent run in progress</span>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="position:relative; display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-control); overflow:hidden;">
+          <span class="hr-orb-pulse" style="display:inline-flex;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-active" size="28" hint-size="28px,28px"></x-import></span>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Run <span style="font:var(--mono-sm); color:var(--violet);">#24</span> scanning… <span style="font:var(--mono-sm); color:var(--text-mid);">512 postings · step 9/25</span></span>
+          <div style="position:absolute; left:0; right:0; bottom:0; height:2px; overflow:hidden; background:rgba(167,139,250,0.12);"><div class="hr-prog" style="position:absolute; inset:0; width:40%; background:linear-gradient(90deg, transparent, var(--violet), transparent); animation:hr-progress 1.1s linear infinite;"></div></div>
+        </div>
+        <div style="position:relative; display:flex; align-items:center; gap:16px; padding:16px 18px; background:var(--bg-raised); border:1px solid rgba(167,139,250,0.3); border-left:3px solid var(--violet); border-radius:var(--radius-card);">
+          <span style="position:absolute; left:-5px; top:50%; width:10px; height:10px;"><span style="position:absolute; inset:0; border-radius:50%; background:var(--violet);"></span><span class="hr-ping2" style="position:absolute; inset:0; border-radius:50%; background:var(--violet); animation:hr-ping2 1.6s var(--ease-out) infinite;"></span></span>
+          <div style="flex:1;"><span style="display:inline-flex; height:20px; padding:0 8px; font:600 10px/20px var(--font-mono); letter-spacing:0.1em; color:var(--violet); background:var(--violet-12); border:1px solid rgba(167,139,250,0.4); border-radius:var(--radius-sm);">NEW PICK</span><div style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi); margin-top:8px;">Vector Foundry</div><div style="font:var(--text-sm); color:var(--text-mid);">ML Platform Engineer</div></div>
+          <div style="position:relative; width:48px; height:48px;"><svg width="48" height="48" style="transform:rotate(-90deg);"><circle cx="24" cy="24" r="21" fill="none" stroke="rgba(167,139,250,0.16)" stroke-width="5"></circle><circle cx="24" cy="24" r="21" fill="none" stroke="var(--violet)" stroke-width="5" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="23.7"></circle></svg><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:600 14px/1 var(--font-mono); color:var(--text-hi);">82</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 ACTION ERROR -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">05 · Action error — stage revert</span>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; align-items:center; gap:16px; padding:16px 18px; background:var(--bg-raised); border:1px solid rgba(255,93,93,0.42); border-left:3px solid var(--red); border-radius:var(--radius-card); animation:hr-shake 0.5s var(--ease-out);">
+          <div style="flex:1;"><div style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi);">DataForge</div><div style="font:var(--text-sm); color:var(--text-mid);">Founding Engineer</div></div>
+          <span style="display:inline-flex; align-items:center; height:30px; padding:0 10px; font:600 11px/1 var(--font-mono); letter-spacing:0.06em; text-transform:uppercase; color:var(--cyan); background:var(--bg-surface); border:1px solid rgba(76,201,240,0.3); border-radius:var(--radius-control);">APPLIED ⤺</span>
+        </div>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Toast" tone="error" title="Couldn't update stage" message="Reverted to Applied. The server didn't respond." action="retry" action-label="Retry" on-action="{{ noop }}" on-close="{{ noop }}" hint-size="100%,80px"></x-import>
+      </div>
+    </div>
+
+    <!-- 6 ARCHIVED VIEW -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">06 · Archived view</span>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <sc-for list="{{ archivedRows }}" as="a" hint-placeholder-count="2">
+          <div style="display:flex; align-items:center; gap:16px; padding:16px 18px; background:var(--bg-raised); border:1px solid var(--border); border-left:3px solid var(--text-low); border-radius:var(--radius-card); opacity:0.55;">
+            <div style="flex:1;"><div style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi);">{{ a.company }}</div><div style="font:var(--text-sm); color:var(--text-mid);">{{ a.role }}</div></div>
+            <button style="display:inline-flex; align-items:center; gap:7px; height:32px; padding:0 12px; background:transparent; border:1px solid var(--border-strong); border-radius:var(--radius-control); color:var(--text-hi); font:var(--text-sm); cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><polyline points="21 3 21 9 15 9"></polyline></svg>Restore</button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- 7 LOAD ERROR -->
+    <div style="grid-column:1 / -1;">
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">07 · Load error (header + tabs stay)</span>
+      <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+          <h3 style="margin:0; font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-hi);">Shortlist</h3>
+          <span style="flex:1;"></span>
+          <span style="display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 14px; background:var(--violet); border-radius:var(--radius-control); color:#160A2E; font:600 12px/1 var(--font-ui); box-shadow:var(--glow-violet);">Run agent scan</span>
+        </div>
+        <div style="display:flex; gap:4px; margin-bottom:18px; border-bottom:1px solid var(--divider);">
+          <span style="padding:0 12px 10px; border-bottom:2px solid var(--phosphor); color:var(--text-hi); font:500 13px/1 var(--font-ui);">All</span>
+          <span style="padding:0 12px 10px; color:var(--text-mid); font:500 13px/1 var(--font-ui);">New</span>
+          <span style="padding:0 12px 10px; color:var(--text-mid); font:500 13px/1 var(--font-ui);">Applied</span>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; padding:36px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control);">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="88" hint-size="88px,88px"></x-import>
+          <span style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi);">Couldn't load your shortlist</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content);">the database didn't respond — your picks are safe</span>
+          <div style="margin-top:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" hint-size="auto,36px">Retry</x-import></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1120}}">
+class Component extends DCLogic {
+  state = {
+    activeTab: 'all',
+    kebab: null,
+    confirmId: null,
+    noteOpen: {},
+    showBanner: true,
+    stages: { meridian: 'new', quietwire: 'new', dataforge: 'applied', glasswing: 'interviewing', helios: 'new', northbeam: 'archived' },
+    removed: {},
+  };
+
+  base() {
+    return [
+      { id: 'meridian', company: 'Meridian Labs', role: 'Senior Full-Stack Engineer (TypeScript)', salary: '$160k–$195k', stack: ['TypeScript', 'React', 'Node'], source: { type: 'agent', run: 23 }, match: 91, why: 'Strongest TypeScript+AI overlap this month; salary above target; async-friendly culture mentioned.', note: null, noteTs: null },
+      { id: 'quietwire', company: 'Quietwire', role: 'Senior Product Engineer, AI', salary: '$140k–$170k', stack: ['Python', 'LLM', 'React'], source: { type: 'agent', run: 23 }, match: 88, why: 'Product engineer role with real LLM surface; global remote; range within target.', note: null, noteTs: null },
+      { id: 'dataforge', company: 'DataForge', role: 'Founding Engineer', salary: '$150k–$180k', stack: ['TypeScript', 'Next.js', 'Go'], source: { type: 'agent', run: 22 }, match: 86, why: null, note: 'Applied 06-08 via email — waiting.', noteTs: '06-08 09:12' },
+      { id: 'glasswing', company: 'Glasswing AI', role: 'Product Engineer (LLM apps)', salary: '$130k–$165k', stack: ['Python', 'TypeScript', 'LLM'], source: { type: 'manual' }, match: 84, why: null, note: '1st call Thu 17:00 UTC-3.', noteTs: '06-09 14:02' },
+      { id: 'helios', company: 'Helios Grid', role: 'Staff Frontend Engineer', salary: '€95k–€120k', stack: ['TypeScript', 'React', 'GraphQL'], source: { type: 'manual' }, match: 78, why: null, note: null, noteTs: null },
+      { id: 'northbeam', company: 'Northbeam Systems', role: 'Platform Engineer (Go/K8s)', salary: '$185k–$220k', stack: ['Go', 'Kubernetes', 'Terraform'], source: { type: 'agent', run: 21 }, match: 42, why: 'Onsite NYC conflicts with remote-only preference.', note: null, noteTs: null },
+    ];
+  }
+
+  stageMeta(s) {
+    const m = {
+      new: { c: 'var(--violet)', tint: 'rgba(167,139,250,0.30)', label: 'New' },
+      applied: { c: 'var(--cyan)', tint: 'rgba(76,201,240,0.30)', label: 'Applied' },
+      interviewing: { c: 'var(--amber)', tint: 'rgba(255,200,87,0.30)', label: 'Interviewing' },
+      offer: { c: 'var(--phosphor)', tint: 'rgba(61,255,162,0.30)', label: 'Offer' },
+      archived: { c: 'var(--text-low)', tint: 'var(--border)', label: 'Archived' },
+    };
+    return m[s] || m.new;
+  }
+
+  renderVals() {
+    const all = this.base().filter((c) => !this.state.removed[c.id]);
+    const stageOf = (c) => this.state.stages[c.id];
+
+    const counts = { new: 0, applied: 0, interviewing: 0, offer: 0, archived: 0 };
+    all.forEach((c) => { counts[stageOf(c)] = (counts[stageOf(c)] || 0) + 1; });
+    counts.new += 1; counts.applied += 1; // 2 tracked-but-not-shown
+    const allCount = all.length + 2;
+
+    const at = this.state.activeTab;
+    const tabDefs = [
+      { id: 'all', label: 'All', n: allCount },
+      { id: 'new', label: 'New', n: counts.new },
+      { id: 'applied', label: 'Applied', n: counts.applied },
+      { id: 'interviewing', label: 'Interviewing', n: counts.interviewing },
+      { id: 'offer', label: 'Offer', n: counts.offer },
+      { id: 'archived', label: 'Archived', n: counts.archived },
+    ];
+    const tabs = tabDefs.map((t) => {
+      const on = t.id === at;
+      return {
+        ...t,
+        onClick: () => this.setState({ activeTab: t.id, kebab: null }),
+        style: {
+          display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '0 14px', height: '38px',
+          background: 'transparent', border: 'none', borderBottom: on ? '2px solid var(--phosphor)' : '2px solid transparent',
+          color: on ? 'var(--text-hi)' : 'var(--text-mid)', font: '500 13px/1 var(--font-ui)', cursor: 'pointer', marginBottom: '-1px',
+        },
+        countStyle: {
+          font: '600 11px/1 var(--font-mono)', padding: '2px 6px', borderRadius: 'var(--radius-sm)',
+          color: on ? 'var(--phosphor)' : 'var(--text-low)', background: on ? 'var(--phosphor-12)' : 'var(--bg-raised)',
+        },
+      };
+    });
+
+    const visible = at === 'all' ? all : all.filter((c) => stageOf(c) === at);
+
+    const cards = visible.map((c) => {
+      const s = stageOf(c);
+      const sm = this.stageMeta(s);
+      const archived = s === 'archived';
+      const isAgent = c.source.type === 'agent';
+      const offset = (150.8 * (1 - c.match / 100)).toFixed(1);
+      return {
+        company: c.company, role: c.role, salary: c.salary, stack: c.stack, why: c.why,
+        match: c.match, gaugeOffset: offset, stage: s,
+        note: c.note, noteTs: c.noteTs,
+        kebabOpen: this.state.kebab === c.id,
+        noteOpen: !!this.state.noteOpen[c.id],
+        badgeLabel: isAgent ? 'AGENT PICK #' + c.source.run : 'MANUAL',
+        badgeStyle: {
+          display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start', height: '20px', padding: '0 8px',
+          font: '600 10px/1 var(--font-mono)', letterSpacing: '0.1em', textTransform: 'uppercase', borderRadius: 'var(--radius-sm)', whiteSpace: 'nowrap',
+          color: isAgent ? 'var(--violet)' : 'var(--phosphor)',
+          background: isAgent ? 'var(--violet-12)' : 'transparent',
+          border: '1px solid ' + (isAgent ? 'rgba(167,139,250,0.4)' : 'var(--border-strong)'),
+        },
+        cardStyle: {
+          background: 'var(--bg-raised)', border: '1px solid ' + sm.tint, borderLeft: '3px solid ' + sm.c,
+          borderRadius: 'var(--radius-card)', boxShadow: 'var(--shadow-card)',
+          opacity: archived ? 0.55 : 1, overflow: 'hidden',
+          transition: 'border-color var(--dur) var(--ease-out), opacity var(--dur) var(--ease-out)',
+        },
+        selectStyle: {
+          height: '30px', padding: '0 8px', borderRadius: 'var(--radius-control)',
+          font: '600 11px/1 var(--font-mono)', letterSpacing: '0.06em', textTransform: 'uppercase',
+          background: 'var(--bg-surface)', color: sm.c, border: '1px solid ' + sm.tint, cursor: 'pointer', appearance: 'auto',
+        },
+        onStage: (e) => this.setStage(c.id, e.target.value),
+        onKebab: () => this.setState((st) => ({ kebab: st.kebab === c.id ? null : c.id })),
+        onRemove: () => this.setState({ confirmId: c.id, kebab: null }),
+        onNote: () => this.setState((st) => ({ noteOpen: { ...st.noteOpen, [c.id]: !st.noteOpen[c.id] } })),
+      };
+    });
+
+    const confirmCard = this.base().find((c) => c.id === this.state.confirmId);
+
+    return {
+      tabs, cards,
+      hasCards: cards.length > 0,
+      filteredEmpty: cards.length === 0,
+      activeLabel: (tabDefs.find((t) => t.id === at) || {}).label || '',
+      showBanner: this.state.showBanner,
+      confirmOpen: !!this.state.confirmId,
+      confirmCompany: confirmCard ? confirmCard.company : '',
+      runScan: () => {},
+      noop: () => {},
+      rng4: [0, 1, 2, 3],
+      archivedRows: [
+        { company: 'Northbeam Systems', role: 'Platform Engineer (Go/K8s)' },
+        { company: 'Loomwork', role: 'Senior ML Engineer' },
+      ],
+      reviewNew: () => this.setState({ activeTab: 'new' }),
+      closeConfirm: () => this.setState({ confirmId: null }),
+      doRemove: () => this.setState((st) => ({ removed: { ...st.removed, [st.confirmId]: true }, confirmId: null })),
+    };
+  }
+
+  setStage(id, v) {
+    this.setState((st) => ({ stages: { ...st.stages, [id]: v } }));
+  }
+}
+</script>
+</body>
+</html>

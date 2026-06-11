@@ -1,0 +1,15 @@
+<!-- @dsCard group="Spacing" viewport="700x160" name="Glows & elevation" subtitle="Phosphor/violet glows on interactive elements; near-black shadows for elevation" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-void); padding: 24px; display: flex; gap: 22px; align-items: center; }
+  .chip { width: 120px; height: 78px; border-radius: var(--radius-card); background: var(--bg-raised); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; }
+  .n { font: var(--mono-sm); color: var(--text-mid); }
+  .t { font: 10px var(--font-mono); color: var(--text-low-content); }
+</style></head>
+<body>
+  <div class="chip" style="box-shadow:var(--glow-phosphor); border-color:var(--border-strong)"><span class="n" style="color:var(--phosphor)">phosphor</span><span class="t">0 0 24 · 0.25</span></div>
+  <div class="chip" style="box-shadow:var(--glow-violet); border-color:rgba(167,139,250,0.4)"><span class="n" style="color:var(--violet)">violet · AI</span><span class="t">0 0 24 · 0.22</span></div>
+  <div class="chip" style="box-shadow:var(--shadow-card)"><span class="n">card</span><span class="t">8 24 · 0.45</span></div>
+  <div class="chip" style="box-shadow:var(--shadow-panel)"><span class="n">panel</span><span class="t">16 48 · 0.55</span></div>
+</body></html>

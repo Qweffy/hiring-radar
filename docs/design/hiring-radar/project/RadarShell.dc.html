@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@keyframes hr-dotping { 0% { transform: scale(1); opacity: 0.55; } 80%, 100% { transform: scale(2.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .hr-dotring { animation: none !important; } }
+</style>
+</helmet>
+
+<div style="display:flex; width:100%; height:100%; background:var(--bg-surface); color:var(--text-mid); font-family:var(--font-ui); overflow:hidden;">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside style="width:248px; flex-shrink:0; display:flex; flex-direction:column; background:var(--bg-surface); border-right:1px solid var(--divider); height:100%;">
+
+    <!-- logo -->
+    <div style="display:flex; align-items:center; gap:10px; height:56px; flex-shrink:0; padding:0 16px; border-bottom:1px solid var(--divider);">
+      <svg width="22" height="22" viewBox="0 0 64 64" fill="none" style="flex-shrink:0; filter:drop-shadow(0 0 6px rgba(61,255,162,0.35));">
+        <circle cx="32" cy="32" r="26" stroke="#3DFFA2" stroke-opacity="0.30" stroke-width="1.5"></circle>
+        <circle cx="32" cy="32" r="17" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"></circle>
+        <circle cx="32" cy="32" r="8" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"></circle>
+        <path d="M32 32 L32 6 A26 26 0 0 1 51.9 15.3 Z" fill="#3DFFA2" fill-opacity="0.14"></path>
+        <line x1="32" y1="32" x2="32" y2="6" stroke="#3DFFA2" stroke-opacity="0.65" stroke-width="1.5"></line>
+        <circle cx="32" cy="32" r="2.2" fill="#3DFFA2"></circle>
+        <circle cx="49" cy="22" r="3" fill="#3DFFA2"></circle>
+      </svg>
+      <span style="font-family:var(--font-display); font-weight:600; font-size:16px; letter-spacing:-0.02em; color:var(--text-hi);">hiring-radar</span>
+    </div>
+
+    <!-- main nav -->
+    <nav style="display:flex; flex-direction:column; gap:2px; padding:12px 10px;">
+      <a href="#" style="{{ navStyle.radar }}" style-hover="background: rgba(147,164,179,0.05)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"></path><path d="M4 6h.01"></path><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"></path><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67"></path><path d="M12 18h.01"></path><path d="M17.99 11.66A6 6 0 0 1 15.77 16.67"></path><circle cx="12" cy="12" r="2"></circle><path d="m13.41 10.59 5.66-5.66"></path></svg>
+        <span style="flex:1;">Radar</span>
+        <span style="font:var(--mono-sm); font-size:11px; color:var(--text-low); letter-spacing:0.08em; white-space:nowrap;">g d</span>
+      </a>
+      <a href="#" style="{{ navStyle.browse }}" style-hover="background: rgba(147,164,179,0.05)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <span style="flex:1;">Browse</span>
+        <span style="font:var(--mono-sm); font-size:11px; color:var(--text-low); letter-spacing:0.08em; white-space:nowrap;">g b</span>
+      </a>
+      <a href="#" style="{{ navStyle.shortlist }}" style-hover="background: rgba(147,164,179,0.05)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <span style="flex:1;">Shortlist</span>
+        <span style="font:var(--mono-sm); font-size:11px; color:var(--text-low); letter-spacing:0.08em; white-space:nowrap;">g s</span>
+      </a>
+      <a href="#" style="{{ navStyle.agent }}" style-hover="background: rgba(147,164,179,0.05)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        <span style="flex:1;">Agent Runs</span>
+        <span style="font:var(--mono-sm); font-size:11px; color:var(--text-low); letter-spacing:0.08em; white-space:nowrap;">g r</span>
+      </a>
+      <a href="#" style="{{ navStyle.profile }}" style-hover="background: rgba(147,164,179,0.05)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span style="flex:1;">Profile</span>
+        <span style="font:var(--mono-sm); font-size:11px; color:var(--text-low); letter-spacing:0.08em; white-space:nowrap;">g u</span>
+      </a>
+    </nav>
+
+    <div style="flex:1;"></div>
+
+    <!-- admin / bottom group -->
+    <div style="padding:0 14px;"><div style="height:1px; background:var(--divider);"></div></div>
+    <div style="padding:6px 10px 4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); padding-left:6px;">ADMIN</span></div>
+    <nav style="display:flex; flex-direction:column; gap:2px; padding:0 10px 14px;">
+      <a href="#" style="{{ navStyle.pipeline }}" style-hover="background: rgba(147,164,179,0.05)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"></rect><rect width="20" height="8" x="2" y="14" rx="2"></rect><path d="M6 6h.01"></path><path d="M6 18h.01"></path></svg>
+        <span style="flex:1;">Pipeline</span>
+        <span style="font:var(--mono-sm); font-size:11px; color:var(--text-low); letter-spacing:0.08em; white-space:nowrap;">g p</span>
+      </a>
+      <a href="#" style="{{ navStyle.settings }}" style-hover="background: rgba(147,164,179,0.05)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span style="flex:1;">Settings</span>
+        <span style="font:var(--mono-sm); font-size:11px; color:var(--text-low); letter-spacing:0.08em; white-space:nowrap;">g ,</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ============ MAIN COLUMN ============ -->
+  <div style="display:flex; flex-direction:column; flex:1; min-width:0; height:100%;">
+
+    <!-- topbar -->
+    <header style="display:flex; align-items:center; gap:16px; height:56px; flex-shrink:0; padding:0 18px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid var(--divider); position:relative; z-index:5;">
+      <div style="width:340px; max-width:38%;">
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.SearchInput" placeholder="scan postings…" hint="⌘K" hint-size="100%,36px"></x-import>
+      </div>
+
+      <button title="Go to Pipeline" style="display:flex; align-items:center; gap:9px; height:34px; padding:0 12px; flex-shrink:0; background:transparent; border:1px solid transparent; border-radius:var(--radius-control); cursor:pointer;" style-hover="background: rgba(147,164,179,0.05); border-color: var(--divider)">
+        <span style="position:relative; width:8px; height:8px; flex-shrink:0;">
+          <span style="position:absolute; inset:0; border-radius:50%; background:{{ sweepColor }};"></span>
+          <span class="hr-dotring" style="position:absolute; inset:0; border-radius:50%; background:{{ sweepColor }}; animation:hr-dotping 1.8s var(--ease-out) infinite;"></span>
+        </span>
+        <span style="display:flex; flex-direction:column; align-items:flex-start; gap:1px; line-height:1.1;">
+          <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); white-space:nowrap;">Last sweep</span>
+          <span style="font:var(--mono-sm); color:var(--text-mid); white-space:nowrap;">{{ lastSweep }}</span>
+        </span>
+      </button>
+
+      <div style="flex:1;"></div>
+
+      <button style="display:flex; align-items:center; gap:8px; height:34px; padding:0 11px; flex-shrink:0; white-space:nowrap; background:transparent; border:1px solid var(--border); border-radius:var(--radius-control); cursor:pointer; color:var(--text-mid);" style-hover="border-color: var(--border-strong); color: var(--text-hi)">
+        <span style="font:var(--mono-sm); letter-spacing:0.06em;">{{ month }}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+
+      <button title="Naomi Mercer" style="display:flex; align-items:center; justify-content:center; width:32px; height:32px; flex-shrink:0; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-control); cursor:pointer; font:600 12px/1 var(--font-mono); color:var(--text-hi); letter-spacing:0.04em;" style-hover="border-color: var(--border-strong)">NM</button>
+    </header>
+
+    <!-- content slot -->
+    <div class="hr-void" style="flex:1; min-height:0; position:relative; overflow:hidden;">
+      {{ children }}
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1320,&quot;height&quot;:820},&quot;activeNav&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;radar&quot;,&quot;browse&quot;,&quot;shortlist&quot;,&quot;agent&quot;,&quot;profile&quot;,&quot;pipeline&quot;,&quot;settings&quot;],&quot;default&quot;:&quot;radar&quot;},&quot;sweep&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;healthy&quot;,&quot;syncing&quot;,&quot;failed&quot;],&quot;default&quot;:&quot;healthy&quot;},&quot;lastSweep&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;06:00 UTC&quot;},&quot;month&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;JUN 2026&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const active = this.props.activeNav || 'radar';
+    const sweep = this.props.sweep || 'healthy';
+    const sweepColor = sweep === 'failed' ? 'var(--red)' : sweep === 'syncing' ? 'var(--amber)' : 'var(--phosphor)';
+
+    const base = {
+      display: 'flex', alignItems: 'center', gap: '11px', height: '38px',
+      padding: '0 12px 0 13px', borderRadius: 'var(--radius-control)',
+      textDecoration: 'none', font: 'var(--text-sm)', fontWeight: '500',
+      borderLeft: '3px solid transparent', color: 'var(--text-mid)',
+      background: 'transparent', boxShadow: 'none', transition: 'background var(--dur-fast), color var(--dur-fast)',
+    };
+    const on = {
+      ...base, color: 'var(--phosphor)', background: 'var(--phosphor-08)',
+      borderLeft: '3px solid var(--phosphor)',
+      boxShadow: 'inset 0 0 0 1px var(--phosphor-dim), 0 0 18px rgba(61,255,162,0.12)',
+    };
+    const ids = ['radar', 'browse', 'shortlist', 'agent', 'profile', 'pipeline', 'settings'];
+    const navStyle = {};
+    ids.forEach((id) => { navStyle[id] = id === active ? on : base; });
+
+    return {
+      navStyle,
+      sweepColor,
+      lastSweep: this.props.lastSweep || '06:00 UTC',
+      month: this.props.month || 'JUN 2026',
+      children: this.props.children,
+    };
+  }
+}
+</script>
+</body>
+</html>

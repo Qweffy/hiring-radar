@@ -1,0 +1,11 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hiring Radar mark">
+  <g transform="translate(24 24)">
+    <circle r="19" fill="none" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"></circle>
+    <circle r="12.5" fill="none" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"></circle>
+    <circle r="6" fill="none" stroke="#3DFFA2" stroke-opacity="0.18" stroke-width="1.5"></circle>
+    <path d="M0 0 L0 -19" stroke="#3DFFA2" stroke-width="1.5" stroke-linecap="round"></path>
+    <path d="M0 0 L15 -11.6 A19 19 0 0 0 0 -19 Z" fill="#3DFFA2" fill-opacity="0.16"></path>
+    <circle r="2.4" fill="#3DFFA2"></circle>
+    <circle cx="10.5" cy="-7" r="2" fill="#3DFFA2"></circle>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<!-- @dsCard group="Brand" viewport="700x150" name="Texture & motion language" subtitle="Dot-grid + scanline drift; easing curves and the four motion primitives" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 0; display: flex; height: 150px; }
+  .tex { flex: 1; position: relative; background-color: var(--bg-void);
+    background-image: radial-gradient(rgba(61,255,162,0.06) 1px, transparent 1px); background-size: 24px 24px; }
+  .tex::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(61,255,162,0.04) 0 1px, transparent 1px 3px); animation: drift 14s linear infinite; }
+  @keyframes drift { to { background-position: 0 48px; } }
+  .cap { position: absolute; left: 16px; bottom: 14px; font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--text-mid); }
+  .motion { width: 300px; background: var(--bg-surface); padding: 18px 20px; display: flex; flex-direction: column; gap: 9px; justify-content: center; }
+  .m { display: flex; gap: 10px; align-items: baseline; }
+  .k { font: var(--mono-sm); color: var(--phosphor); min-width: 78px; }
+  .d { font: var(--text-sm); color: var(--text-mid); }
+  @media (prefers-reduced-motion: reduce) { .tex::after { animation: none; } }
+</style></head>
+<body>
+  <div class="tex"><span class="cap">Dot-grid · 24px · 6% + scanline drift</span></div>
+  <div class="motion">
+    <div class="m"><span class="k">sweep</span><span class="d">4s linear · conic beam</span></div>
+    <div class="m"><span class="k">ping</span><span class="d">1.8s · blip ripple on new item</span></div>
+    <div class="m"><span class="k">count-up</span><span class="d">600ms · scorecard numbers</span></div>
+    <div class="m"><span class="k">ease-out</span><span class="d">cubic(.22,1,.36,1)</span></div>
+  </div>
+</body></html>

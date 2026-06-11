@@ -1,0 +1,27 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Text & match-strength" subtitle="Text tiers on surface + violet match opacities (HIGH/MED/LOW)" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-surface); padding: 18px; display: flex; gap: 28px; }
+  .col { flex: 1; }
+  .lbl { font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--text-label); margin-bottom: 12px; }
+  .line { display: flex; align-items: baseline; gap: 10px; margin-bottom: 9px; }
+  .hex { font: var(--mono-sm); color: var(--text-low-content); margin-left: auto; }
+  .match { display: flex; gap: 8px; align-items: center; }
+  .pill { font: 600 10px/1 var(--font-mono); letter-spacing: 0.08em; padding: 4px 7px; border-radius: var(--radius-sm); }
+</style></head>
+<body>
+  <div class="col">
+    <div class="lbl">Text on --bg-surface</div>
+    <div class="line"><span style="color:var(--text-hi); font:var(--text-base)">High — headings & primary</span><span class="hex">#E8F0F2</span></div>
+    <div class="line"><span style="color:var(--text-mid); font:var(--text-base)">Mid — body copy (4.5:1)</span><span class="hex">#93A4B3</span></div>
+    <div class="line"><span style="color:var(--text-low-content); font:var(--text-base)">Muted — readable content</span><span class="hex">#6E7E8F</span></div>
+    <div class="line"><span style="color:var(--text-low); font:var(--label-mono); letter-spacing:var(--label-tracking)">LOW — 11PX MONO LABELS ONLY</span><span class="hex">#5C6B7A</span></div>
+  </div>
+  <div class="col">
+    <div class="lbl">AI match strength — violet opacity</div>
+    <div class="match" style="margin-bottom:12px"><span class="pill" style="color:rgba(167,139,250,1); background:rgba(167,139,250,0.14); border:1px solid rgba(167,139,250,0.5)">HIGH 100%</span><span style="font:var(--text-sm); color:var(--text-mid)">strong match</span></div>
+    <div class="match" style="margin-bottom:12px"><span class="pill" style="color:rgba(167,139,250,0.6); background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.3)">MED 60%</span><span style="font:var(--text-sm); color:var(--text-mid)">partial match</span></div>
+    <div class="match"><span class="pill" style="color:rgba(167,139,250,0.35); background:rgba(167,139,250,0.05); border:1px solid rgba(167,139,250,0.18)">LOW 35%</span><span style="font:var(--text-sm); color:var(--text-mid)">weak match</span></div>
+  </div>
+</body></html>

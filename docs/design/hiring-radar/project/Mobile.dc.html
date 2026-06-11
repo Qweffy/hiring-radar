@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-rotate { to { transform: rotate(360deg); } }
+  @keyframes hr-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  .msnap::-webkit-scrollbar { display:none; }
+  .msnap { scrollbar-width:none; }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1400px; margin:0 auto 28px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Responsive · 390px</span>
+    <h1 style="margin:10px 0 8px; font-family:var(--font-display); font-weight:700; font-size:30px; letter-spacing:-0.02em; color:var(--text-hi);">Mobile</h1>
+    <p style="margin:0; max-width:640px; font:var(--text-base); color:var(--text-mid);">The four user-facing screens at phone width — sidebar becomes a bottom tab bar; admin views politely gate. Every loading/empty/error pattern stays structurally identical.</p>
+  </div>
+
+  <div style="max-width:1400px; margin:0 auto; display:flex; flex-wrap:wrap; gap:40px 32px;">
+
+    <!-- ================= RADAR ================= -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:12px;">Radar · dashboard</span>
+      <div style="position:relative; width:390px; height:822px; background:var(--bg-void); border:1px solid var(--border); border-radius:34px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+        <div class="hr-void" style="position:absolute; inset:0; display:flex; flex-direction:column;">
+          <!-- status bar -->
+          <div style="display:flex; align-items:center; justify-content:space-between; height:42px; padding:0 22px; flex-shrink:0;"><span style="font:600 13px/1 var(--font-mono); color:var(--text-hi);">9:41</span><span style="display:flex; gap:5px; align-items:center;"><span style="font:var(--mono-sm); color:var(--text-mid);">5G</span><span style="width:22px; height:11px; border:1px solid var(--text-mid); border-radius:3px; position:relative;"><span style="position:absolute; left:1px; top:1px; bottom:1px; width:70%; background:var(--phosphor); border-radius:1px;"></span></span></span></div>
+          <!-- header -->
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 20px 12px; flex-shrink:0;">
+            <div style="display:flex; align-items:center; gap:9px;"><svg width="20" height="20" viewBox="0 0 64 64" fill="none" style="filter:drop-shadow(0 0 5px rgba(61,255,162,0.35));"><circle cx="32" cy="32" r="26" stroke="#3DFFA2" stroke-opacity="0.3" stroke-width="1.5"></circle><path d="M32 32 L32 6 A26 26 0 0 1 51.9 15.3 Z" fill="#3DFFA2" fill-opacity="0.14"></path><line x1="32" y1="32" x2="32" y2="6" stroke="#3DFFA2" stroke-opacity="0.65" stroke-width="1.5"></line><circle cx="32" cy="32" r="2.2" fill="#3DFFA2"></circle><circle cx="49" cy="22" r="3" fill="#3DFFA2"></circle></svg><span style="font-family:var(--font-display); font-weight:600; font-size:16px; letter-spacing:-0.02em; color:var(--text-hi);">hiring-radar</span></div>
+            <div style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-control); font:600 11px/1 var(--font-mono); color:var(--text-hi);">NM</div>
+          </div>
+          <!-- scroll -->
+          <div style="flex:1; min-height:0; overflow:auto; padding:4px 0 14px;">
+            <!-- scope -->
+            <div style="position:relative; width:330px; height:330px; margin:6px auto 0;">
+              <svg width="330" height="330" viewBox="0 0 330 330" style="position:absolute; inset:0;"><circle cx="165" cy="165" r="150" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle><circle cx="165" cy="165" r="112" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle><circle cx="165" cy="165" r="74" fill="none" stroke="var(--phosphor-dim)" stroke-width="1"></circle><circle cx="165" cy="165" r="36" fill="none" stroke="rgba(61,255,162,0.22)" stroke-width="1"></circle><line x1="165" y1="15" x2="165" y2="315" stroke="rgba(61,255,162,0.06)" stroke-width="1"></line><line x1="15" y1="165" x2="315" y2="165" stroke="rgba(61,255,162,0.06)" stroke-width="1"></line></svg>
+              <div style="position:absolute; left:15px; top:15px; width:300px; height:300px; border-radius:50%; background:conic-gradient(from 0deg, rgba(61,255,162,0.2) 0deg, rgba(61,255,162,0.05) 22deg, transparent 46deg, transparent 360deg); animation:hr-rotate 4s linear infinite;"></div>
+              <div style="position:absolute; left:165px; top:165px; width:7px; height:7px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 8px var(--phosphor); transform:translate(-50%,-50%);"></div>
+              <span style="position:absolute; left:165px; top:8px; transform:translateX(-50%); font:600 9px/1 var(--font-mono); letter-spacing:0.1em; color:var(--text-low-content);">FRONTEND</span>
+              <span style="position:absolute; right:8px; top:130px; font:600 9px/1 var(--font-mono); letter-spacing:0.1em; color:var(--text-low-content);">AI·ML</span>
+              <span style="position:absolute; left:165px; bottom:8px; transform:translateX(-50%); font:600 9px/1 var(--font-mono); letter-spacing:0.1em; color:var(--text-low-content);">BACKEND</span>
+              <sc-for list="{{ mblips }}" as="b" hint-placeholder-count="12"><div style="{{ b.wrap }}"><sc-if value="{{ b.halo }}" hint-placeholder-val="{{ false }}"><span style="{{ b.haloStyle }}"></span></sc-if><span style="{{ b.dot }}"></span></div></sc-for>
+            </div>
+            <!-- legend below -->
+            <div style="display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 20px 4px; justify-content:center;">
+              <span style="display:flex; align-items:center; gap:7px; font:var(--mono-sm); color:var(--text-mid);"><span style="width:7px; height:7px; border-radius:50%; background:var(--phosphor);"></span>closer = match</span>
+              <span style="display:flex; align-items:center; gap:7px; font:var(--mono-sm); color:var(--text-mid);"><span style="width:9px; height:9px; border-radius:50%; box-shadow:0 0 0 2px rgba(167,139,250,0.6);"></span>shortlisted</span>
+            </div>
+            <div style="text-align:center; font:var(--mono-sm); color:var(--text-low-content); padding:2px 0 14px;">JUN 2026 · 512 · <span style="color:var(--phosphor);">38 NEW</span></div>
+            <!-- scorecards snap row -->
+            <div class="msnap" style="display:flex; gap:12px; overflow-x:auto; padding:0 20px 4px; scroll-snap-type:x mandatory;">
+              <sc-for list="{{ scorecards }}" as="s" hint-placeholder-count="4">
+                <div style="scroll-snap-align:start; flex-shrink:0; width:148px; display:flex; flex-direction:column; gap:8px; padding:14px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">{{ s.label }}</span><span style="font:var(--mono-xl); font-size:26px; color:{{ s.color }};">{{ s.value }}</span></div>
+              </sc-for>
+            </div>
+            <!-- agent digest -->
+            <div style="margin:16px 20px 0; padding:16px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+              <div style="display:flex; align-items:center; gap:9px; margin-bottom:12px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-idle" size="26" hint-size="26px,26px"></x-import><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--violet);">Agent digest</span><span style="flex:1;"></span><span style="font:var(--mono-sm); color:var(--text-low-content);">2h ago</span></div>
+              <div style="font:var(--mono-sm); color:var(--text-mid); margin-bottom:14px;">Run #23 · 5 of 512 · $0.43</div>
+              <div style="display:flex; align-items:center; gap:12px;"><div style="flex:1;"><div style="font:600 13px/1.3 var(--font-ui); color:var(--text-hi);">Meridian Labs</div><div style="font:var(--mono-sm); color:var(--phosphor); margin-top:3px;">$160k–$195k</div></div><div style="position:relative; width:48px; height:48px;"><svg width="48" height="48" style="transform:rotate(-90deg);"><circle cx="24" cy="24" r="20" fill="none" stroke="rgba(167,139,250,0.16)" stroke-width="5"></circle><circle cx="24" cy="24" r="20" fill="none" stroke="var(--violet)" stroke-width="5" stroke-linecap="round" stroke-dasharray="125.7" stroke-dashoffset="11.3"></circle></svg><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:600 14px/1 var(--font-mono); color:var(--text-hi);">91</div></div></div>
+            </div>
+          </div>
+          <!-- tab bar -->
+          <div style="display:flex; align-items:center; height:62px; flex-shrink:0; padding:0 8px 6px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-top:1px solid var(--divider);">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--phosphor);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"></path><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"></path><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67"></path><circle cx="12" cy="12" r="2"></circle><path d="m13.41 10.59 5.66-5.66"></path></svg><span style="font:600 9px/1 var(--font-mono);">Radar</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg><span style="font:600 9px/1 var(--font-mono);">Browse</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><span style="font:600 9px/1 var(--font-mono);">Shortlist</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg><span style="font:600 9px/1 var(--font-mono);">Agent</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg><span style="font:600 9px/1 var(--font-mono);">More</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= BROWSE ================= -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:12px;">Browse · index</span>
+      <div style="position:relative; width:390px; height:822px; background:var(--bg-void); border:1px solid var(--border); border-radius:34px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+        <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; justify-content:space-between; height:42px; padding:0 22px; flex-shrink:0;"><span style="font:600 13px/1 var(--font-mono); color:var(--text-hi);">9:41</span><span style="width:22px; height:11px; border:1px solid var(--text-mid); border-radius:3px; position:relative;"><span style="position:absolute; left:1px; top:1px; bottom:1px; width:70%; background:var(--phosphor); border-radius:1px;"></span></span></div>
+          <!-- sticky search + chips -->
+          <div style="flex-shrink:0; padding:6px 16px 12px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid var(--divider);">
+            <div style="display:flex; align-items:center; gap:10px; height:42px; padding:0 12px; background:var(--bg-surface); border:1px solid var(--border-strong); border-radius:var(--radius-control); box-shadow:var(--glow-phosphor-sm);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--phosphor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg><span style="flex:1; font:var(--mono-sm); color:var(--text-hi);">senior typescript remote</span><span style="font:600 10px/1 var(--font-mono); color:var(--text-low-content); border:1px solid var(--border); border-radius:var(--radius-sm); padding:3px 5px;">⌘K</span></div>
+            <div class="msnap" style="display:flex; gap:8px; overflow-x:auto; margin-top:10px;">
+              <span style="flex-shrink:0; display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; font:var(--mono-sm); color:var(--phosphor); background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-control);">JUN 2026</span>
+              <span style="flex-shrink:0; display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; font:var(--mono-sm); color:var(--text-mid); border:1px solid var(--border); border-radius:var(--radius-control);">Remote ▾</span>
+              <span style="flex-shrink:0; display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; font:var(--mono-sm); color:var(--text-mid); border:1px solid var(--border); border-radius:var(--radius-control);">Salary ▾</span>
+              <span style="flex-shrink:0; display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; font:var(--mono-sm); color:var(--violet); background:var(--violet-12); border:1px solid rgba(167,139,250,0.4); border-radius:var(--radius-control);">Match ≥ 30</span>
+              <span style="flex-shrink:0; display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; font:var(--mono-sm); color:var(--text-mid); border:1px solid var(--border); border-radius:var(--radius-control);">Stack ▾</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:11px 18px 8px; flex-shrink:0;"><span style="font:var(--mono-sm); color:var(--text-low-content);"><span style="color:var(--phosphor);">127</span> / 512 postings</span><span style="font:var(--mono-sm); color:var(--text-low-content);">match ▾</span></div>
+          <!-- cards -->
+          <div style="flex:1; min-height:0; overflow:auto; padding:0 16px 14px; display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ browse }}" as="r" hint-placeholder-count="6">
+              <div style="padding:13px 15px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);" style-hover="border-color: var(--border-strong)">
+                <div style="display:flex; align-items:flex-start; gap:10px;">
+                  <div style="flex:1; min-width:0;">
+                    <div style="display:flex; align-items:center; gap:7px;"><span style="font:600 14px/1.3 var(--font-ui); color:var(--text-hi);">{{ r.company }}</span><sc-if value="{{ r.new }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="NEW" hint-size="auto,18px"></x-import></sc-if></div>
+                    <div style="font:var(--text-sm); color:var(--text-mid); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.role }}</div>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;"><path d="m9 18 6-6-6-6"></path></svg>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; margin-top:11px;">
+                  <span style="font:var(--mono-base); color:{{ r.salaryColor }};">{{ r.salary }}</span>
+                  <span style="flex:1;"></span>
+                  <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.MatchBadge" level="{{ r.level }}" score="{{ r.score }}" hint-size="auto,20px"></x-import>
+                  <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="{{ r.remote }}" hint-size="auto,20px"></x-import>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <!-- tab bar (Browse active) -->
+          <div style="display:flex; align-items:center; height:62px; flex-shrink:0; padding:0 8px 6px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-top:1px solid var(--divider);">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"></path><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"></path><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67"></path><circle cx="12" cy="12" r="2"></circle><path d="m13.41 10.59 5.66-5.66"></path></svg><span style="font:600 9px/1 var(--font-mono);">Radar</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--phosphor);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg><span style="font:600 9px/1 var(--font-mono);">Browse</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><span style="font:600 9px/1 var(--font-mono);">Shortlist</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg><span style="font:600 9px/1 var(--font-mono);">Agent</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg><span style="font:600 9px/1 var(--font-mono);">More</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= BROWSE — SEARCH ERROR ================= -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:12px;">Browse · search error (state pattern)</span>
+      <div style="position:relative; width:390px; height:822px; background:var(--bg-void); border:1px solid var(--border); border-radius:34px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+        <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; justify-content:space-between; height:42px; padding:0 22px; flex-shrink:0;"><span style="font:600 13px/1 var(--font-mono); color:var(--text-hi);">9:41</span><span style="width:22px; height:11px; border:1px solid var(--text-mid); border-radius:3px; position:relative;"><span style="position:absolute; left:1px; top:1px; bottom:1px; width:70%; background:var(--phosphor); border-radius:1px;"></span></span></div>
+          <div style="flex-shrink:0; padding:6px 16px 12px; border-bottom:1px solid var(--divider);">
+            <div style="display:flex; align-items:center; gap:10px; height:42px; padding:0 12px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-control);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg><span style="flex:1; font:var(--mono-sm); color:var(--text-mid);">senior typescript remote</span></div>
+            <div class="msnap" style="display:flex; gap:8px; overflow-x:auto; margin-top:10px;"><span style="flex-shrink:0; display:inline-flex; align-items:center; height:28px; padding:0 11px; font:var(--mono-sm); color:var(--phosphor); background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-control);">JUN 2026</span><span style="flex-shrink:0; display:inline-flex; align-items:center; height:28px; padding:0 11px; font:var(--mono-sm); color:var(--text-mid); border:1px solid var(--border); border-radius:var(--radius-control);">Remote ▾</span><span style="flex-shrink:0; display:inline-flex; align-items:center; height:28px; padding:0 11px; font:var(--mono-sm); color:var(--text-mid); border:1px solid var(--border); border-radius:var(--radius-control);">Salary ▾</span></div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:11px; padding:30px;">
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="88" hint-size="88px,88px"></x-import>
+            <span style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi);">Search failed</span>
+            <span style="font:var(--mono-sm); color:var(--text-low-content);">the index didn't respond · filters still work</span>
+            <div style="margin-top:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" hint-size="auto,36px">Retry</x-import></div>
+          </div>
+          <div style="display:flex; align-items:center; height:62px; flex-shrink:0; padding:0 8px 6px; background:var(--glass); border-top:1px solid var(--divider);">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="2"></circle><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"></path></svg><span style="font:600 9px/1 var(--font-mono);">Radar</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--phosphor);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg><span style="font:600 9px/1 var(--font-mono);">Browse</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><span style="font:600 9px/1 var(--font-mono);">Shortlist</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M12 8V4H8"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg><span style="font:600 9px/1 var(--font-mono);">Agent</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg><span style="font:600 9px/1 var(--font-mono);">More</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= POSTING DETAIL (SHEET) ================= -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:12px;">Posting detail · full-screen sheet</span>
+      <div style="position:relative; width:390px; height:822px; background:var(--bg-surface); border:1px solid var(--border); border-radius:34px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+        <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; justify-content:space-between; height:42px; padding:0 22px; flex-shrink:0;"><span style="font:600 13px/1 var(--font-mono); color:var(--text-hi);">9:41</span><span style="width:22px; height:11px; border:1px solid var(--text-mid); border-radius:3px; position:relative;"><span style="position:absolute; left:1px; top:1px; bottom:1px; width:70%; background:var(--phosphor); border-radius:1px;"></span></span></div>
+          <!-- back bar -->
+          <div style="display:flex; align-items:center; gap:12px; height:50px; padding:0 16px; flex-shrink:0; border-bottom:1px solid var(--divider);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-hi)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg><span style="flex:1; font:600 14px/1 var(--font-ui); color:var(--text-hi);">Posting</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></div>
+          <div style="flex:1; min-height:0; overflow:auto; padding:18px 16px;">
+            <div style="display:flex; gap:7px; margin-bottom:10px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="REMOTE" hint-size="auto,20px"></x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="NEW" hint-size="auto,20px"></x-import></div>
+            <h2 style="margin:0 0 5px; font-family:var(--font-display); font-weight:600; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Meridian Labs <span style="font:var(--mono-sm); color:var(--text-low-content);">(YC W25)</span></h2>
+            <div style="font:var(--text-sm); color:var(--text-mid);">Senior Full-Stack Engineer (TypeScript)</div>
+            <div style="font:var(--mono-sm); color:var(--text-low-content); margin-top:6px;">posted 5h ago</div>
+
+            <!-- match panel collapsed -->
+            <div style="margin-top:18px; padding:16px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-card);">
+              <div onClick="{{ toggleReasons }}" style="display:flex; align-items:center; gap:14px; cursor:pointer;">
+                <div style="position:relative; width:56px; height:56px; flex-shrink:0;"><svg width="56" height="56" style="transform:rotate(-90deg);"><circle cx="28" cy="28" r="23" fill="none" stroke="rgba(167,139,250,0.16)" stroke-width="5"></circle><circle cx="28" cy="28" r="23" fill="none" stroke="var(--violet)" stroke-width="5" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="13"></circle></svg><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:var(--mono-lg); color:var(--text-hi);">91</div></div>
+                <div style="flex:1;"><div style="font:600 14px/1.3 var(--font-ui); color:var(--text-hi);">Strong match</div><div style="font:var(--mono-sm); color:var(--text-low-content); margin-top:3px;">3 reasons · run #23</div></div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="{{ reasonsCaret }}"><path d="m6 9 6 6 6-6"></path></svg>
+              </div>
+              <sc-if value="{{ reasonsOpen }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px; padding-top:14px; border-top:1px solid rgba(167,139,250,0.2);">
+                  <div style="display:flex; gap:8px;"><span style="color:var(--phosphor); font:700 12px/1.4 var(--font-mono);">+</span><span style="font:var(--text-sm); color:var(--text-mid);">TypeScript + Next.js — your core stack</span></div>
+                  <div style="display:flex; gap:8px;"><span style="color:var(--phosphor); font:700 12px/1.4 var(--font-mono);">+</span><span style="font:var(--text-sm); color:var(--text-mid);">Salary $160–195k within target</span></div>
+                  <div style="display:flex; gap:8px;"><span style="color:var(--amber); font:700 12px/1.4 var(--font-mono);">−</span><span style="font:var(--text-sm); color:var(--text-mid);">Wants Rust — you have none</span></div>
+                </div>
+              </sc-if>
+            </div>
+
+            <!-- fields -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px;">
+              <div><div style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Salary</div><div style="font:var(--mono-sm); color:var(--text-hi); margin-top:4px;">$160k–$195k</div></div>
+              <div><div style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Location</div><div style="font:var(--mono-sm); color:var(--text-hi); margin-top:4px;">Remote (US/EU)</div></div>
+              <div style="grid-column:1/-1;"><div style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:6px;">Stack</div><div style="display:flex; flex-wrap:wrap; gap:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">Next.js</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">tRPC</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">Postgres</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="violet" hint-size="auto,24px">Claude</x-import></div></div>
+            </div>
+
+            <!-- original -->
+            <div style="margin-top:18px;"><div style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:8px;">Original posting</div><div style="padding:14px; background:var(--bg-surface); border:1px solid var(--border); border-left:3px solid var(--phosphor); border-radius:var(--radius-control); font:13px/1.6 var(--font-ui); color:var(--text-mid);"><span style="text-decoration:underline dotted rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Meridian Labs</span> (YC W25) — building the orchestration layer for clinical-trial data. Stack: <span style="text-decoration:underline dotted rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Next.js</span>, <span style="text-decoration:underline dotted rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">tRPC</span>, <span style="text-decoration:underline dotted rgba(61,255,162,0.6); text-underline-offset:3px; color:var(--text-hi);">Postgres</span>…</div></div>
+          </div>
+          <!-- sticky action footer -->
+          <div style="display:flex; gap:10px; padding:12px 16px; flex-shrink:0; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-top:1px solid var(--divider);">
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-left="close" hint-size="auto,44px">Not for me</x-import>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="bookmark" style="flex:1;" hint-size="100%,44px">Add to shortlist</x-import>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SHORTLIST + STAGE SHEET ================= -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:12px;">Shortlist · stage bottom-sheet</span>
+      <div style="position:relative; width:390px; height:822px; background:var(--bg-void); border:1px solid var(--border); border-radius:34px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+        <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; justify-content:space-between; height:42px; padding:0 22px; flex-shrink:0;"><span style="font:600 13px/1 var(--font-mono); color:var(--text-hi);">9:41</span><span style="width:22px; height:11px; border:1px solid var(--text-mid); border-radius:3px; position:relative;"><span style="position:absolute; left:1px; top:1px; bottom:1px; width:70%; background:var(--phosphor); border-radius:1px;"></span></span></div>
+          <div style="padding:6px 18px 10px; flex-shrink:0;"><div style="display:flex; align-items:baseline; gap:10px;"><h2 style="margin:0; font-family:var(--font-display); font-weight:600; font-size:20px; color:var(--text-hi);">Shortlist</h2><span style="font:var(--mono-sm); color:var(--text-low-content);">8 TRACKED</span></div><div class="msnap" style="display:flex; gap:6px; overflow-x:auto; margin-top:12px;"><span style="flex-shrink:0; padding:5px 11px; font:500 12px/1 var(--font-ui); color:var(--text-hi); border-bottom:2px solid var(--phosphor);">All 8</span><span style="flex-shrink:0; padding:5px 11px; font:500 12px/1 var(--font-ui); color:var(--text-mid);">New 4</span><span style="flex-shrink:0; padding:5px 11px; font:500 12px/1 var(--font-ui); color:var(--text-mid);">Applied 2</span><span style="flex-shrink:0; padding:5px 11px; font:500 12px/1 var(--font-ui); color:var(--text-mid);">Interviewing 1</span></div></div>
+          <div style="flex:1; min-height:0; overflow:auto; padding:4px 16px 14px; display:flex; flex-direction:column; gap:12px;">
+            <sc-for list="{{ shortlist }}" as="c" hint-placeholder-count="4">
+              <div style="{{ c.cardStyle }}">
+                <div style="display:flex; align-items:flex-start; gap:12px;">
+                  <div style="flex:1; min-width:0;">
+                    <span style="{{ c.badgeStyle }}">{{ c.badge }}</span>
+                    <div style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi); margin-top:8px;">{{ c.company }}</div>
+                    <div style="font:var(--text-sm); color:var(--text-mid); margin-top:2px;">{{ c.role }}</div>
+                    <div style="font:var(--mono-sm); color:var(--phosphor); margin-top:6px;">{{ c.salary }}</div>
+                  </div>
+                  <div style="position:relative; width:46px; height:46px; flex-shrink:0;"><svg width="46" height="46" style="transform:rotate(-90deg);"><circle cx="23" cy="23" r="19" fill="none" stroke="rgba(167,139,250,0.16)" stroke-width="4"></circle><circle cx="23" cy="23" r="19" fill="none" stroke="var(--violet)" stroke-width="4" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="{{ c.offset }}"></circle></svg><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:600 13px/1 var(--font-mono); color:var(--text-hi);">{{ c.match }}</div></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid var(--divider);">
+                  <span style="{{ c.stageStyle }}">{{ c.stageLabel }}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+                  <span style="flex:1;"></span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; align-items:center; height:62px; flex-shrink:0; padding:0 8px 6px; background:var(--glass); border-top:1px solid var(--divider);">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="2"></circle><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"></path></svg><span style="font:600 9px/1 var(--font-mono);">Radar</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg><span style="font:600 9px/1 var(--font-mono);">Browse</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--phosphor);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><span style="font:600 9px/1 var(--font-mono);">Shortlist</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M12 8V4H8"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg><span style="font:600 9px/1 var(--font-mono);">Agent</span></div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-low);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg><span style="font:600 9px/1 var(--font-mono);">More</span></div>
+          </div>
+
+          <!-- stage bottom sheet (open) -->
+          <div style="position:absolute; inset:0; background:rgba(3,5,8,0.55); backdrop-filter:blur(2px);"></div>
+          <div style="position:absolute; left:0; right:0; bottom:0; padding:8px 16px 22px; background:var(--bg-raised); border-top:1px solid var(--border-strong); border-radius:18px 18px 0 0; box-shadow:var(--shadow-panel);">
+            <div style="width:38px; height:4px; border-radius:2px; background:var(--border-strong); margin:0 auto 14px;"></div>
+            <div style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); padding:0 4px 8px;">Stage · Meridian Labs</div>
+            <sc-for list="{{ stageOptions }}" as="o" hint-placeholder-count="5">
+              <div style="display:flex; align-items:center; gap:12px; padding:13px 12px; border-radius:var(--radius-control);" style-hover="background: var(--phosphor-08)">
+                <span style="width:9px; height:9px; border-radius:50%; background:{{ o.color }}; box-shadow:0 0 6px {{ o.color }};"></span>
+                <span style="flex:1; font:500 14px/1 var(--font-ui); color:{{ o.textColor }};">{{ o.label }}</span>
+                <sc-if value="{{ o.current }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--phosphor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ADMIN GATE ================= -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:12px;">Admin · gate (Pipeline / Settings / Agent trace)</span>
+      <div style="position:relative; width:390px; height:822px; background:var(--bg-void); border:1px solid var(--border); border-radius:34px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+        <div class="hr-void" style="position:absolute; inset:0; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; justify-content:space-between; height:42px; padding:0 22px; flex-shrink:0;"><span style="font:600 13px/1 var(--font-mono); color:var(--text-hi);">9:41</span><span style="width:22px; height:11px; border:1px solid var(--text-mid); border-radius:3px; position:relative;"><span style="position:absolute; left:1px; top:1px; bottom:1px; width:70%; background:var(--phosphor); border-radius:1px;"></span></span></div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:16px; padding:32px;">
+            <div style="position:relative; width:120px; height:120px;"><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="empty-radar" size="120" hint-size="120px,120px"></x-import></div><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; animation:hr-rotate 5s linear infinite;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="loading-sweep" size="120" hint-size="120px,120px"></x-import></div></div>
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Desktop only</span>
+            <h2 style="margin:0; font-family:var(--font-display); font-weight:600; font-size:22px; line-height:1.25; letter-spacing:-0.02em; color:var(--text-hi);">This view needs a bigger screen</h2>
+            <p style="margin:0; max-width:280px; font:var(--text-base); color:var(--text-mid);">It's mission control, after all. Open Pipeline, Settings, and the agent trace on desktop.</p>
+            <div style="margin-top:4px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="radar" hint-size="auto,44px">Back to Radar</x-import></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { reasonsOpen: true };
+  renderVals() {
+    const C = 165, polar = (a, r) => { const t = a * Math.PI / 180; return { x: C + r * Math.sin(t), y: C - r * Math.cos(t) }; };
+    const rad = (m) => 142 - (m / 100) * 118;
+    const blipDefs = [
+      { a: 30, m: 91, halo: true }, { a: 52, m: 86, halo: true }, { a: 92, m: 88, halo: true },
+      { a: 110, m: 80 }, { a: 70, m: 72 }, { a: 45, m: 66 }, { a: 100, m: 84, halo: true },
+      { a: 318, m: 78 }, { a: 300, m: 58 }, { a: 150, m: 42 }, { a: 210, m: 63 }, { a: 270, m: 52 },
+    ];
+    const mblips = blipDefs.map((b) => {
+      const p = polar(b.a, rad(b.m));
+      const op = (0.55 + b.m / 100 * 0.45).toFixed(2);
+      return {
+        halo: !!b.halo,
+        wrap: { position: 'absolute', left: p.x + 'px', top: p.y + 'px', width: '16px', height: '16px', transform: 'translate(-50%,-50%)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        dot: { width: '9px', height: '9px', borderRadius: '50%', background: 'rgba(61,255,162,' + op + ')', boxShadow: '0 0 6px rgba(61,255,162,0.5)' },
+        haloStyle: { position: 'absolute', width: '17px', height: '17px', borderRadius: '50%', boxShadow: '0 0 0 2px rgba(167,139,250,0.6)' },
+      };
+    });
+
+    const scorecards = [
+      { label: 'New', value: '38', color: 'var(--text-hi)' },
+      { label: 'Match ≥ 80', value: '11', color: 'var(--violet)' },
+      { label: 'Remote', value: '64%', color: 'var(--cyan)' },
+      { label: 'Median', value: '$165k', color: 'var(--text-hi)' },
+    ];
+
+    const lvl = (m) => m >= 80 ? 'HIGH' : m >= 60 ? 'MED' : 'LOW';
+    const browse = [
+      { company: 'Meridian Labs', role: 'Senior Full-Stack Engineer (TypeScript)', salary: '$160k–$195k', score: 91, remote: 'REMOTE', new: true },
+      { company: 'Quietwire', role: 'Senior Product Engineer, AI', salary: '$140k–$170k', score: 88, remote: 'REMOTE', new: false },
+      { company: 'Glasswing AI', role: 'Product Engineer (LLM apps)', salary: '$130k–$165k', score: 84, remote: 'REMOTE', new: true },
+      { company: 'Oslo Dynamics', role: 'Senior Full-Stack (React/Go)', salary: '€95k–€115k', score: 72, remote: 'REMOTE', new: false },
+      { company: 'Northbeam Systems', role: 'Platform Engineer (Go/K8s)', salary: '$185k–$220k', score: 42, remote: 'ONSITE', new: false },
+      { company: 'Tidewater Robotics', role: 'Software Engineer, Controls', salary: '—', score: 33, remote: 'ONSITE', new: false },
+    ].map((r) => ({ ...r, level: lvl(r.score), salaryColor: r.salary === '—' ? 'var(--text-low)' : 'var(--text-hi)' }));
+
+    const stageMeta = { new: ['var(--violet)', 'New'], applied: ['var(--cyan)', 'Applied'], interviewing: ['var(--amber)', 'Interviewing'] };
+    const slDefs = [
+      { company: 'Meridian Labs', role: 'Senior Full-Stack Engineer', salary: '$160k–$195k', match: 91, badge: 'AGENT PICK #23', agent: true, stage: 'new' },
+      { company: 'Quietwire', role: 'Senior Product Engineer, AI', salary: '$140k–$170k', match: 88, badge: 'AGENT PICK #23', agent: true, stage: 'new' },
+      { company: 'DataForge', role: 'Founding Engineer', salary: '$150k–$180k', match: 86, badge: 'AGENT PICK #22', agent: true, stage: 'applied' },
+      { company: 'Glasswing AI', role: 'Product Engineer (LLM apps)', salary: '$130k–$165k', match: 84, badge: 'MANUAL', agent: false, stage: 'interviewing' },
+    ];
+    const shortlist = slDefs.map((c) => {
+      const sm = stageMeta[c.stage];
+      return {
+        ...c, offset: (119.4 * (1 - c.match / 100)).toFixed(1),
+        stageLabel: sm[1],
+        cardStyle: { padding: '15px', background: 'var(--bg-raised)', border: '1px solid var(--border)', borderLeft: '3px solid ' + sm[0], borderRadius: 'var(--radius-card)', boxShadow: 'var(--shadow-card)' },
+        badgeStyle: {
+          display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start', height: '20px', padding: '0 7px', whiteSpace: 'nowrap',
+          font: '600 10px/1 var(--font-mono)', letterSpacing: '0.08em', borderRadius: 'var(--radius-sm)',
+          color: c.agent ? 'var(--violet)' : 'var(--phosphor)', background: c.agent ? 'var(--violet-12)' : 'transparent',
+          border: '1px solid ' + (c.agent ? 'rgba(167,139,250,0.4)' : 'var(--border-strong)'),
+        },
+        stageStyle: {
+          display: 'inline-flex', alignItems: 'center', gap: '6px', height: '28px', padding: '0 11px',
+          font: '600 11px/1 var(--font-mono)', letterSpacing: '0.06em', textTransform: 'uppercase',
+          color: sm[0], background: 'var(--bg-surface)', border: '1px solid ' + sm[0], borderRadius: 'var(--radius-control)',
+        },
+      };
+    });
+
+    const stageOptions = [
+      { key: 'new', label: 'New', color: 'var(--violet)' },
+      { key: 'applied', label: 'Applied', color: 'var(--cyan)' },
+      { key: 'interviewing', label: 'Interviewing', color: 'var(--amber)' },
+      { key: 'offer', label: 'Offer', color: 'var(--phosphor)' },
+      { key: 'archived', label: 'Archived', color: 'var(--text-low)' },
+    ].map((o) => ({ label: o.label, color: o.color, current: o.key === 'new', textColor: o.key === 'new' ? 'var(--text-hi)' : 'var(--text-mid)' }));
+
+    return {
+      mblips, scorecards, browse, shortlist, stageOptions,
+      reasonsOpen: this.state.reasonsOpen,
+      reasonsCaret: { transform: this.state.reasonsOpen ? 'rotate(180deg)' : 'none', transition: 'transform var(--dur-fast)' },
+      toggleReasons: () => this.setState((s) => ({ reasonsOpen: !s.reasonsOpen })),
+    };
+  }
+}
+</script>
+</body>
+</html>

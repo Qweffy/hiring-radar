@@ -1,0 +1,68 @@
+<!-- @dsCard group="Components" viewport="700x560" name="Data — Tags, Badges, Gauge, Scorecards, JobRow" subtitle="The instrument: status badges, match strength, score gauge, metric tiles, posting rows" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-void); color: var(--text-body); padding: 22px; }
+  .lbl { font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--text-label); margin-bottom: 10px; }
+  .row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .block { margin-bottom: 22px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+  const { Tag, StatusBadge, MatchBadge, ScoreGauge, Scorecard, JobRow } = window.HiringRadarDesignSystem_e283cd;
+  function Demo() {
+    return (
+      <div>
+        <div className="block">
+          <div className="lbl">Status badges — attributes / process / triggers</div>
+          <div className="row">
+            <StatusBadge status="NEW" /><StatusBadge status="REMOTE" /><StatusBadge status="ONSITE" /><StatusBadge status="HYBRID" /><StatusBadge status="VISA" />
+            <span style={{ width: 1, height: 18, background: 'var(--divider)' }} />
+            <StatusBadge status="RUNNING" /><StatusBadge status="COMPLETED" /><StatusBadge status="FAILED" /><StatusBadge status="PARTIAL" /><StatusBadge status="CANCELLED" />
+          </div>
+        </div>
+        <div className="block">
+          <div className="lbl">Stack tags · filter chips · match strength · gauge</div>
+          <div className="row">
+            <Tag>Rust</Tag><Tag>k8s</Tag><Tag tone="cyan">Postgres</Tag>
+            <Tag tone="phosphor" onRemove={() => {}}>remote</Tag>
+            <Tag tone="violet" icon="bot" onRemove={() => {}}>AI-matched</Tag>
+            <span style={{ width: 1, height: 18, background: 'var(--divider)' }} />
+            <MatchBadge level="HIGH" score={92} /><MatchBadge level="MED" score={64} /><MatchBadge level="LOW" score={31} />
+            <span style={{ width: 1, height: 18, background: 'var(--divider)' }} />
+            <ScoreGauge score={92} size={52} />
+            <ScoreGauge score={64} size={52} />
+          </div>
+        </div>
+        <div className="block">
+          <div className="lbl">Scorecards</div>
+          <div className="row" style={{ gap: 14 }}>
+            <Scorecard label="New roles" value={47} delta={12} spark={[3,5,4,7,6,9,8,12]} />
+            <Scorecard label="Avg match" value={71} suffix="/100" tone="violet" spark={[60,62,58,66,70,68,71]} />
+            <Scorecard label="Shortlisted" value={9} tone="cyan" />
+          </div>
+        </div>
+        <div className="block" style={{ marginBottom: 0 }}>
+          <div className="lbl">Job rows — default / selected / stale</div>
+          <div className="row" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
+            <JobRow company="Cortex Labs" role="Staff Systems Engineer" salary="$210–250K" location="Remote (US)" tags={['Rust','Postgres','k8s']} badges={['NEW','REMOTE','VISA']} score={92} />
+            <JobRow company="Helio" role="Senior Backend Engineer" salary="$180–220K" location="NYC · Hybrid" tags={['Go','gRPC']} badges={['HYBRID']} score={64} selected bookmarked />
+            <JobRow company="Driftwood" role="Platform Engineer" salary="$160–190K" location="Remote (EU)" tags={['Python','AWS']} badges={['REMOTE']} score={48} stale />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

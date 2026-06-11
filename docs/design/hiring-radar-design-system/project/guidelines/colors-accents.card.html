@@ -1,0 +1,21 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Accents — signal palette" subtitle="Phosphor leads; cyan=info/links, violet=AI, amber=pending, red=error" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-void); padding: 18px; }
+  .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .sw { border-radius: var(--radius-card); padding: 12px; height: 96px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,255,255,0.06); }
+  .dot { width: 22px; height: 22px; border-radius: 6px; }
+  .name { font: 600 12px/1 var(--font-display); color: var(--text-hi); }
+  .hex { font: var(--mono-sm); color: var(--text-low-content); }
+  .use { font: var(--text-xs); color: var(--text-mid); }
+</style></head>
+<body>
+  <div class="row">
+    <div class="sw" style="background:rgba(61,255,162,0.08); box-shadow: var(--glow-phosphor)"><div class="dot" style="background:var(--phosphor); box-shadow: var(--glow-phosphor-sm)"></div><div><div class="name">Phosphor</div><div class="hex">#3DFFA2</div><div class="use">actions · radar</div></div></div>
+    <div class="sw" style="background:rgba(76,201,240,0.08)"><div class="dot" style="background:var(--cyan)"></div><div><div class="name">Cyan</div><div class="hex">#4CC9F0</div><div class="use">links · info</div></div></div>
+    <div class="sw" style="background:rgba(167,139,250,0.10)"><div class="dot" style="background:var(--violet)"></div><div><div class="name">Violet</div><div class="hex">#A78BFA</div><div class="use">AI · agent</div></div></div>
+    <div class="sw" style="background:rgba(255,200,87,0.10)"><div class="dot" style="background:var(--amber)"></div><div><div class="name">Amber</div><div class="hex">#FFC857</div><div class="use">warning · pending</div></div></div>
+    <div class="sw" style="background:rgba(255,93,93,0.10)"><div class="dot" style="background:var(--red)"></div><div><div class="name">Red</div><div class="hex">#FF5D5D</div><div class="use">error · destructive</div></div></div>
+  </div>
+</body></html>

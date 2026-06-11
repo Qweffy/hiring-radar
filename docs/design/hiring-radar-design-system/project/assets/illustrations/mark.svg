@@ -1,0 +1,11 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <defs><filter id="mark_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.8"></feGaussianBlur></filter></defs>
+  <circle cx="32" cy="32" r="26" stroke="#3DFFA2" stroke-opacity="0.30" stroke-width="1.5"></circle>
+  <circle cx="32" cy="32" r="17" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"></circle>
+  <circle cx="32" cy="32" r="8" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"></circle>
+  <path d="M32 32 L32 6 A26 26 0 0 1 51.9 15.3 Z" fill="#3DFFA2" fill-opacity="0.12"></path>
+  <line x1="32" y1="32" x2="32" y2="6" stroke="#3DFFA2" stroke-opacity="0.6" stroke-width="1.5"></line>
+  <circle cx="32" cy="32" r="2.2" fill="#3DFFA2"></circle>
+  <circle cx="49" cy="22" r="6" fill="#3DFFA2" opacity="0.35" filter="url(#mark_g)"></circle>
+  <circle cx="49" cy="22" r="3" fill="#3DFFA2"></circle>
+  </svg>

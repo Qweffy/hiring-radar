@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-dotping { 0%{transform:scale(1);opacity:0.6} 80%,100%{transform:scale(2.6);opacity:0} }
+  @keyframes hr-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1440px; margin:0 auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Route · settings</span>
+    <span style="font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--text-hi);">Settings</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Limits, schedule, access, and data.</span>
+  </div>
+
+  <!-- ============ MAIN SCREEN ============ -->
+  <div style="position:relative; width:1440px; max-width:1440px; height:1180px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <dc-import name="RadarShell" active-nav="settings" sweep="healthy" last-sweep="06:00 UTC" month="JUN 2026" hint-size="100%,100%" style="display:block; width:100%; height:100%;">
+      <div style="position:absolute; inset:0; overflow:auto;">
+        <div style="max-width:920px; margin:0 auto; padding:32px 24px 56px; display:flex; flex-direction:column; gap:22px;">
+
+          <!-- 1 AGENT LIMITS -->
+          <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;"><span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--phosphor);">Agent limits</span><div style="flex:1; height:1px; background:var(--divider);"></div></div>
+            <div style="display:flex; flex-direction:column; gap:20px;">
+              <div>
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.RangeSlider" value="{{ steps }}" min="5" max="50" step="1" label="Step budget" format="{{ fmtSteps }}" on-change="{{ onSteps }}" hint-size="100%,52px"></x-import>
+                <p style="margin:6px 0 0; font:var(--text-sm); color:var(--text-low-content);">Runs stop cleanly when the budget is reached — picks are kept.</p>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                <div>
+                  <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:8px;">Cost cap per run</label>
+                  <div style="display:flex; align-items:center; height:36px; padding:0 12px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control);"><span style="font:var(--mono-base); color:var(--text-low-content); margin-right:2px;">$</span><input value="1.00" style="flex:1; min-width:0; background:transparent; border:none; outline:none; color:var(--text-hi); font:var(--mono-base);"/><span style="font:var(--mono-sm); color:var(--text-low-content);">per run</span></div>
+                  <p style="margin:6px 0 0; font:var(--text-sm); color:var(--text-low-content);">The run halts before exceeding this.</p>
+                </div>
+                <div>
+                  <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:8px;">Model</label>
+                  <div style="display:flex; align-items:center; justify-content:space-between; height:36px; padding:0 12px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); cursor:pointer;"><span style="font:var(--mono-base); color:var(--text-hi);">claude-sonnet-4.5</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+                  <p style="margin:6px 0 0; font:var(--text-sm); color:var(--text-low-content);">Used for parsing and matching.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 SWEEP SCHEDULE -->
+          <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;"><span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--phosphor);">Sweep schedule</span><div style="flex:1; height:1px; background:var(--divider);"></div></div>
+            <div style="display:flex; align-items:flex-end; gap:18px;">
+              <div style="flex:1;">
+                <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Next sweep</span>
+                <div style="font:var(--mono-lg); color:var(--text-hi); margin-top:6px;">01 JUL 06:00 UTC</div>
+              </div>
+              <div style="width:220px;">
+                <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:8px;">Frequency</label>
+                <div style="display:flex; align-items:center; justify-content:space-between; height:36px; padding:0 12px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); cursor:pointer;"><span style="font:var(--mono-sm); color:var(--text-hi);">Monthly · 1st 06:00</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+              </div>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="play" onClick="{{ runSweep }}" hint-size="auto,36px">Run sweep now</x-import>
+            </div>
+          </div>
+
+          <!-- 3 MCP & API ACCESS -->
+          <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;"><span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--violet);">MCP &amp; API access</span><div style="flex:1; height:1px; background:var(--divider);"></div></div>
+            <p style="margin:0 0 18px; font:var(--text-sm); color:var(--text-low-content);">Expose your radar to Claude and other MCP clients.</p>
+
+            <!-- connected clients -->
+            <div style="display:flex; align-items:center; gap:11px; padding:12px 14px; margin-bottom:18px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-control);">
+              <span style="position:relative; width:8px; height:8px; flex-shrink:0;"><span style="position:absolute; inset:0; border-radius:50%; background:var(--phosphor);"></span><span style="position:absolute; inset:0; border-radius:50%; background:var(--phosphor); animation:hr-dotping 1.8s var(--ease-out) infinite;"></span></span>
+              <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Claude Desktop <span style="font:var(--mono-sm); color:var(--text-low-content);">· last call 4m ago · </span><span style="font:var(--mono-sm); color:var(--violet);">search_jobs</span></span>
+              <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--phosphor);">Connected</span>
+            </div>
+
+            <!-- api keys -->
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">API keys</span><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" size="sm" icon-left="zap" onClick="{{ genKey }}" hint-size="auto,30px">Generate key</x-import></div>
+            <div style="border:1px solid var(--border); border-radius:var(--radius-control); overflow:hidden; margin-bottom:18px;">
+              <div style="display:grid; grid-template-columns:minmax(0,1.3fr) 130px 110px 100px 80px; gap:12px; align-items:center; padding:9px 14px; border-bottom:1px solid var(--border); background:var(--bg-raised);">
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low);">Name</span><span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low);">Scope</span><span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low);">Created</span><span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low);">Last used</span><span></span>
+              </div>
+              <sc-for list="{{ keys }}" as="k" hint-placeholder-count="2">
+                <div style="display:grid; grid-template-columns:minmax(0,1.3fr) 130px 110px 100px 80px; gap:12px; align-items:center; padding:12px 14px; border-bottom:1px solid var(--divider);">
+                  <span style="font:var(--mono-base); color:var(--text-hi);">{{ k.name }}</span>
+                  <span style="{{ k.scopeStyle }}">{{ k.scope }}</span>
+                  <span style="font:var(--mono-sm); color:var(--text-low-content);">{{ k.created }}</span>
+                  <span style="font:var(--mono-sm); color:var(--text-mid);">{{ k.lastUsed }}</span>
+                  <span onClick="{{ revokeKey }}" style="font:var(--mono-sm); color:var(--red); cursor:pointer; justify-self:start;">Revoke</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <!-- reveal (after generate) -->
+            <sc-if value="{{ revealed }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:14px; margin-bottom:18px; background:var(--bg-void); border:1px solid var(--amber); border-radius:var(--radius-control);">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg><span style="font:var(--text-sm); color:var(--amber);">Copy it now — it won't be shown again.</span></div>
+                <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-sm);"><span style="flex:1; font:var(--mono-sm); color:var(--text-hi); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">hr_live_7f3a91c4e8b20d5619af33c1</span><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.IconButton" icon="copy" label="Copy key" hint-size="30px,30px"></x-import></div>
+              </div>
+            </sc-if>
+
+            <!-- json config -->
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Claude Desktop config</span><span style="display:inline-flex; align-items:center; gap:6px; font:var(--mono-sm); color:var(--cyan); cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Copy</span></div>
+            <pre style="margin:0; padding:14px 16px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); font:var(--mono-sm); line-height:1.6; color:var(--text-mid); overflow:auto; white-space:pre;">{{ jsonConfig }}</pre>
+          </div>
+
+          <!-- 4 DATA -->
+          <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;"><span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--phosphor);">Data</span><div style="flex:1; height:1px; background:var(--divider);"></div></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0;">
+              <div><div style="font:500 14px/1.3 var(--font-ui); color:var(--text-hi);">Re-index embeddings</div><div style="font:var(--text-sm); color:var(--text-low-content); margin-top:3px;">Rebuilds all vectors · idempotent, safe to re-run.</div></div>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" onClick="{{ reindex }}" hint-size="auto,36px">Re-index</x-import>
+            </div>
+            <div style="height:1px; background:var(--divider);"></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0 0;">
+              <div><div style="font:500 14px/1.3 var(--font-ui); color:var(--text-hi);">Purge all data</div><div style="font:var(--text-sm); color:var(--text-low-content); margin-top:3px;">Deletes every posting, shortlist entry and run. Permanent.</div></div>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="destructive" icon-left="alert-triangle" onClick="{{ purge }}" hint-size="auto,36px">Purge all data</x-import>
+            </div>
+          </div>
+
+          <!-- 5 NOTIFICATIONS -->
+          <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--phosphor);">Notifications</span><div style="flex:1; height:1px; background:var(--divider);"></div></div>
+            <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--divider);">
+                <span style="font:var(--mono-sm); color:var(--text-mid);">{{ n.label }}</span>
+                <div role="switch" tabindex="0" aria-checked="{{ n.on }}" onClick="{{ n.onToggle }}" onKeyDown="{{ n.onKey }}" style="{{ n.trackStyle }}"><span style="{{ n.knobStyle }}"></span></div>
+              </div>
+            </sc-for>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- confirm modal -->
+      <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; background:rgba(3,5,8,0.62); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);">
+          <div style="width:440px; max-width:90%; background:var(--bg-raised); border:1px solid var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-panel); overflow:hidden;">
+            <div style="padding:20px 20px 0;">
+              <h3 style="margin:0 0 8px; font:var(--text-h3); color:var(--text-hi);">{{ modal.title }}</h3>
+              <p style="margin:0; font:var(--text-sm); color:var(--text-mid);">{{ modal.body }}</p>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; padding:18px 20px;">
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" onClick="{{ closeModal }}" hint-size="auto,36px">Cancel</x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="{{ modal.variant }}" onClick="{{ closeModal }}" hint-size="auto,36px">{{ modal.confirm }}</x-import>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </dc-import>
+  </div>
+
+  <!-- ============ STATES GALLERY ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Settings states</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Keys reveal once; destructive actions always restate the object; nothing saves silently.</span>
+  </div>
+  <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+    <!-- 1 LOADING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">01 · Loading</span>
+      <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:280px; display:flex; flex-direction:column; gap:16px;">
+        <div style="width:120px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="1" hint-size="120px,12px"></x-import></div>
+        <div style="height:36px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-control); animation:hr-shimmer 1.4s linear infinite;"></div>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="2" hint-size="100%,40px"></x-import>
+        <div style="height:36px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-control); animation:hr-shimmer 1.4s linear infinite;"></div>
+      </div>
+    </div>
+
+    <!-- 2 SAVE ERROR -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">02 · Save error</span>
+      <div style="position:relative; padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:280px; display:flex; flex-direction:column; gap:14px;">
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Toast" tone="error" title="Couldn't save settings" message="The server didn't respond. Your changes are still here." action="retry" action-label="Retry" on-action="{{ noop }}" on-close="{{ noop }}" hint-size="100%,80px"></x-import>
+        <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid var(--border-strong); border-radius:var(--radius-control); margin-top:auto;">
+          <span style="width:8px; height:8px; border-radius:50%; background:var(--amber); box-shadow:0 0 8px var(--amber);"></span>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Unsaved changes</span>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" size="sm" hint-size="auto,30px">Save</x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 UNSAVED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">03 · Unsaved changes</span>
+      <div style="position:relative; padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:280px;">
+        <p style="margin:0; font:var(--text-sm); color:var(--text-mid);">A sticky bar tracks edits across all sections until saved or discarded.</p>
+        <div style="position:absolute; left:18px; right:18px; bottom:18px; display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid var(--border-strong); border-radius:var(--radius-control); box-shadow:var(--shadow-pop);">
+          <span style="width:8px; height:8px; border-radius:50%; background:var(--amber); box-shadow:0 0 8px var(--amber);"></span>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Unsaved changes</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content); cursor:pointer;">Discard</span>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" size="sm" hint-size="auto,30px">Save</x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 KEY GENERATED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">04 · Key generated — one-time reveal</span>
+      <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:280px;">
+        <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">New key · claude-desktop</span>
+        <div style="padding:16px; margin-top:14px; background:var(--bg-void); border:1px solid var(--amber); border-radius:var(--radius-control); box-shadow:0 0 18px rgba(255,200,87,0.12);">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg><span style="font:var(--text-sm); color:var(--amber);">Copy it now — it won't be shown again.</span></div>
+          <div style="display:flex; align-items:center; gap:10px; padding:11px 13px; background:var(--bg-surface); border:1px solid var(--border-strong); border-radius:var(--radius-sm);"><span style="flex:1; font:var(--mono-base); color:var(--text-hi); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">hr_live_7f3a91c4e8b20d5619af33c1</span><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" size="sm" icon-left="copy" hint-size="auto,30px">Copy</x-import></div>
+          <div style="font:var(--mono-sm); color:var(--text-low-content); margin-top:12px;">scope read+write · created just now</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 KEY GEN ERROR -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">05 · Key generation error</span>
+      <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:280px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">API keys</span></div>
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; padding:30px 20px; background:var(--bg-void); border:1px solid rgba(255,93,93,0.32); border-radius:var(--radius-control);">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="76" hint-size="76px,76px"></x-import>
+          <span style="font:600 14px/1.3 var(--font-ui); color:var(--text-hi);">Couldn't generate the key</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content);">the auth service didn't respond</span>
+          <div style="margin-top:4px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" hint-size="auto,36px">Retry</x-import></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 KEY REVOKED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">06 · Key revoked</span>
+      <div style="position:relative; padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:280px;">
+        <div style="display:flex; flex-direction:column; gap:2px; opacity:0.6;">
+          <div style="display:grid; grid-template-columns:minmax(0,1.3fr) 120px 80px; gap:12px; align-items:center; padding:12px 0; border-bottom:1px solid var(--divider);"><span style="font:var(--mono-base); color:var(--text-low); text-decoration:line-through;">claude-desktop</span><span style="font:var(--mono-sm); color:var(--text-low);">read+write</span><span style="font:var(--mono-sm); color:var(--red);">revoked</span></div>
+          <div style="display:grid; grid-template-columns:minmax(0,1.3fr) 120px 80px; gap:12px; align-items:center; padding:12px 0;"><span style="font:var(--mono-base); color:var(--text-hi);">ci-export</span><span style="font:var(--mono-sm); color:var(--text-mid);">read</span><span style="font:var(--mono-sm); color:var(--text-low-content);">12d ago</span></div>
+        </div>
+        <div style="position:absolute; left:18px; right:18px; bottom:18px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Toast" tone="success" title="Key revoked" message="‘claude-desktop’ can no longer access your radar." on-close="{{ noop }}" hint-size="100%,72px"></x-import>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1260}}">
+class Component extends DCLogic {
+  state = {
+    steps: 25, revealed: false, modal: null,
+    notif: { sweep: true, agent: true, match90: false },
+  };
+
+  trackKnob(on) {
+    return {
+      track: {
+        width: '40px', height: '22px', borderRadius: '11px', flexShrink: 0, cursor: 'pointer', position: 'relative',
+        background: on ? 'var(--phosphor-12)' : 'var(--bg-void)',
+        border: '1px solid ' + (on ? 'var(--border-strong)' : 'var(--border)'),
+        transition: 'background var(--dur-fast)',
+      },
+      knob: {
+        position: 'absolute', top: '2px', left: on ? '20px' : '2px', width: '16px', height: '16px', borderRadius: '50%',
+        background: on ? 'var(--phosphor)' : 'var(--text-low)',
+        boxShadow: on ? 'var(--glow-phosphor-sm)' : 'none', transition: 'left var(--dur-fast), background var(--dur-fast)',
+      },
+    };
+  }
+
+  renderVals() {
+    const keys = [
+      { name: 'claude-desktop', scope: 'read+write', created: '2026-05-12', lastUsed: '4m ago' },
+      { name: 'ci-export', scope: 'read', created: '2026-03-01', lastUsed: '12d ago' },
+    ].map((k) => ({
+      ...k,
+      scopeStyle: {
+        display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start', height: '20px', padding: '0 7px',
+        font: '600 10px/1 var(--font-mono)', letterSpacing: '0.06em', borderRadius: 'var(--radius-sm)', whiteSpace: 'nowrap',
+        color: k.scope === 'read' ? 'var(--text-mid)' : 'var(--cyan)',
+        border: '1px solid ' + (k.scope === 'read' ? 'var(--border)' : 'rgba(76,201,240,0.35)'),
+        background: k.scope === 'read' ? 'transparent' : 'var(--cyan-12)',
+      },
+    }));
+
+    const notifDefs = [
+      { id: 'sweep', label: 'Sweep completed' },
+      { id: 'agent', label: 'Agent run finished' },
+      { id: 'match90', label: 'New ≥ 90 match found' },
+    ];
+    const notifs = notifDefs.map((n) => {
+      const on = this.state.notif[n.id];
+      const tk = this.trackKnob(on);
+      const toggle = () => this.setState((st) => ({ notif: { ...st.notif, [n.id]: !st.notif[n.id] } }));
+      return {
+        label: n.label, trackStyle: tk.track, knobStyle: tk.knob, on, onToggle: toggle,
+        onKey: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } },
+      };
+    });
+
+    const jsonConfig = '{\n  "mcpServers": {\n    "hiring-radar": {\n      "url": "https://radar.example.dev/mcp",\n      "headers": {\n        "Authorization": "Bearer hr_live_••••••••"\n      }\n    }\n  }\n}';
+
+    const setModal = (m) => this.setState({ modal: m });
+    const m = this.state.modal || {};
+
+    return {
+      keys, notifs, jsonConfig, noop: () => {},
+      steps: this.state.steps, revealed: this.state.revealed,
+      fmtSteps: (v) => 'MAX STEPS ' + v,
+      onSteps: (e) => this.setState({ steps: parseInt(e.target.value, 10) }),
+      genKey: () => this.setState({ revealed: true }),
+      modalOpen: !!this.state.modal,
+      modal: { title: m.title, body: m.body, confirm: m.confirm, variant: m.variant || 'primary' },
+      closeModal: () => this.setState({ modal: null }),
+      runSweep: () => setModal({ title: 'Run a sweep now?', body: 'Fetches the current HN thread and re-embeds changes. ≈512 postings · est. 4 min.', confirm: 'Run sweep', variant: 'primary' }),
+      revokeKey: () => setModal({ title: "Revoke key 'claude-desktop'?", body: 'Any client using this key loses access immediately. This can\u2019t be undone.', confirm: 'Revoke key', variant: 'destructive' }),
+      reindex: () => setModal({ title: 'Re-index all embeddings?', body: 'Rebuilds 14,203 vectors. Embeddings are idempotent (content-hash) — safe to re-run.', confirm: 'Re-index', variant: 'primary' }),
+      purge: () => setModal({ title: 'Purge all data?', body: 'Purge 512 postings, 8 shortlist entries and 24 runs? This permanently deletes everything and can\u2019t be undone.', confirm: 'Purge everything', variant: 'destructive' }),
+    };
+  }
+}
+</script>
+</body>
+</html>

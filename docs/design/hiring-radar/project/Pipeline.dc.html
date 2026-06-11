@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1440px; margin:0 auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Admin · pipeline</span>
+    <span style="font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--text-hi);">Ingest pipeline</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Sweeps, embeddings, and dead letters — the machine room.</span>
+  </div>
+
+  <!-- ============ MAIN SCREEN ============ -->
+  <div style="position:relative; width:1440px; max-width:1440px; height:1120px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <dc-import name="RadarShell" active-nav="pipeline" sweep="healthy" last-sweep="06:00 UTC" month="JUN 2026" hint-size="100%,100%" style="display:block; width:100%; height:100%;">
+      <div style="position:absolute; inset:0; overflow:auto;">
+        <div style="padding:24px 28px; display:flex; flex-direction:column; gap:22px;">
+
+          <!-- STATUS STRIP -->
+          <div style="display:flex; align-items:center; gap:0; padding:16px 20px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+            <div style="display:flex; align-items:center; gap:11px; padding-right:26px;">
+              <span style="position:relative; width:9px; height:9px;"><span style="position:absolute; inset:0; border-radius:50%; background:var(--phosphor); box-shadow:0 0 10px var(--phosphor);"></span></span>
+              <span style="font:600 11px/1.3 var(--font-mono); letter-spacing:0.12em; text-transform:uppercase; color:var(--phosphor);">System<br>healthy</span>
+            </div>
+            <div style="width:1px; height:34px; background:var(--divider);"></div>
+            <div style="display:flex; flex-direction:column; gap:4px; padding:0 26px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Last sweep</span><span style="font:var(--mono-sm); color:var(--text-hi);">06:00 UTC <span style="color:var(--phosphor);">✓</span></span></div>
+            <div style="width:1px; height:34px; background:var(--divider);"></div>
+            <div style="display:flex; flex-direction:column; gap:4px; padding:0 26px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Next</span><span style="font:var(--mono-sm); color:var(--text-mid);">01 JUL 06:00</span></div>
+            <div style="width:1px; height:34px; background:var(--divider);"></div>
+            <div style="display:flex; flex-direction:column; gap:4px; padding:0 26px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Index</span><span style="font:var(--mono-sm); color:var(--text-mid);">14,203 vectors</span></div>
+            <div style="width:1px; height:34px; background:var(--divider);"></div>
+            <div style="display:flex; flex-direction:column; gap:4px; padding:0 26px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Embed model</span><span style="font:var(--mono-sm); color:var(--text-mid);">all-minilm-l6-v2 · v3</span></div>
+          </div>
+
+          <!-- SWEEPS + side -->
+          <div style="display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:22px; align-items:start;">
+
+            <!-- SWEEPS TABLE -->
+            <div style="background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--divider);">
+                <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Sweeps</span>
+                <span style="font:var(--mono-sm); color:var(--text-low-content);">last 5</span>
+              </div>
+              <div style="display:grid; grid-template-columns:minmax(120px,1.2fr) 84px 84px 54px 50px 64px 64px 116px 24px; gap:10px; align-items:center; padding:9px 18px; border-bottom:1px solid var(--border);">
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low);">Sweep</span>
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low);">Trigger</span>
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low);">Started</span>
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low); text-align:right;">Dur</span>
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low); text-align:right;">New</span>
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low); text-align:right;">Re-emb</span>
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low); text-align:right;">Failed</span>
+                <span style="font:var(--label-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-low);">Status</span>
+                <span></span>
+              </div>
+              <sc-for list="{{ sweeps }}" as="s" hint-placeholder-count="5">
+                <div>
+                  <div onClick="{{ s.onToggle }}" style="display:grid; grid-template-columns:minmax(120px,1.2fr) 84px 84px 54px 50px 64px 64px 116px 24px; gap:10px; align-items:center; padding:13px 18px; border-bottom:1px solid var(--divider); cursor:pointer;" style-hover="background: var(--phosphor-08)">
+                    <div style="display:flex; align-items:center; gap:8px; min-width:0;"><span style="font:600 13px/1.2 var(--font-ui); color:var(--text-hi); white-space:nowrap;">{{ s.month }}</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></div>
+                    <span style="{{ s.trigStyle }}">{{ s.trigger }}</span>
+                    <span style="font:var(--mono-sm); color:var(--text-low-content); white-space:nowrap;">{{ s.started }}</span>
+                    <span style="font:var(--mono-sm); color:var(--text-mid); text-align:right;">{{ s.dur }}</span>
+                    <span style="font:var(--mono-sm); color:var(--phosphor); text-align:right;">{{ s.new }}</span>
+                    <span style="font:var(--mono-sm); color:var(--text-mid); text-align:right;">{{ s.reemb }}</span>
+                    <span style="font:var(--mono-sm); color:{{ s.failedColor }}; text-align:right;">{{ s.failed }}</span>
+                    <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="{{ s.status }}" hint-size="auto,20px"></x-import>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="{{ s.caretStyle }}"><path d="m6 9 6 6 6-6"></path></svg>
+                  </div>
+                  <sc-if value="{{ s.open }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:14px 18px 16px 18px; background:var(--bg-void); border-bottom:1px solid var(--divider);">
+                      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Step breakdown</span><span style="font:var(--mono-sm); color:var(--text-low-content);">thread 48357725 · fetched {{ s.fetched }} · changed {{ s.changed }}</span></div>
+                      <div style="display:flex; align-items:stretch; gap:0;">
+                        <sc-for list="{{ s.steps }}" as="st" hint-placeholder-count="5">
+                          <div style="flex:1; display:flex; align-items:center;">
+                            <div style="flex:1; padding:12px 14px; background:var(--bg-raised); border:1px solid {{ st.border }}; border-radius:var(--radius-control);">
+                              <div style="display:flex; align-items:center; gap:7px; margin-bottom:7px;"><span style="{{ st.dotStyle }}"></span><span style="font:var(--mono-base); color:var(--text-hi);">{{ st.name }}</span></div>
+                              <div style="font:var(--mono-sm); color:var(--text-mid);">{{ st.dur }}</div>
+                              <div style="font:var(--mono-sm); color:{{ st.noteColor }}; margin-top:3px;">{{ st.note }}</div>
+                            </div>
+                            <sc-if value="{{ st.arrow }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin:0 2px;"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></sc-if>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+
+            <!-- SIDE: dead letters + backfill -->
+            <div style="display:flex; flex-direction:column; gap:22px;">
+              <div style="background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden;">
+                <div style="padding:14px 18px; border-bottom:1px solid var(--divider);"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Dead letters</span></div>
+                <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:30px 24px;">
+                  <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="clean-signal" size="80" hint-size="80px,80px"></x-import>
+                  <span style="font:600 14px/1.3 var(--font-ui); color:var(--text-hi);">No dead letters</span>
+                  <span style="font:var(--mono-sm); color:var(--text-low-content);">Clean signal.</span>
+                </div>
+              </div>
+
+              <div style="background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); padding:18px;">
+                <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Backfill</span>
+                <div style="display:flex; align-items:center; gap:10px; margin:12px 0 14px;">
+                  <div style="flex:1; display:flex; align-items:center; justify-content:space-between; height:36px; padding:0 12px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-control);"><span style="font:var(--mono-sm); color:var(--text-hi);">JAN 2025 — NOV 2025</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+                </div>
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="database" onClick="{{ openBackfill }}" style="width:100%;" hint-size="100%,36px">Backfill 2025 threads</x-import>
+                <p style="margin:12px 0 0; font:var(--mono-sm); color:var(--text-low-content); line-height:1.5;">Embeddings are idempotent (content-hash) — safe to re-run.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- EVENT LOG -->
+          <div style="background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden;">
+            <div style="display:flex; align-items:center; gap:14px; padding:13px 18px; border-bottom:1px solid var(--divider);">
+              <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Event log</span>
+              <span style="flex:1;"></span>
+              <sc-for list="{{ logTabs }}" as="lt" hint-placeholder-count="4"><button onClick="{{ lt.onClick }}" style="{{ lt.style }}">{{ lt.label }}</button></sc-for>
+            </div>
+            <div style="padding:6px 0;">
+              <sc-for list="{{ logLines }}" as="l" hint-placeholder-count="8">
+                <div style="display:flex; align-items:center; gap:14px; padding:7px 18px;" style-hover="background: rgba(147,164,179,0.03)">
+                  <span style="font:var(--mono-sm); color:var(--text-low); white-space:nowrap;">{{ l.ts }}</span>
+                  <span style="{{ l.levelStyle }}">{{ l.level }}</span>
+                  <span style="flex:1; font:var(--mono-sm); color:{{ l.msgColor }};">{{ l.msg }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- backfill confirm -->
+      <sc-if value="{{ backfillOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; background:rgba(3,5,8,0.62); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);">
+          <div style="width:440px; max-width:90%; background:var(--bg-raised); border:1px solid var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-panel); overflow:hidden;">
+            <div style="padding:20px 20px 0;">
+              <h3 style="margin:0 0 8px; font:var(--text-h3); color:var(--text-hi);">Backfill 11 threads?</h3>
+              <p style="margin:0 0 12px; font:var(--text-sm); color:var(--text-mid);">≈ 6,000 postings · est. 18 min. This runs in the background.</p>
+              <div style="display:flex; align-items:center; gap:9px; padding:10px 12px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-control);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--phosphor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span style="font:var(--mono-sm); color:var(--text-low-content);">embeddings are idempotent — safe to re-run</span></div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; padding:18px 20px;">
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" onClick="{{ closeBackfill }}" hint-size="auto,36px">Cancel</x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="play" onClick="{{ closeBackfill }}" hint-size="auto,36px">Start backfill</x-import>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </dc-import>
+  </div>
+
+  <!-- ============ STATES GALLERY ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Pipeline states</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Failures resume from the failed step; partial sweeps quarantine to dead letters, never silently drop.</span>
+  </div>
+  <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+    <!-- 2 RUN IN PROGRESS -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">02 · Run in progress</span>
+      <div style="background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden; min-height:300px;">
+        <div style="position:relative; display:grid; grid-template-columns:minmax(0,1fr) 90px 110px; gap:10px; align-items:center; padding:14px 18px; border-bottom:1px solid var(--divider);">
+          <div style="display:flex; align-items:center; gap:10px;"><span style="font:600 13px/1.2 var(--font-ui); color:var(--text-hi);">JUL 2026</span><span style="display:inline-flex; height:20px; padding:0 7px; font:600 10px/20px var(--font-mono); letter-spacing:0.08em; color:var(--text-mid); border:1px solid var(--border); border-radius:var(--radius-sm);">CRON</span></div>
+          <span style="font:var(--mono-sm); color:var(--text-low-content);">2m 04s</span>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="RUNNING" hint-size="auto,20px"></x-import>
+          <div style="position:absolute; left:0; right:0; bottom:0; height:2px; overflow:hidden; background:var(--phosphor-08);"><div style="position:absolute; inset:0; width:42%; background:linear-gradient(90deg, transparent, var(--phosphor), transparent); animation:hr-shimmer 1.2s linear infinite;"></div></div>
+        </div>
+        <div style="padding:16px 18px; display:flex; align-items:center; gap:6px;">
+          <span style="display:inline-flex; align-items:center; gap:6px; padding:8px 12px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--phosphor);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>fetch</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          <span style="display:inline-flex; align-items:center; gap:6px; padding:8px 12px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--phosphor);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>parse</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          <span style="display:inline-flex; align-items:center; gap:7px; padding:8px 12px; background:var(--bg-surface); border:1px solid var(--border-strong); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--text-hi);"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Spinner" size="12" color="var(--phosphor)" hint-size="12px,12px"></x-import>diff…</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5" style="opacity:0.4;"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          <span style="padding:8px 12px; border:1px dashed var(--border); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--text-low);">embed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 LAST RUN FAILED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">03 · Last run failed — resume</span>
+      <div style="min-height:300px; display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; align-items:center; gap:12px; padding:13px 16px; background:var(--red-14); border:1px solid rgba(255,93,93,0.32); border-radius:var(--radius-card);">
+          <span style="position:relative; width:9px; height:9px; flex-shrink:0;"><span style="position:absolute; inset:0; border-radius:50%; background:var(--red); box-shadow:0 0 10px var(--red);"></span></span>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">June sweep failed at <span style="font:var(--mono-sm);">embed</span> step — Browse is serving <span style="font:var(--mono-sm);">May</span> data.</span>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="play" hint-size="auto,36px">Retry from failed step</x-import>
+        </div>
+        <div style="flex:1; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-card); padding:16px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; gap:6px; padding:8px 12px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--phosphor);">fetch ✓</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          <span style="display:inline-flex; align-items:center; gap:6px; padding:8px 12px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--phosphor);">parse ✓</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          <span style="display:inline-flex; align-items:center; gap:6px; padding:8px 12px; background:var(--phosphor-08); border:1px solid var(--border-strong); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--phosphor);">diff ✓</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          <span style="display:inline-flex; align-items:center; gap:6px; padding:8px 12px; background:var(--red-14); border:1px solid rgba(255,93,93,0.45); border-radius:var(--radius-control); font:var(--mono-sm); color:var(--red);">embed ✗ provider 500</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 PARTIAL -->
+    <div style="grid-column:1 / -1;">
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">04 · Partial — dead letters</span>
+      <div style="background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:12px; padding:13px 18px; border-bottom:1px solid var(--divider);">
+          <span style="position:relative; width:9px; height:9px; flex-shrink:0;"><span style="position:absolute; inset:0; border-radius:50%; background:var(--amber); box-shadow:0 0 10px var(--amber);"></span></span>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">510 of 512 indexed · <span style="color:var(--amber);">2 in dead letters</span></span>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" hint-size="auto,36px">Retry all (2)</x-import>
+        </div>
+        <sc-for list="{{ deadLetters }}" as="d" hint-placeholder-count="2">
+          <div style="display:flex; align-items:flex-start; gap:16px; padding:14px 18px; border-bottom:1px solid var(--divider);">
+            <div style="width:130px; flex-shrink:0;"><div style="font:var(--mono-sm); color:var(--text-hi);">{{ d.id }}</div><span style="display:inline-flex; margin-top:6px; height:18px; padding:0 6px; font:600 9px/18px var(--font-mono); letter-spacing:0.08em; text-transform:uppercase; color:var(--red); background:var(--red-14); border:1px solid rgba(255,93,93,0.42); border-radius:var(--radius-sm);">{{ d.step }}</span></div>
+            <div style="flex:1; min-width:0;"><div style="font:var(--mono-sm); color:var(--red); margin-bottom:7px;">{{ d.error }}</div><div style="display:inline-flex; align-items:center; gap:7px; padding:6px 10px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-sm); cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg><span style="font:var(--mono-sm); color:var(--text-low-content);">payload preview</span></div></div>
+            <div style="display:flex; gap:8px; flex-shrink:0;">
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" size="sm" icon-left="retry" hint-size="auto,30px">Retry</x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="destructive" size="sm" hint-size="auto,30px">Discard</x-import>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- 5 EMPTY -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">05 · Empty — fresh install</span>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; padding:40px 24px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="empty-radar" size="100" hint-size="100px,100px"></x-import>
+        <h3 style="margin:10px 0 4px; font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-hi);">No sweeps yet</h3>
+        <p style="margin:0 0 16px; max-width:320px; font:var(--text-sm); color:var(--text-mid);">Ingest the current HN thread to populate the index — ≈512 postings · est. 4 min.</p>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="inbox" hint-size="auto,36px">Run first ingest</x-import>
+      </div>
+    </div>
+
+    <!-- 6 LOADING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">06 · Loading</span>
+      <div style="background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden; min-height:300px; padding:6px 0;">
+        <sc-for list="{{ rng5 }}" as="x" hint-placeholder-count="5">
+          <div style="display:grid; grid-template-columns:minmax(0,1.4fr) 80px 70px 60px 110px; gap:12px; align-items:center; padding:16px 18px; border-bottom:1px solid var(--divider);">
+            <div style="height:13px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+            <div style="height:11px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+            <div style="height:11px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+            <div style="height:11px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+            <div style="height:20px; width:90px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-sm); animation:hr-shimmer 1.4s linear infinite;"></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1200}}">
+class Component extends DCLogic {
+  state = { expanded: 'jun', logFilter: 'all', backfillOpen: false };
+
+  trigStyleFor(t) {
+    return {
+      display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start', height: '20px', padding: '0 7px',
+      font: '600 10px/1 var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 'var(--radius-sm)',
+      color: 'var(--text-mid)', border: '1px solid var(--border)', whiteSpace: 'nowrap',
+    };
+  }
+
+  renderVals() {
+    const baseSteps = [
+      { name: 'fetch', dur: '1.2s', note: 'ok', retry: 0 },
+      { name: 'parse', dur: '8.4s', note: '3 low-conf', retry: 0 },
+      { name: 'diff', dur: '0.6s', note: 'ok', retry: 0 },
+      { name: 'embed', dur: '12.1s', note: '2 retries · backoff 4s', retry: 2 },
+      { name: 'index', dur: '1.8s', note: 'ok', retry: 0 },
+    ];
+    const steps = baseSteps.map((st, i) => ({
+      name: st.name, dur: st.dur, note: st.note,
+      arrow: i < baseSteps.length - 1,
+      border: st.retry > 0 ? 'rgba(255,200,87,0.32)' : 'var(--border)',
+      noteColor: st.retry > 0 ? 'var(--amber)' : 'var(--text-low)',
+      dotStyle: { width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0, background: st.retry > 0 ? 'var(--amber)' : 'var(--phosphor)', boxShadow: '0 0 6px ' + (st.retry > 0 ? 'var(--amber)' : 'var(--phosphor)') },
+    }));
+
+    const rows = [
+      { id: 'jun', month: 'JUN 2026', trigger: 'CRON', started: '06:00 UTC', dur: '3m 24s', new: 38, reemb: 45, failed: 0, changed: 7, fetched: 512, status: 'COMPLETED' },
+      { id: 'may', month: 'MAY 2026', trigger: 'CRON', started: '06:00 UTC', dur: '3m 12s', new: 42, reemb: 40, failed: 0, changed: 5, fetched: 498, status: 'COMPLETED' },
+      { id: 'apr', month: 'APR 2026', trigger: 'CRON', started: '06:00 UTC', dur: '4m 02s', new: 30, reemb: 33, failed: 2, changed: 6, fetched: 505, status: 'PARTIAL' },
+      { id: 'mar', month: 'MAR 2026', trigger: 'MANUAL', started: '14:22 UTC', dur: '5m 41s', new: 28, reemb: 31, failed: 0, changed: 4, fetched: 491, status: 'RESUMED' },
+      { id: 'feb', month: 'FEB 2026', trigger: 'BACKFILL', started: '09:10 UTC', dur: '11m 08s', new: 0, reemb: 480, failed: 0, changed: 0, fetched: 480, status: 'COMPLETED' },
+    ];
+    const sweeps = rows.map((r) => ({
+      ...r,
+      open: this.state.expanded === r.id,
+      failedColor: r.failed > 0 ? 'var(--red)' : 'var(--text-low)',
+      trigStyle: this.trigStyleFor(r.trigger),
+      caretStyle: { transform: this.state.expanded === r.id ? 'rotate(180deg)' : 'none', transition: 'transform var(--dur-fast)' },
+      steps,
+      onToggle: () => this.setState((st) => ({ expanded: st.expanded === r.id ? null : r.id })),
+    }));
+
+    const logFilter = this.state.logFilter;
+    const tabs = ['all', 'info', 'warn', 'error'].map((id) => {
+      const on = id === logFilter;
+      return {
+        label: id.toUpperCase(),
+        onClick: () => this.setState({ logFilter: id }),
+        style: {
+          height: '26px', padding: '0 10px', background: on ? 'var(--phosphor-12)' : 'transparent',
+          color: on ? 'var(--phosphor)' : 'var(--text-low)', border: '1px solid ' + (on ? 'var(--border-strong)' : 'var(--border)'),
+          borderRadius: 'var(--radius-sm)', font: '600 10px/1 var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer',
+        },
+      };
+    });
+
+    const lvlColor = { INFO: 'var(--cyan)', WARN: 'var(--amber)', ERROR: 'var(--red)' };
+    const lines = [
+      { ts: '06:00:01', level: 'INFO', msg: 'sweep started — thread 48357725' },
+      { ts: '06:02:11', level: 'INFO', msg: 'parsed 512 postings (3 low-confidence)' },
+      { ts: '06:08:30', level: 'INFO', msg: 'diff complete — 38 new · 7 changed' },
+      { ts: '06:14:02', level: 'WARN', msg: 'retry embed batch 12 (429 from provider, backoff 8s)' },
+      { ts: '06:14:40', level: 'ERROR', msg: 'LLM parse: malformed JSON after 3 attempts — posting hn-48359112 → dead letter' },
+      { ts: '06:15:01', level: 'INFO', msg: 'index updated — 45 vectors upserted' },
+      { ts: '06:15:03', level: 'INFO', msg: 'sweep completed — 512 fetched · 0 failed' },
+      { ts: '06:15:04', level: 'WARN', msg: 'next cron scheduled — 01 JUL 06:00 UTC' },
+    ];
+    const logLines = lines.filter((l) => logFilter === 'all' || l.level.toLowerCase() === logFilter).map((l) => ({
+      ts: l.ts, level: l.level, msg: l.msg,
+      msgColor: l.level === 'ERROR' ? 'var(--text-hi)' : 'var(--text-mid)',
+      levelStyle: {
+        width: '46px', flexShrink: 0, font: '600 10px/1 var(--font-mono)', letterSpacing: '0.06em',
+        color: lvlColor[l.level],
+      },
+    }));
+
+    return {
+      sweeps, logTabs: tabs, logLines,
+      rng5: [0, 1, 2, 3, 4],
+      deadLetters: [
+        { id: 'hn-48359112', step: 'PARSE', error: 'LLM parse: malformed JSON after 3 attempts' },
+        { id: 'hn-48360044', step: 'EMBED', error: 'embed timeout (provider 504) after 3 retries' },
+      ],
+      backfillOpen: this.state.backfillOpen,
+      openBackfill: () => this.setState({ backfillOpen: true }),
+      closeBackfill: () => this.setState({ backfillOpen: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>

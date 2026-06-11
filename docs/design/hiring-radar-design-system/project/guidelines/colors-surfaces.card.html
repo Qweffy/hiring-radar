@@ -1,0 +1,18 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Surfaces — void → raised" subtitle="The near-black elevation stack the whole instrument sits on" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-void); padding: 18px; }
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .sw { border-radius: var(--radius-card); border: 1px solid var(--border); padding: 14px; height: 96px; display: flex; flex-direction: column; justify-content: space-between; }
+  .name { font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--text-mid); }
+  .hex { font: var(--mono-sm); color: var(--text-low-content); }
+</style></head>
+<body>
+  <div class="row">
+    <div class="sw" style="background:var(--bg-void)"><span class="name">Void</span><span class="hex">#06080C · page</span></div>
+    <div class="sw" style="background:var(--bg-surface)"><span class="name">Surface</span><span class="hex">#0B1018 · panels</span></div>
+    <div class="sw" style="background:var(--bg-raised)"><span class="name">Raised</span><span class="hex">#111826 · cards</span></div>
+    <div class="sw" style="background:var(--glass); backdrop-filter: blur(16px)"><span class="name">Glass</span><span class="hex">rgba 0.55 · blur 16</span></div>
+  </div>
+</body></html>

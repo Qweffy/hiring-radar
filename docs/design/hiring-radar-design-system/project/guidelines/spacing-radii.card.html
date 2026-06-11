@@ -1,0 +1,18 @@
+<!-- @dsCard group="Spacing" viewport="700x150" name="Radii & borders" subtitle="Hard cap 10px — no pills. 1px phosphor-dim borders" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-void); padding: 20px; display: flex; gap: 18px; align-items: center; }
+  .box { width: 92px; height: 92px; background: var(--bg-raised); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .n { font: var(--mono-sm); color: var(--text-mid); }
+  .t { font: 10px var(--font-mono); color: var(--text-low-content); }
+  .note { font: var(--text-sm); color: var(--text-mid); max-width: 200px; }
+  .strong { width: 92px; height: 92px; border-radius: 10px; background: var(--bg-raised); border: 1px solid var(--border-strong); box-shadow: var(--glow-phosphor-sm); display:flex;align-items:center;justify-content:center; }
+</style></head>
+<body>
+  <div class="box" style="border-radius:4px"><span class="n">4px</span><span class="t">--radius-sm</span></div>
+  <div class="box" style="border-radius:6px"><span class="n">6px</span><span class="t">controls</span></div>
+  <div class="box" style="border-radius:10px"><span class="n">10px</span><span class="t">cards · max</span></div>
+  <div class="strong"><span class="t" style="color:var(--phosphor)">focus / active<br/>border-strong</span></div>
+  <p class="note">Never exceed 10px. Pills and fully-round cards are banned — this is an instrument.</p>
+</body></html>

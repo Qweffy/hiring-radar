@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  @keyframes hr-sweep400 { 0%{background-position:150% 0; opacity:1} 100%{background-position:-150% 0; opacity:0} }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1440px; margin:0 auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Route · profile</span>
+    <span style="font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--text-hi);">Calibration</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Tune the signal the agent matches against.</span>
+  </div>
+
+  <!-- ============ MAIN SCREEN ============ -->
+  <div style="position:relative; width:1440px; max-width:1440px; height:1080px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <dc-import name="RadarShell" active-nav="profile" sweep="healthy" last-sweep="06:00 UTC" month="JUN 2026" hint-size="100%,100%" style="display:block; width:100%; height:100%;">
+      <div style="position:absolute; inset:0; overflow:auto;">
+        <div style="display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:28px; padding:28px; align-items:start;">
+
+          <!-- ===== LEFT — CALIBRATION FORM ===== -->
+          <div style="display:flex; flex-direction:column; gap:28px;">
+
+            <!-- 1 SIGNAL SOURCE -->
+            <div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--phosphor);">01 · Signal source</span><div style="flex:1; height:1px; background:var(--divider);"></div></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;"><label style="font:var(--text-sm); color:var(--text-mid);">Paste your CV</label><span style="display:inline-flex; align-items:center; gap:6px; font:var(--mono-sm); color:var(--cyan); cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><path d="M12 3v12"></path></svg>upload .md / .txt / .pdf</span></div>
+              <textarea style="display:block; width:100%; box-sizing:border-box; min-height:120px; padding:13px 15px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); color:var(--text-mid); font:var(--mono-sm); line-height:1.6; resize:vertical; outline:none;">Senior product engineer, 8 yrs. TypeScript + React Native across the stack; shipped AI-assisted features end-to-end (LLM eval, retrieval). Remote-only, Buenos Aires (UTC-3). Postgres, some Python. Currently going deep on fine-tuning…</textarea>
+
+              <div style="display:flex; align-items:center; gap:9px; margin:18px 0 12px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--phosphor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span style="font:var(--text-sm); color:var(--text-hi);">Parsed 7 skills</span><span style="font:var(--mono-sm); color:var(--text-low-content);">· click a tag to recategorize</span></div>
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+                  <div style="display:flex; align-items:flex-start; gap:12px;">
+                    <span style="{{ g.labelStyle }}">{{ g.label }}</span>
+                    <div style="flex:1; display:flex; flex-wrap:wrap; gap:7px; min-height:24px;">
+                      <sc-for list="{{ g.tags }}" as="t" hint-placeholder-count="3">
+                        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="{{ t.tone }}" selected="{{ true }}" onClick="{{ t.onClick }}" style="cursor:pointer;" hint-size="auto,24px">{{ t.name }}</x-import>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- 2 TARGETS -->
+            <div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;"><span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--phosphor);">02 · Targets</span><div style="flex:1; height:1px; background:var(--divider);"></div></div>
+
+              <div style="display:flex; flex-direction:column; gap:18px;">
+                <div>
+                  <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:8px;">Desired roles</label>
+                  <div style="display:flex; flex-wrap:wrap; gap:7px; align-items:center;">
+                    <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="phosphor" selected="{{ true }}" hint-size="auto,24px">Senior Product Engineer</x-import>
+                    <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="phosphor" selected="{{ true }}" hint-size="auto,24px">AI Engineer</x-import>
+                    <span style="display:inline-flex; align-items:center; gap:5px; height:24px; padding:0 9px; font:var(--mono-sm); color:var(--text-low-content); border:1px dashed var(--border); border-radius:var(--radius-sm); cursor:pointer;">+ add role</span>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
+                  <div>
+                    <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.RangeSlider" value="{{ salary }}" min="80" max="300" step="5" label="Salary floor" format="{{ fmtSalary }}" on-change="{{ onSalary }}" hint-size="100%,52px"></x-import>
+                  </div>
+                  <div>
+                    <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:8px;">Timezone overlap</label>
+                    <div style="display:flex; align-items:center; justify-content:space-between; height:36px; padding:0 12px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-control); cursor:pointer;"><span style="font:var(--mono-base); color:var(--text-hi);">UTC-3 ±4h</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+                  </div>
+                </div>
+
+                <div>
+                  <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:8px;">Remote policy</label>
+                  <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.SegmentedControl" options="{{ remoteOptions }}" value="{{ remote }}" on-change="{{ onRemote }}" hint-size="auto,34px"></x-import>
+                </div>
+
+                <div>
+                  <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:10px;">Company stage</label>
+                  <div style="display:flex; flex-wrap:wrap; gap:10px 18px;">
+                    <sc-for list="{{ stages }}" as="st" hint-placeholder-count="6">
+                      <span style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;"><span style="{{ st.boxStyle }}"><sc-if value="{{ st.on }}" hint-placeholder-val="{{ true }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#04130C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></sc-if></span><span style="font:var(--text-sm); color:{{ st.color }};">{{ st.label }}</span></span>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div>
+                  <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:8px;">Dealbreakers</label>
+                  <div style="display:flex; flex-wrap:wrap; gap:7px; align-items:center;">
+                    <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="amber" selected="{{ true }}" hint-size="auto,24px">no crypto</x-import>
+                    <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="amber" selected="{{ true }}" hint-size="auto,24px">no on-call</x-import>
+                    <span style="display:inline-flex; align-items:center; gap:5px; height:24px; padding:0 9px; font:var(--mono-sm); color:var(--text-low-content); border:1px dashed var(--border); border-radius:var(--radius-sm); cursor:pointer;">+ add</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3 AGENT INSTRUCTIONS -->
+            <div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--violet);">03 · Agent instructions</span><div style="flex:1; height:1px; background:var(--divider);"></div></div>
+              <label style="display:block; font:var(--text-sm); color:var(--text-mid); margin-bottom:8px;">Anything else the agent should weigh?</label>
+              <textarea placeholder="Prefer products I'd actually use; weight AI-native teams higher." style="display:block; width:100%; box-sizing:border-box; min-height:84px; padding:13px 15px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-control); color:var(--text-hi); font:var(--mono-sm); line-height:1.6; resize:vertical; outline:none;"></textarea>
+            </div>
+          </div>
+
+          <!-- ===== RIGHT — LIVE PREVIEW ===== -->
+          <div style="position:sticky; top:0;">
+            <div style="position:relative; padding:20px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-card); box-shadow:0 0 28px rgba(167,139,250,0.10); overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-idle" size="30" hint-size="30px,30px"></x-import>
+                <span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--violet);">How the agent sees you</span>
+              </div>
+
+              <p style="margin:0 0 18px; font:14px/1.6 var(--font-ui); color:var(--text-mid);">Senior product engineer (8 yrs), TypeScript/React Native core, shipping AI-assisted features end-to-end. Remote-only from Buenos Aires (UTC-3), strongest in product-minded startup teams. Targets $150k+ senior IC roles with real LLM surface area.</p>
+
+              <div style="display:flex; flex-direction:column; gap:11px; padding:16px 0; border-top:1px solid rgba(167,139,250,0.2);">
+                <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:2px;">Weighted criteria</span>
+                <sc-for list="{{ criteria }}" as="c" hint-placeholder-count="5">
+                  <div style="display:flex; align-items:center; gap:12px;">
+                    <span style="flex:1; font:var(--text-sm); color:var(--text-mid);">{{ c.label }}</span>
+                    <div style="width:120px; height:5px; border-radius:3px; background:rgba(167,139,250,0.16); overflow:hidden;"><div style="height:100%; width:{{ c.pct }}; background:var(--violet); border-radius:3px;"></div></div>
+                    <span style="width:30px; font:var(--mono-sm); color:var(--violet); text-align:right;">{{ c.val }}</span>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="padding:16px; margin-top:6px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-control);">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Test match · Meridian Labs</span></div>
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <div style="position:relative; width:64px; height:64px; flex-shrink:0;"><svg width="64" height="64" style="transform:rotate(-90deg);"><circle cx="32" cy="32" r="28" fill="none" stroke="rgba(167,139,250,0.16)" stroke-width="6"></circle><circle cx="32" cy="32" r="28" fill="none" stroke="var(--violet)" stroke-width="6" stroke-linecap="round" stroke-dasharray="175.9" stroke-dashoffset="15.8" style="filter:drop-shadow(0 0 5px rgba(167,139,250,0.45));"></circle></svg><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:var(--mono-lg); color:var(--text-hi);">91</div></div>
+                  <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:7px;">
+                    <div style="display:flex; gap:8px;"><span style="color:var(--phosphor); font:700 12px/1.4 var(--font-mono);">+</span><span style="font:var(--text-xs); color:var(--text-mid);">TypeScript + Next.js — your core stack</span></div>
+                    <div style="display:flex; gap:8px;"><span style="color:var(--phosphor); font:700 12px/1.4 var(--font-mono);">+</span><span style="font:var(--text-xs); color:var(--text-mid);">Salary $160–195k within target</span></div>
+                    <div style="display:flex; gap:8px;"><span style="color:var(--amber); font:700 12px/1.4 var(--font-mono);">−</span><span style="font:var(--text-xs); color:var(--text-mid);">Wants Rust experience — you have none</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:18px;">
+                <span style="font:var(--mono-sm); color:var(--text-low-content);">PROFILE V4 · USED BY RUN #24</span>
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="play" hint-size="auto,36px">Save &amp; re-run</x-import>
+              </div>
+
+              <sc-if value="{{ shimmer }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute; inset:0; pointer-events:none; border-radius:var(--radius-card); background:linear-gradient(100deg, transparent 30%, rgba(167,139,250,0.18) 50%, transparent 70%); background-size:250% 100%; animation:hr-sweep400 0.4s linear;"></div>
+              </sc-if>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </dc-import>
+  </div>
+
+  <!-- ============ STATES GALLERY ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Calibration states</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">A failed load never falls back to onboarding; a failed preview never blocks saving.</span>
+  </div>
+  <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+    <!-- 1 EMPTY -->
+    <div style="grid-column:1 / -1;">
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">01 · Empty — first visit (onboarding)</span>
+      <div style="display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:24px; align-items:start;">
+        <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+          <span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--phosphor);">Start here — paste your CV</span>
+          <textarea placeholder="Paste your CV or résumé text here — the agent extracts your skills automatically. Or upload a .md / .txt / .pdf." style="display:block; width:100%; box-sizing:border-box; min-height:170px; margin-top:12px; padding:14px 16px; background:var(--bg-void); border:1px solid var(--border-strong); border-radius:var(--radius-control); color:var(--text-mid); font:var(--mono-sm); line-height:1.6; resize:vertical; outline:none; box-shadow:var(--glow-phosphor-sm);"></textarea>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:12px; padding:36px 24px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-card); min-height:230px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="flatline-calibration" size="120" hint-size="120px,76px"></x-import>
+          <span style="font:600 14px/1.4 var(--font-ui); color:var(--text-hi);">Awaiting calibration signal…</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content);">paste your CV and the preview builds itself</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 PARSING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">02 · Parsing CV</span>
+      <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:240px;">
+        <div style="display:flex; align-items:center; gap:9px; margin-bottom:16px;"><div style="width:14px; height:14px; border-radius:50%; border:2px solid var(--violet-16); border-top-color:var(--violet); animation:hr-shimmer 0s;"></div><span style="font:var(--text-sm); color:var(--violet);">Extracting skills…</span></div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ rng3 }}" as="x" hint-placeholder-count="3">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="width:74px; height:11px; background:linear-gradient(90deg, rgba(167,139,250,0.08), rgba(167,139,250,0.22), rgba(167,139,250,0.08)); background-size:200% 100%; border-radius:3px; animation:hr-shimmer 1.4s linear infinite;"></div>
+              <div style="flex:1; display:flex; gap:7px;"><div style="width:80px; height:24px; background:linear-gradient(90deg, rgba(167,139,250,0.08), rgba(167,139,250,0.22), rgba(167,139,250,0.08)); background-size:200% 100%; border-radius:var(--radius-sm); animation:hr-shimmer 1.4s linear infinite;"></div><div style="width:64px; height:24px; background:linear-gradient(90deg, rgba(167,139,250,0.08), rgba(167,139,250,0.22), rgba(167,139,250,0.08)); background-size:200% 100%; border-radius:var(--radius-sm); animation:hr-shimmer 1.4s linear infinite;"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 PARSE FAILED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">03 · Parse failed — paste instead</span>
+      <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:240px;">
+        <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; margin-bottom:14px; background:var(--amber-14); border:1px solid rgba(255,200,87,0.3); border-radius:var(--radius-control);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+          <span style="font:var(--text-sm); color:var(--text-hi);">Couldn't parse the file — paste the text instead.</span>
+        </div>
+        <textarea autofocus placeholder="Paste your CV text here…" style="display:block; width:100%; box-sizing:border-box; min-height:130px; padding:14px 16px; background:var(--bg-void); border:1px solid var(--border-strong); border-radius:var(--radius-control); color:var(--text-hi); font:var(--mono-sm); line-height:1.6; resize:vertical; outline:none; box-shadow:var(--glow-phosphor-sm);"></textarea>
+      </div>
+    </div>
+
+    <!-- 4 UNSAVED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">04 · Unsaved changes</span>
+      <div style="position:relative; padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:240px;">
+        <p style="margin:0 0 16px; font:var(--text-sm); color:var(--text-mid);">A sticky bar tracks edits; leaving the route opens a confirm-discard modal.</p>
+        <div style="position:absolute; left:18px; right:18px; bottom:18px; display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid var(--border-strong); border-radius:var(--radius-control); box-shadow:var(--shadow-pop);">
+          <span style="width:8px; height:8px; border-radius:50%; background:var(--amber); box-shadow:0 0 8px var(--amber);"></span>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Unsaved calibration changes</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content); cursor:pointer;">Discard</span>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" size="sm" hint-size="auto,30px">Save</x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 SAVE ERROR -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">05 · Save error</span>
+      <div style="position:relative; padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:240px; display:flex; flex-direction:column; gap:14px;">
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Toast" tone="error" title="Couldn't save profile" message="The server didn't respond. Your edits are still here." action="retry" action-label="Retry" on-action="{{ noop }}" on-close="{{ noop }}" hint-size="100%,80px"></x-import>
+        <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid var(--border-strong); border-radius:var(--radius-control); margin-top:auto;">
+          <span style="width:8px; height:8px; border-radius:50%; background:var(--amber); box-shadow:0 0 8px var(--amber);"></span>
+          <span style="flex:1; font:var(--text-sm); color:var(--text-hi);">Unsaved calibration changes</span>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" size="sm" hint-size="auto,30px">Save</x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 PREVIEW DEGRADED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">06 · Preview degraded</span>
+      <div style="padding:20px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-card); min-height:240px; display:flex; flex-direction:column;">
+        <span style="font:600 11px/1 var(--font-mono); letter-spacing:0.14em; text-transform:uppercase; color:var(--violet); margin-bottom:16px;">How the agent sees you</span>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="80" hint-size="80px,80px"></x-import>
+          <span style="font:600 14px/1.4 var(--font-ui); color:var(--text-hi);">Preview unavailable</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content); max-width:260px;">Your profile still saves fine — the live read is just offline.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 LOADING -->
+    <div style="grid-column:1 / -1;">
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">07 · Loading — returning user</span>
+      <div style="display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:24px; align-items:start;">
+        <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:14px;">
+          <div style="width:120px; height:90px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="1" hint-size="120px,12px"></x-import></div>
+          <div style="height:110px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-control); animation:hr-shimmer 1.4s linear infinite;"></div>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="3" hint-size="100%,60px"></x-import>
+        </div>
+        <div style="padding:20px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-card); display:flex; flex-direction:column; gap:12px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="3" hint-size="100%,60px"></x-import>
+          <div style="height:120px; background:linear-gradient(90deg, rgba(167,139,250,0.08), rgba(167,139,250,0.2), rgba(167,139,250,0.08)); background-size:200% 100%; border-radius:var(--radius-control); animation:hr-shimmer 1.4s linear infinite;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 LOAD ERROR -->
+    <div style="grid-column:1 / -1;">
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">08 · Load error (not onboarding)</span>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; padding:40px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:240px;">
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="92" hint-size="92px,92px"></x-import>
+        <span style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi);">Couldn't load your profile</span>
+        <span style="font:var(--mono-sm); color:var(--text-low-content);">your saved calibration is safe — this is a fetch error, not a blank slate</span>
+        <div style="margin-top:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" hint-size="auto,36px">Retry</x-import></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1160}}">
+class Component extends DCLogic {
+  state = {
+    skills: [
+      { name: 'TypeScript', g: 'core' }, { name: 'React Native', g: 'core' }, { name: 'Next.js', g: 'core' },
+      { name: 'Python', g: 'familiar' }, { name: 'Postgres', g: 'familiar' },
+      { name: 'ML', g: 'learning' }, { name: 'fine-tuning', g: 'learning' },
+    ],
+    salary: 150, remote: 'remote', shimmer: false,
+  };
+
+  ping() {
+    this.setState({ shimmer: false });
+    requestAnimationFrame(() => {
+      this.setState({ shimmer: true });
+      clearTimeout(this._sh);
+      this._sh = setTimeout(() => this.setState({ shimmer: false }), 420);
+    });
+  }
+  cycle(name) {
+    const order = ['core', 'familiar', 'learning'];
+    this.setState((st) => ({
+      skills: st.skills.map((s) => s.name === name ? { ...s, g: order[(order.indexOf(s.g) + 1) % 3] } : s),
+    }));
+    this.ping();
+  }
+
+  renderVals() {
+    const toneOf = { core: 'phosphor', familiar: 'cyan', learning: 'violet' };
+    const groupDefs = [
+      { key: 'core', label: 'CORE', color: 'var(--phosphor)' },
+      { key: 'familiar', label: 'FAMILIAR', color: 'var(--cyan)' },
+      { key: 'learning', label: 'LEARNING', color: 'var(--violet)' },
+    ];
+    const groups = groupDefs.map((g) => ({
+      label: g.label,
+      labelStyle: { width: '74px', flexShrink: 0, paddingTop: '4px', font: '600 10px/1.4 var(--font-mono)', letterSpacing: '0.1em', color: g.color },
+      tags: this.state.skills.filter((s) => s.g === g.key).map((s) => ({
+        name: s.name, tone: toneOf[g.key], onClick: () => this.cycle(s.name),
+      })),
+    }));
+
+    const stages = [
+      { label: 'Pre-seed', on: true }, { label: 'Seed', on: true }, { label: 'Series A', on: true },
+      { label: 'Series B', on: false }, { label: 'Growth', on: false }, { label: 'Public', on: false },
+    ].map((s) => ({
+      label: s.label, on: s.on, color: s.on ? 'var(--text-hi)' : 'var(--text-low-content)',
+      boxStyle: {
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '18px', height: '18px',
+        borderRadius: 'var(--radius-sm)', flexShrink: 0,
+        background: s.on ? 'var(--phosphor)' : 'transparent',
+        border: '1px solid ' + (s.on ? 'var(--phosphor)' : 'var(--border-strong)'),
+      },
+    }));
+
+    const salaryCrit = (0.5 + (this.state.salary - 80) / 440).toFixed(2);
+    const criteria = [
+      { label: 'TypeScript depth', val: '0.9' },
+      { label: 'AI product experience', val: '0.8' },
+      { label: 'Remote + UTC-3 overlap', val: this.state.remote === 'remote' ? '0.75' : '0.6' },
+      { label: 'Salary ≥ $' + this.state.salary + 'k', val: '0.7' },
+      { label: 'Early-stage fit', val: '0.5' },
+    ].map((c) => ({ ...c, pct: (parseFloat(c.val) * 100) + '%' }));
+
+    return {
+      groups, stages, criteria,
+      salary: this.state.salary, remote: this.state.remote, shimmer: this.state.shimmer,
+      rng3: [0, 1, 2],
+      noop: () => {},
+      fmtSalary: (v) => '$' + v + 'k+',
+      onSalary: (e) => { this.setState({ salary: parseInt(e.target.value, 10) }); this.ping(); },
+      remoteOptions: [{ value: 'remote', label: 'Remote only' }, { value: 'hybrid', label: 'Hybrid ok' }, { value: 'any', label: 'Any' }],
+      onRemote: (v) => { this.setState({ remote: v }); this.ping(); },
+    };
+  }
+}
+</script>
+</body>
+</html>

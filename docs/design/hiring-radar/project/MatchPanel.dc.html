@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex; flex-direction:column; gap:14px; padding:18px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.32); border-radius:var(--radius-card); box-shadow:0 0 24px rgba(167,139,250,0.10); font-family:var(--font-ui);">
+
+  <div style="display:flex; align-items:center; justify-content:space-between;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--violet);">Agent match</span>
+    <sc-if value="{{ isAssessed }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex; align-items:center; gap:6px; font:var(--mono-sm); color:var(--violet);"><span style="width:6px; height:6px; border-radius:50%; background:var(--violet); box-shadow:0 0 6px var(--violet);"></span>assessed</span></sc-if>
+  </div>
+
+  <!-- ASSESSED -->
+  <sc-if value="{{ isAssessed }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex; align-items:center; gap:18px;">
+      <div style="position:relative; width:84px; height:84px; flex-shrink:0;">
+        <svg width="84" height="84" style="transform:rotate(-90deg);">
+          <circle cx="42" cy="42" r="38" fill="none" stroke="rgba(167,139,250,0.16)" stroke-width="8"></circle>
+          <circle cx="42" cy="42" r="38" fill="none" stroke="var(--violet)" stroke-width="8" stroke-linecap="round" stroke-dasharray="238.76" stroke-dashoffset="21.5" style="filter:drop-shadow(0 0 6px rgba(167,139,250,0.45));"></circle>
+        </svg>
+        <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;"><span style="font:var(--mono-lg); color:var(--text-hi); line-height:1;">91</span><span style="font:600 9px/1 var(--font-mono); letter-spacing:0.1em; color:var(--text-low);">MATCH</span></div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:9px;">
+        <sc-for list="{{ reasons }}" as="r" hint-placeholder-count="4">
+          <div style="display:flex; align-items:flex-start; gap:9px;">
+            <span style="{{ r.iconStyle }}">{{ r.sign }}</span>
+            <span style="flex:1; min-width:0; font:var(--text-sm); color:var(--text-mid); line-height:1.4;">{{ r.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid rgba(167,139,250,0.2);">
+      <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Assessed by agent run #23 · 2h ago</span>
+      <button style="display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; flex-shrink:0; white-space:nowrap; background:transparent; border:1px solid rgba(167,139,250,0.4); border-radius:var(--radius-control); color:var(--violet); font:600 11px/1 var(--font-mono); letter-spacing:0.06em; text-transform:uppercase; cursor:pointer;" style-hover="background: var(--violet-12)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><polyline points="21 3 21 9 15 9"></polyline></svg>Re-assess</button>
+    </div>
+  </sc-if>
+
+  <!-- EMPTY -->
+  <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:14px 8px;">
+      <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-idle" size="64" hint-size="64px,64px"></x-import>
+      <span style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi);">Not assessed yet</span>
+      <span style="font:var(--text-sm); color:var(--text-mid); max-width:280px;">Ask the agent to score this posting against your profile.</span>
+      <button style="display:inline-flex; align-items:center; gap:7px; height:36px; padding:0 16px; margin-top:4px; background:var(--violet); border:1px solid transparent; border-radius:var(--radius-control); color:#160A2E; font:600 13px/1 var(--font-ui); cursor:pointer; box-shadow:var(--glow-violet);" style-hover="background:#b9a2ff"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>Assess now</button>
+    </div>
+  </sc-if>
+
+  <!-- RUNNING -->
+  <sc-if value="{{ isRunning }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:14px 8px;">
+      <div class="hr-orb-pulse" style="display:flex;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="agent-orb-active" size="64" hint-size="64px,64px"></x-import></div>
+      <span style="font:600 15px/1.3 var(--font-ui); color:var(--violet);">Agent assessing…</span>
+      <span style="font:var(--mono-sm); color:var(--text-mid);">step 2 / 5 · scoring against your profile</span>
+      <div style="display:flex; gap:6px; margin-top:2px;">
+        <span style="width:26px; height:4px; border-radius:2px; background:var(--violet);"></span>
+        <span style="width:26px; height:4px; border-radius:2px; background:var(--violet);"></span>
+        <span style="width:26px; height:4px; border-radius:2px; background:rgba(167,139,250,0.22);"></span>
+        <span style="width:26px; height:4px; border-radius:2px; background:rgba(167,139,250,0.22);"></span>
+        <span style="width:26px; height:4px; border-radius:2px; background:rgba(167,139,250,0.22);"></span>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- FAILED -->
+  <sc-if value="{{ isFailed }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:14px 8px;">
+      <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="76" hint-size="76px,76px"></x-import>
+      <span style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi);">Assessment failed — model unavailable</span>
+      <span style="font:var(--mono-sm); color:var(--text-low-content);">the rest of the posting is unaffected</span>
+      <button style="display:inline-flex; align-items:center; gap:7px; height:36px; padding:0 14px; margin-top:4px; background:transparent; border:1px solid rgba(167,139,250,0.45); border-radius:var(--radius-control); color:var(--violet); font:600 13px/1 var(--font-ui); cursor:pointer;" style-hover="background: var(--violet-12)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><polyline points="21 3 21 9 15 9"></polyline></svg>Retry assessment</button>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:460,&quot;height&quot;:280},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;assessed&quot;,&quot;empty&quot;,&quot;running&quot;,&quot;failed&quot;],&quot;default&quot;:&quot;assessed&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const v = this.props.variant || 'assessed';
+    const reasons = [
+      { sign: '+', text: 'TypeScript + Next.js — your core stack', pos: true },
+      { sign: '+', text: 'Salary $160–195k within target', pos: true },
+      { sign: '+', text: 'Remote, US-overlap ok from BA', pos: true },
+      { sign: '−', text: 'Wants Rust experience — you have none', pos: false },
+    ].map((r) => ({
+      ...r,
+      iconStyle: {
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        width: '18px', height: '18px', marginTop: '1px', borderRadius: 'var(--radius-sm)',
+        font: '700 13px/1 var(--font-mono)',
+        color: r.pos ? 'var(--phosphor)' : 'var(--amber)',
+        background: r.pos ? 'var(--phosphor-12)' : 'var(--amber-14)',
+        border: '1px solid ' + (r.pos ? 'var(--border-strong)' : 'rgba(255,200,87,0.38)'),
+      },
+    }));
+    return {
+      reasons,
+      score: 91,
+      isAssessed: v === 'assessed',
+      isEmpty: v === 'empty',
+      isRunning: v === 'running',
+      isFailed: v === 'failed',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!-- @dsCard group="Components" viewport="700x460" name="Overlays — Palette, Modal, Confirm, Menu, Tooltip, Drawer" subtitle="⌘K command palette, dialogs, destructive confirm, dropdown menu, tooltips" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-void); color: var(--text-body); padding: 22px; }
+  .lbl { font: var(--label-mono); letter-spacing: var(--label-tracking); text-transform: uppercase; color: var(--text-label); margin-bottom: 12px; }
+  .grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; align-items: start; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+  const NS = window.HiringRadarDesignSystem_e283cd;
+  const { Button, IconButton, Menu, Tooltip, Modal, ConfirmModal, CommandPalette, Drawer, Icon, Kbd } = NS;
+
+  // Static rendition of the command palette panel (visual richness for the thumbnail)
+  function PalettePreview() {
+    const item = (icon, label, hint, active) => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 'var(--radius-sm)', background: active ? 'var(--phosphor-12)' : 'transparent', color: active ? 'var(--text-hi)' : 'var(--text-body)' }}>
+        <Icon name={icon} size={16} style={{ color: active ? 'var(--phosphor)' : 'var(--text-low-content)' }} />
+        <span style={{ flex: 1, font: 'var(--text-sm)' }}>{label}</span>
+        {hint && <kbd style={{ font: 'var(--mono-sm)', color: 'var(--text-low-content)' }}>{hint}</kbd>}
+      </div>
+    );
+    return (
+      <div style={{ background: 'var(--glass)', backdropFilter: 'blur(var(--blur-glass))', WebkitBackdropFilter: 'blur(var(--blur-glass))', border: '1px solid var(--border-strong)', borderRadius: 'var(--radius-card)', boxShadow: 'var(--shadow-panel), var(--glow-phosphor-sm)', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderBottom: '1px solid var(--divider)' }}>
+          <Icon name="command" size={18} style={{ color: 'var(--phosphor)' }} />
+          <span style={{ flex: 1, font: 'var(--mono-base)', color: 'var(--text-hi)' }}>run sweep</span>
+          <kbd style={{ font: 'var(--mono-sm)', color: 'var(--text-low-content)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '2px 6px' }}>ESC</kbd>
+        </div>
+        <div style={{ padding: 6 }}>
+          <div style={{ padding: '8px 10px 4px', font: 'var(--label-mono)', letterSpacing: 'var(--label-tracking)', textTransform: 'uppercase', color: 'var(--text-label)' }}>Actions</div>
+          {item('play', 'Run sweep now', '⌘↵', true)}
+          {item('bot', 'Ask agent to shortlist', null)}
+          <div style={{ padding: '8px 10px 4px', font: 'var(--label-mono)', letterSpacing: 'var(--label-tracking)', textTransform: 'uppercase', color: 'var(--text-label)' }}>Navigate</div>
+          {item('list', 'Open signal feed', 'G F')}
+        </div>
+      </div>
+    );
+  }
+
+  function Demo() {
+    const [modal, setModal] = React.useState(false);
+    const [confirm, setConfirm] = React.useState(false);
+    const [palette, setPalette] = React.useState(false);
+    const [drawer, setDrawer] = React.useState(false);
+    return (
+      <div className="grid">
+        <div>
+          <div className="lbl">Command palette ⌘K</div>
+          <PalettePreview />
+          <div className="row" style={{ marginTop: 18 }}>
+            <Button variant="secondary" iconLeft="command" onClick={() => setPalette(true)}>Open palette</Button>
+            <Button variant="secondary" onClick={() => setModal(true)}>Open modal</Button>
+            <Button variant="destructive" onClick={() => setConfirm(true)}>Confirm destructive</Button>
+            <Button variant="ghost" onClick={() => setDrawer(true)}>Drawer</Button>
+          </div>
+        </div>
+        <div>
+          <div className="lbl">Dropdown menu (open) · tooltip</div>
+          <div style={{ position: 'relative', height: 200 }}>
+            <Menu open onOpenChange={() => {}} trigger={<Button variant="secondary" iconRight="chevron-down">Row actions</Button>} items={[
+              { label: 'Open posting', icon: 'external-link', shortcut: '↵' },
+              { label: 'Copy link', icon: 'copy' },
+              { label: 'Save to shortlist', icon: 'bookmark' },
+              { divider: true },
+              { label: 'Discard', icon: 'close', danger: true },
+            ]} />
+          </div>
+          <div className="row" style={{ marginTop: 8 }}>
+            <Tooltip label="06:00 UTC daily"><span style={{ font: 'var(--mono-sm)', color: 'var(--text-mid)', borderBottom: '1px dotted var(--text-low)', cursor: 'help' }}>LAST SWEEP</span></Tooltip>
+            <span style={{ color: 'var(--text-low-content)', font: 'var(--text-xs)' }}>← hover</span>
+          </div>
+        </div>
+
+        <Modal open={modal} onClose={() => setModal(false)} title="Sweep settings"
+          footer={<><Button variant="ghost" onClick={() => setModal(false)}>Cancel</Button><Button variant="primary" onClick={() => setModal(false)}>Save</Button></>}>
+          <p style={{ margin: 0, font: 'var(--text-sm)', color: 'var(--text-body)' }}>Configure when the radar scans new postings and how aggressively the agent shortlists.</p>
+        </Modal>
+        <ConfirmModal open={confirm} onCancel={() => setConfirm(false)} onConfirm={() => setConfirm(false)}
+          title="Discard 2 dead letters?" message="These failed ingestion items will be permanently removed from the queue." confirmLabel="Discard" />
+        <CommandPalette open={palette} onClose={() => setPalette(false)} onSelect={() => setPalette(false)} onSearchFallback={() => setPalette(false)} groups={[
+          { label: 'Actions', items: [{ id: 'run', label: 'Run sweep now', icon: 'play', hint: '⌘↵' }, { id: 'agent', label: 'Ask agent to shortlist', icon: 'bot' }] },
+          { label: 'Navigate', items: [{ id: 'feed', label: 'Open signal feed', icon: 'list', hint: 'G F' }, { id: 'saved', label: 'Saved roles', icon: 'bookmark', hint: 'G S' }] },
+        ]} />
+        <Drawer open={drawer} onClose={() => setDrawer(false)} title="Cortex Labs · Staff Engineer"
+          footer={<Button variant="primary" iconLeft="bookmark" onClick={() => setDrawer(false)}>Save to shortlist</Button>}>
+          <p style={{ margin: 0, font: 'var(--text-sm)', color: 'var(--text-body)' }}>Full posting detail, agent reasoning trace, and match breakdown render here.</p>
+        </Drawer>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

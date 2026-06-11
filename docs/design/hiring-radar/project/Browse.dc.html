@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-progress { 0% { transform:translateX(-100%);} 100% { transform:translateX(100%);} }
+  @keyframes hr-shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
+  @media (prefers-reduced-motion: reduce){ .hr-prog{ animation:none !important; } }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1440px; margin:0 auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Route · browse</span>
+    <span style="font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--text-hi);">The index</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Every posting, searchable — hybrid semantic + keyword.</span>
+  </div>
+
+  <!-- ============ MAIN SCREEN ============ -->
+  <div style="position:relative; width:1440px; max-width:1440px; height:980px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <dc-import name="RadarShell" active-nav="browse" sweep="healthy" last-sweep="06:00 UTC" month="JUN 2026" hint-size="100%,100%" style="display:block; width:100%; height:100%;">
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+
+        <!-- TOOLBAR -->
+        <div style="position:relative; z-index:20; flex-shrink:0; padding:16px 24px 14px; background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid var(--divider);">
+
+          <!-- search row -->
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="flex:1; display:flex; align-items:center; gap:12px; height:46px; padding:0 8px 0 14px; background:var(--bg-surface); border:1px solid var(--border-strong); border-radius:var(--radius-control); box-shadow:var(--glow-phosphor-sm);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--phosphor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              <span style="flex:1; font:var(--mono-base); color:var(--text-hi);">senior full-stack typescript remote<span style="display:inline-block; width:1.5px; height:15px; background:var(--phosphor); margin-left:2px; vertical-align:middle;"></span></span>
+              <span style="display:inline-flex; align-items:center; gap:6px;">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.SegmentedControl" options="{{ modeOptions }}" value="{{ mode }}" on-change="{{ setMode }}" size="sm" hint-size="auto,28px"></x-import>
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tooltip" label="HYBRID blends keyword + semantic · EXACT = keyword only · SEMANTIC = meaning only" hint-size="16px,16px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="cursor:help;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg></x-import>
+                <kbd style="font:600 11px/1 var(--font-mono); color:var(--text-low-content); background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-sm); padding:4px 6px;">⌘K</kbd>
+              </span>
+            </div>
+            <button title="Saved searches" style="display:flex; align-items:center; justify-content:center; width:46px; height:46px; flex-shrink:0; background:transparent; border:1px solid var(--border); border-radius:var(--radius-control); cursor:pointer; color:var(--phosphor);" style-hover="border-color: var(--border-strong); background: var(--phosphor-08)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            </button>
+          </div>
+
+          <!-- filter triggers row -->
+          <div style="display:flex; align-items:center; gap:10px; margin-top:14px;">
+            <button style="{{ chipBtnActive }}" style-hover="border-color: var(--border-strong)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>JUN 2026<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <button style="{{ chipBtn }}" style-hover="border-color: var(--border-strong)">Remote<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <button style="{{ chipBtn }}" style-hover="border-color: var(--border-strong)">Salary<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <button style="{{ chipBtn }}" style-hover="border-color: var(--border-strong)">Stack<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <button style="{{ chipBtn }}" style-hover="border-color: var(--border-strong)">Visa<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <div style="display:flex; align-items:center; gap:9px; height:30px; padding:0 12px; background:var(--violet-12); border:1px solid rgba(167,139,250,0.40); border-radius:var(--radius-control);">
+              <span style="font:600 11px/1 var(--font-mono); letter-spacing:0.08em; text-transform:uppercase; color:var(--violet);">Match ≥</span>
+              <div style="position:relative; width:88px; height:4px; border-radius:2px; background:rgba(167,139,250,0.20);">
+                <div style="position:absolute; left:0; top:0; height:4px; width:30%; border-radius:2px; background:var(--violet);"></div>
+                <div style="position:absolute; left:30%; top:50%; width:13px; height:13px; border-radius:50%; background:var(--bg-raised); border:2px solid var(--violet); transform:translate(-50%,-50%); box-shadow:var(--glow-violet);"></div>
+              </div>
+              <span style="font:var(--mono-sm); color:var(--violet); width:18px;">30</span>
+            </div>
+            <span style="flex:1;"></span>
+            <span style="font:var(--mono-sm); color:var(--text-low-content); white-space:nowrap;"><span style="color:var(--phosphor);">127</span> / 512 POSTINGS</span>
+          </div>
+
+          <!-- active chips row -->
+          <div style="display:flex; align-items:center; gap:8px; margin-top:12px;">
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-right:2px;">Active</span>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="phosphor" selected="{{ true }}" hint-size="auto,24px">JUN 2026</x-import>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="violet" selected="{{ true }}" hint-size="auto,24px">Match ≥ 30</x-import>
+            <span style="font:var(--text-xs); color:var(--cyan); cursor:pointer; margin-left:4px;">Clear all</span>
+          </div>
+
+        </div>
+
+        <!-- RESULTS -->
+        <div style="flex:1; min-height:0; overflow:auto;">
+          <!-- header -->
+          <div style="display:grid; grid-template-columns:200px minmax(0,1fr) 168px 124px 234px 70px 78px 26px; align-items:center; gap:12px; padding:10px 24px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg-surface); z-index:5;">
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Company</span>
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Role</span>
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Location</span>
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); text-align:right;">Salary</span>
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Stack</span>
+            <span style="display:inline-flex; align-items:center; gap:4px; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--phosphor); justify-content:center; cursor:pointer;">Match<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+            <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Posted</span>
+            <span></span>
+          </div>
+
+          <!-- rows -->
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="12">
+            <div style="{{ r.rowStyle }}" style-hover="border-color: var(--border-strong); background: var(--phosphor-08); box-shadow: inset 0 0 0 1px var(--phosphor-dim)">
+              <!-- company -->
+              <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+                <sc-if value="{{ r.edited }}" hint-placeholder-val="{{ false }}"><span style="width:7px; height:7px; flex-shrink:0; border-radius:50%; background:var(--amber); box-shadow:0 0 6px var(--amber);"></span></sc-if>
+                <span style="font:600 14px/1.3 var(--font-ui); color:var(--text-hi); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.company }}</span>
+                <sc-if value="{{ r.new }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="NEW" hint-size="auto,20px"></x-import></sc-if>
+              </div>
+              <!-- role + snippet -->
+              <div style="min-width:0;">
+                <div style="font:var(--text-sm); color:var(--text-mid); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.role }}</div>
+                <sc-if value="{{ showSnippets }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex; align-items:center; gap:5px; margin-top:4px; font:var(--mono-sm); color:var(--text-low-content); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+                    <span style="overflow:hidden; text-overflow:ellipsis;"><sc-for list="{{ r.snippet }}" as="seg" hint-placeholder-count="3"><span style="{{ seg.style }}">{{ seg.text }}</span></sc-for></span>
+                  </div>
+                </sc-if>
+              </div>
+              <!-- location -->
+              <div style="display:flex; align-items:center; gap:7px; min-width:0;">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="{{ r.locType }}" hint-size="auto,20px"></x-import>
+                <span style="font:var(--mono-sm); color:var(--text-low-content); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.loc }}</span>
+              </div>
+              <!-- salary -->
+              <div style="text-align:right; font:var(--mono-base); color:{{ r.salaryColor }}; white-space:nowrap;">{{ r.salary }}</div>
+              <!-- stack -->
+              <div style="display:flex; align-items:center; gap:6px; min-width:0; overflow:hidden;">
+                <sc-for list="{{ r.stackVisible }}" as="s" hint-placeholder-count="4"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">{{ s }}</x-import></sc-for>
+                <sc-if value="{{ r.stackMore }}" hint-placeholder-val="{{ false }}"><span style="font:var(--mono-sm); color:var(--text-low); white-space:nowrap;">+{{ r.stackMore }}</span></sc-if>
+              </div>
+              <!-- match gauge -->
+              <div style="display:flex; justify-content:center;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.ScoreGauge" score="{{ r.match }}" size="40" hint-size="40px,40px"></x-import></div>
+              <!-- posted -->
+              <div style="font:var(--mono-sm); color:var(--text-low-content); white-space:nowrap;">{{ r.posted }}</div>
+              <!-- peek -->
+              <div style="{{ r.peekStyle }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></div>
+            </div>
+          </sc-for>
+
+          <!-- pagination -->
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 24px;">
+            <span style="font:var(--mono-sm); color:var(--text-low-content);">1–50 of 127</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button style="display:flex; align-items:center; gap:6px; height:30px; padding:0 12px; background:transparent; border:1px solid var(--border); border-radius:var(--radius-control); color:var(--text-low); font:var(--mono-sm); cursor:not-allowed; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>Prev</button>
+              <button style="display:flex; align-items:center; gap:6px; height:30px; padding:0 12px; background:transparent; border:1px solid var(--border-strong); border-radius:var(--radius-control); color:var(--text-hi); font:var(--mono-sm); cursor:pointer;" style-hover="background: var(--phosphor-08)">Next<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dc-import>
+  </div>
+
+  <!-- ============ DRAWER FRAME ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Row → posting detail</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Enter opens a 560px drawer; content streams in as skeleton (full detail specced next).</span>
+  </div>
+  <div style="position:relative; width:1440px; max-width:1440px; height:620px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <!-- dimmed table backdrop -->
+    <div style="position:absolute; inset:0; filter:blur(2px); opacity:0.4;">
+      <div style="height:64px; border-bottom:1px solid var(--divider); display:flex; align-items:center; padding:0 24px;"><div style="width:60%; height:30px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-control);"></div></div>
+      <div style="padding:0 24px;">
+        <sc-for list="{{ backdropRows }}" as="x" hint-placeholder-count="6"><div style="display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid var(--divider);"><div style="width:140px; height:13px; background:rgba(232,240,242,0.10); border-radius:3px;"></div><div style="flex:1; height:11px; background:rgba(147,164,179,0.08); border-radius:3px;"></div><div style="width:80px; height:13px; background:rgba(61,255,162,0.10); border-radius:3px;"></div><div style="width:36px; height:36px; border-radius:50%; border:3px solid rgba(167,139,250,0.20);"></div></div></sc-for>
+      </div>
+    </div>
+    <div style="position:absolute; inset:0; background:rgba(3,5,8,0.5);"></div>
+
+    <!-- drawer -->
+    <div style="position:absolute; top:0; right:0; bottom:0; width:560px; display:flex; flex-direction:column; background:var(--bg-surface); border-left:1px solid var(--border-strong); box-shadow:var(--shadow-panel);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--divider);">
+        <span style="font:var(--text-h3); color:var(--text-hi);">Posting detail</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+      </div>
+      <div style="flex:1; overflow:hidden; padding:22px; display:flex; flex-direction:column; gap:20px;">
+        <div style="display:flex; align-items:flex-start; gap:16px;">
+          <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+            <div style="width:200px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="1" hint-size="200px,12px"></x-import></div>
+            <div style="width:280px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="1" hint-size="280px,12px"></x-import></div>
+          </div>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="radar" width="64" height="64" hint-size="64px,64px"></x-import>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div style="width:90px; height:24px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-sm); animation:hr-shimmer 1.4s linear infinite;"></div>
+          <div style="width:120px; height:24px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-sm); animation:hr-shimmer 1.4s linear infinite;"></div>
+        </div>
+        <div style="height:1px; background:var(--divider);"></div>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="5" hint-size="100%,80px"></x-import>
+        <div style="display:flex; gap:8px;">
+          <div style="width:70px; height:24px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-sm); animation:hr-shimmer 1.4s linear infinite;"></div>
+          <div style="width:60px; height:24px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-sm); animation:hr-shimmer 1.4s linear infinite;"></div>
+          <div style="width:80px; height:24px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-sm); animation:hr-shimmer 1.4s linear infinite;"></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; padding:16px 20px; border-top:1px solid var(--divider);">
+        <div style="flex:1; height:36px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-control); animation:hr-shimmer 1.4s linear infinite;"></div>
+        <div style="width:120px; height:36px; background:linear-gradient(90deg, rgba(147,164,179,0.06), rgba(61,255,162,0.10), rgba(147,164,179,0.06)); background-size:200% 100%; border-radius:var(--radius-control); animation:hr-shimmer 1.4s linear infinite;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STATES GALLERY ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Browse states</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">The list re-queries without ever blanking — toolbar stays live throughout.</span>
+  </div>
+
+  <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+    <!-- 1 LOADING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">01 · Loading — first scan</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+        <div style="display:flex; align-items:center; gap:10px; height:40px; padding:0 12px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); margin-bottom:16px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <span style="font:var(--mono-sm); color:var(--text-low);">scan postings…</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="row" hint-size="100%,72px"></x-import>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="row" hint-size="100%,72px"></x-import>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="row" hint-size="100%,72px"></x-import>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="row" hint-size="100%,72px"></x-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 SEARCHING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">02 · Searching — re-querying</span>
+      <div style="padding:0; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden;">
+        <div style="position:relative; height:46px; border-bottom:1px solid var(--divider); display:flex; align-items:center; padding:0 18px;">
+          <span style="font:var(--mono-sm); color:var(--text-low-content);"><span style="color:var(--phosphor);">scanning…</span> · 127 / 512 postings</span>
+          <div style="position:absolute; left:0; right:0; bottom:0; height:2px; overflow:hidden; background:var(--phosphor-08);"><div class="hr-prog" style="position:absolute; inset:0; width:40%; background:linear-gradient(90deg, transparent, var(--phosphor), transparent); animation:hr-progress 1.1s linear infinite;"></div></div>
+        </div>
+        <div style="padding:8px 18px 14px; opacity:0.6;">
+          <sc-for list="{{ searchingRows }}" as="x" hint-placeholder-count="4"><div style="display:flex; align-items:center; gap:16px; padding:12px 0; border-bottom:1px solid var(--divider);"><div style="width:130px; height:13px; background:rgba(232,240,242,0.12); border-radius:3px;"></div><div style="flex:1; height:11px; background:rgba(147,164,179,0.10); border-radius:3px;"></div><div style="width:70px; height:13px; background:rgba(61,255,162,0.12); border-radius:3px;"></div><div style="width:34px; height:34px; border-radius:50%; border:3px solid rgba(167,139,250,0.30);"></div></div></sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 EMPTY NO RESULTS -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">03 · Empty — no results</span>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:14px;">Nothing on this frequency</span>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="empty-radar" size="104" hint-size="104px,104px"></x-import>
+        <h3 style="margin:14px 0 6px; font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-hi);">No postings match this scan</h3>
+        <p style="margin:0 0 18px; max-width:340px; font:var(--text-sm); color:var(--text-mid);">Try widening the salary range or removing the <span style="font:var(--mono-sm); color:var(--text-hi);">Rust</span> filter.</p>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="filter" hint-size="auto,36px">Clear filters</x-import>
+      </div>
+    </div>
+
+    <!-- 4 EMPTY NO DATA -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">04 · Empty — no data ingested</span>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px;">
+        <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:14px;">Radar quiet</span>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="empty-radar" size="104" hint-size="104px,104px"></x-import>
+        <h3 style="margin:14px 0 6px; font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--text-hi);">No postings on the scope yet</h3>
+        <p style="margin:0 0 18px; max-width:340px; font:var(--text-sm); color:var(--text-mid);">Ingest a “Who is hiring?” thread to fill the index.</p>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="inbox" hint-size="auto,36px">Ingest June 2026 thread</x-import>
+      </div>
+    </div>
+
+    <!-- 5 SEARCH ERROR -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">05 · Search error — index down</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px; display:flex; flex-direction:column;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+          <div style="flex:1; display:flex; align-items:center; gap:8px; height:36px; padding:0 12px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg><span style="font:var(--mono-sm); color:var(--text-mid);">senior full-stack typescript</span></div>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control); padding:24px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="84" hint-size="84px,84px"></x-import>
+          <span style="font:600 14px/1.3 var(--font-ui); color:var(--text-hi);">Search failed — the index didn't respond</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content);">filters are still usable</span>
+          <div style="margin-top:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" hint-size="auto,36px">Retry</x-import></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 SEMANTIC DOWN -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">06 · Degraded — semantic offline</span>
+      <div style="padding:18px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:300px; display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="display:inline-flex; padding:3px; gap:2px; height:34px; background:var(--bg-void); border:1px solid var(--border); border-radius:var(--radius-control);">
+            <span style="display:inline-flex; align-items:center; padding:0 12px; background:var(--phosphor-12); color:var(--phosphor); border:1px solid var(--border-strong); border-radius:var(--radius-sm); font:600 11px/1 var(--font-mono); letter-spacing:0.08em;">EXACT</span>
+            <span style="display:inline-flex; align-items:center; padding:0 12px; color:var(--text-low); opacity:0.5; border-radius:var(--radius-sm); font:600 11px/1 var(--font-mono); letter-spacing:0.08em;">SEMANTIC</span>
+          </div>
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tooltip" label="Semantic ranking is offline — only exact keyword match is available" hint-size="16px,16px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="cursor:help;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg></x-import>
+        </div>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Banner" tone="amber" hint-size="100%,42px">Semantic search offline — showing exact-match results only.</x-import>
+        <div style="opacity:0.85; display:flex; flex-direction:column; gap:10px; margin-top:2px;">
+          <sc-for list="{{ searchingRows }}" as="x" hint-placeholder-count="3"><div style="display:flex; align-items:center; gap:16px; padding:10px 2px; border-bottom:1px solid var(--divider);"><div style="width:130px; height:13px; background:rgba(232,240,242,0.12); border-radius:3px;"></div><div style="flex:1; height:11px; background:rgba(147,164,179,0.10); border-radius:3px;"></div><div style="width:34px; height:34px; border-radius:50%; border:3px solid rgba(167,139,250,0.30);"></div></div></sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 STALE -->
+    <div style="grid-column:1 / -1;">
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">07 · Stale — June sweep failed</span>
+      <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); overflow:hidden;">
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Banner" tone="amber" action="retry" action-label="Retry sync" on-action="{{ setMode }}" hint-size="100%,42px">Showing May 2026 — June sweep failed.</x-import>
+        <div style="padding:8px 22px 16px;">
+          <sc-for list="{{ backdropRows }}" as="x" hint-placeholder-count="4"><div style="display:flex; align-items:center; gap:16px; padding:12px 0; border-bottom:1px solid var(--divider);"><div style="width:150px; height:13px; background:rgba(232,240,242,0.10); border-radius:3px;"></div><div style="flex:1; height:11px; background:rgba(147,164,179,0.08); border-radius:3px;"></div><div style="width:80px; height:13px; background:rgba(61,255,162,0.10); border-radius:3px;"></div><div style="width:34px; height:34px; border-radius:50%; border:3px solid rgba(167,139,250,0.20);"></div></div></sc-for>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1060}}">
+class Component extends DCLogic {
+  state = { mode: 'hybrid', selected: 3 };
+
+  renderVals() {
+    const mode = this.state.mode;
+    const showSnippets = mode !== 'exact';
+    const hl = { color: 'var(--phosphor)', fontWeight: '600' };
+    const seg = (text, on) => ({ text, style: on ? hl : { color: 'inherit' } });
+
+    const data = [
+      { company: 'Meridian Labs', new: true, edited: false, role: 'Senior Full-Stack Engineer (TypeScript)', loc: 'Remote (US/EU)', locType: 'REMOTE', salary: '$160k–$195k', stack: ['TypeScript', 'React', 'Node', 'Postgres'], match: 91, posted: '5h',
+        snippet: [seg('…fluent in ', 0), seg('TypeScript', 1), seg(' across the ', 0), seg('full stack', 1), seg('…', 0)] },
+      { company: 'Quietwire', new: false, edited: false, role: 'Senior Product Engineer, AI', loc: 'Remote (global)', locType: 'REMOTE', salary: '$140k–$170k', stack: ['Python', 'LLM', 'React', 'FastAPI', 'AWS'], match: 88, posted: '1d',
+        snippet: [seg('…ship ', 0), seg('AI product', 1), seg(' features, comfortable with ', 0), seg('LLM evals', 1), seg('…', 0)] },
+      { company: 'DataForge', new: false, edited: false, role: 'Founding Engineer', loc: 'Remote (Americas)', locType: 'REMOTE', salary: '$150k–$180k', stack: ['TypeScript', 'Next.js', 'Go', 'AWS'], match: 86, posted: '2d',
+        snippet: [seg('…', 0), seg('founding', 1), seg(' hire to own the ', 0), seg('full stack', 1), seg(' from day one…', 0)] },
+      { company: 'Glasswing AI', new: true, edited: false, role: 'Product Engineer (LLM apps)', loc: 'Remote (global)', locType: 'REMOTE', salary: '$130k–$165k', stack: ['Python', 'TypeScript', 'LLM', 'React', 'Postgres', 'AWS'], match: 84, posted: '2h',
+        snippet: [seg('…building ', 0), seg('agentic workflows', 1), seg(' on ', 0), seg('Claude', 1), seg('…', 0)] },
+      { company: 'PendulumPay', new: false, edited: true, role: 'Senior Product Engineer', loc: 'Remote (Americas)', locType: 'REMOTE', salary: '$145k–$175k', stack: ['TypeScript', 'React', 'Ruby', 'Postgres'], match: 81, posted: '3d',
+        snippet: [seg('…', 0), seg('product-minded', 1), seg(' engineer for our payments ', 0), seg('platform', 1), seg('…', 0)] },
+      { company: 'Helios Grid', new: false, edited: false, role: 'Staff Frontend Engineer', loc: 'Berlin / Remote EU', locType: 'REMOTE', salary: '€95k–€120k', stack: ['TypeScript', 'React', 'GraphQL', 'CSS'], match: 78, posted: '4d',
+        snippet: [seg('…staff-level ', 0), seg('frontend', 1), seg(' ownership of our ', 0), seg('design system', 1), seg('…', 0)] },
+      { company: 'Oslo Dynamics', new: false, edited: false, role: 'Senior Full-Stack (React/Go)', loc: 'Remote (CET ±2)', locType: 'REMOTE', salary: '€95k–€115k', stack: ['React', 'Go', 'Postgres', 'Docker'], match: 72, posted: '4d',
+        snippet: [seg('…', 0), seg('React', 1), seg(' on the front, ', 0), seg('Go', 1), seg(' on the back, fully remote…', 0)] },
+      { company: 'Signalhouse', new: true, edited: false, role: 'Senior Backend Engineer (Python/Postgres)', loc: 'Remote (EU)', locType: 'REMOTE', salary: '€85k–€105k', stack: ['Python', 'Postgres', 'Django', 'Redis'], match: 64, posted: '8h',
+        snippet: [seg('…backend systems in ', 0), seg('Python', 1), seg(' over ', 0), seg('Postgres', 1), seg(' at scale…', 0)] },
+      { company: 'Ferrostack', new: false, edited: false, role: 'Founding Frontend Engineer', loc: 'Lisbon / remote', locType: 'REMOTE', salary: '€70k–€90k', stack: ['TypeScript', 'React', 'Svelte'], match: 58, posted: '6d',
+        snippet: [seg('…', 0), seg('founding frontend', 1), seg(' role with early ', 0), seg('equity', 1), seg('…', 0)] },
+      { company: 'Arc Compute', new: false, edited: false, role: 'Staff Platform Engineer', loc: 'SF hybrid', locType: 'HYBRID', salary: '$190k–$230k', stack: ['Go', 'Kubernetes', 'Rust', 'gRPC', 'AWS'], match: 51, posted: '1w',
+        snippet: [seg('…staff ', 0), seg('platform', 1), seg(' engineer for our ', 0), seg('compute fabric', 1), seg('…', 0)] },
+      { company: 'Northbeam Systems', new: false, edited: false, role: 'Platform Engineer (Go/K8s)', loc: 'NYC', locType: 'ONSITE', salary: '$185k–$220k', stack: ['Go', 'Kubernetes', 'Terraform', 'AWS'], match: 42, posted: '1w',
+        snippet: [seg('…', 0), seg('platform', 1), seg(' engineer for ', 0), seg('Go', 1), seg(' services on ', 0), seg('Kubernetes', 1), seg('…', 0)] },
+      { company: 'Tidewater Robotics', new: false, edited: false, role: 'Software Engineer, Controls', loc: 'Boston', locType: 'ONSITE', salary: '—', stack: ['C++', 'ROS', 'Python'], match: 33, posted: '2w',
+        snippet: [seg('…', 0), seg('controls', 1), seg(' software for autonomous marine ', 0), seg('robotics', 1), seg('…', 0)] },
+    ];
+
+    const rows = data.map((r, i) => {
+      const sel = i === this.state.selected;
+      const visible = r.stack.slice(0, 4);
+      const more = r.stack.length - visible.length;
+      return {
+        ...r,
+        stackVisible: visible, stackMore: more > 0 ? more : 0,
+        salaryColor: r.salary === '—' ? 'var(--text-low)' : 'var(--text-hi)',
+        rowStyle: {
+          display: 'grid', gridTemplateColumns: '200px minmax(0,1fr) 168px 124px 234px 70px 78px 26px',
+          alignItems: 'center', gap: '12px', padding: '12px 24px', cursor: 'pointer',
+          borderBottom: '1px solid var(--divider)',
+          borderLeft: sel ? '2px solid var(--phosphor)' : '2px solid transparent',
+          background: sel ? 'var(--phosphor-08)' : 'transparent',
+          boxShadow: sel ? 'inset 0 0 0 1px var(--phosphor-dim)' : 'none',
+          transition: 'background var(--dur-fast), box-shadow var(--dur-fast), border-color var(--dur-fast)',
+        },
+        peekStyle: {
+          display: 'flex', justifyContent: 'center', color: sel ? 'var(--phosphor)' : 'var(--text-low)',
+          opacity: sel ? 1 : 0.35,
+        },
+      };
+    });
+
+    const chipBtnBase = {
+      display: 'inline-flex', alignItems: 'center', gap: '7px', height: '30px', padding: '0 11px',
+      background: 'transparent', border: '1px solid var(--border)', borderRadius: 'var(--radius-control)',
+      font: 'var(--mono-sm)', color: 'var(--text-mid)', cursor: 'pointer', whiteSpace: 'nowrap',
+    };
+    const chipBtnActive = { ...chipBtnBase, color: 'var(--phosphor)', background: 'var(--phosphor-08)', border: '1px solid var(--border-strong)' };
+
+    return {
+      rows, showSnippets,
+      mode,
+      modeOptions: [{ value: 'hybrid', label: 'Hybrid' }, { value: 'exact', label: 'Exact' }, { value: 'semantic', label: 'Semantic' }],
+      setMode: (v) => this.setState({ mode: v }),
+      chipBtn: chipBtnBase, chipBtnActive,
+      backdropRows: [0, 1, 2, 3, 4, 5],
+      searchingRows: [0, 1, 2, 3],
+    };
+  }
+}
+</script>
+</body>
+</html>

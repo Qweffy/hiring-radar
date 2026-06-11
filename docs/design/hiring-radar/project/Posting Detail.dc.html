@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/colors.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/typography.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/effects.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/tokens/base.css">
+<link rel="stylesheet" href="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/styles.css">
+<script src="_ds/hiring-radar-design-system-e283cd56-1f5d-4f18-854f-832d432ec775/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; background:#04060A; }
+  :focus-visible{ outline:2px solid var(--phosphor)!important; outline-offset:2px!important; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
+  @keyframes hr-orb-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(0.94); } }
+  @keyframes hr-shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
+  .hr-orb-pulse { animation: hr-orb-pulse 1.6s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce){ .hr-orb-pulse{ animation:none; } }
+</style>
+</helmet>
+
+<div style="background:#04060A; min-height:100vh; padding:40px 48px 88px; font-family:var(--font-ui); color:var(--text-mid);">
+
+  <div style="max-width:1440px; margin:0 auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Detail · posting</span>
+    <span style="font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-0.02em; color:var(--text-hi);">Posting detail</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">Drawer over Browse · full-page for deep links · Meridian Labs (91).</span>
+  </div>
+
+  <!-- ============ VARIANT 1 — DRAWER ============ -->
+  <div style="max-width:1440px; margin:0 auto 12px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">A · Drawer (560px) over Browse</span></div>
+  <div style="position:relative; width:1440px; max-width:1440px; height:1020px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <!-- dimmed browse backdrop -->
+    <div style="position:absolute; inset:0; filter:blur(2px); opacity:0.4;">
+      <div style="height:64px; border-bottom:1px solid var(--divider); display:flex; align-items:center; padding:0 24px;"><div style="width:55%; height:32px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-control);"></div></div>
+      <div style="padding:0 24px;"><sc-for list="{{ rng8 }}" as="x" hint-placeholder-count="8"><div style="display:flex; align-items:center; gap:16px; padding:18px 0; border-bottom:1px solid var(--divider);"><div style="width:150px; height:13px; background:rgba(232,240,242,0.10); border-radius:3px;"></div><div style="flex:1; height:11px; background:rgba(147,164,179,0.08); border-radius:3px;"></div><div style="width:36px; height:36px; border-radius:50%; border:3px solid rgba(167,139,250,0.20);"></div></div></sc-for></div>
+    </div>
+    <div style="position:absolute; inset:0; background:rgba(3,5,8,0.5);"></div>
+
+    <!-- drawer -->
+    <div style="position:absolute; top:0; right:0; bottom:0; width:560px; display:flex; flex-direction:column; background:var(--bg-surface); border-left:1px solid var(--border-strong); box-shadow:var(--shadow-panel);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid var(--divider); flex-shrink:0;">
+        <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Posting</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+      </div>
+
+      <div style="flex:1; min-height:0; overflow:auto; padding:22px; display:flex; flex-direction:column; gap:22px;">
+        <!-- header -->
+        <div>
+          <div style="display:flex; gap:8px; margin-bottom:10px;">
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="REMOTE" hint-size="auto,20px"></x-import>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="NEW" hint-size="auto,20px"></x-import>
+          </div>
+          <h2 style="margin:0 0 6px; font-family:var(--font-display); font-weight:600; font-size:22px; letter-spacing:-0.02em; color:var(--text-hi);">Meridian Labs <span style="font:var(--mono-sm); color:var(--text-low-content); vertical-align:middle;">(YC W25)</span></h2>
+          <div style="font:var(--text-base); color:var(--text-mid); margin-bottom:8px;">Senior Full-Stack Engineer (TypeScript)</div>
+          <div style="font:var(--mono-sm); color:var(--text-low-content);">posted 5h ago · id 7f3a91</div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;">
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="bookmark" hint-size="auto,36px">Add to shortlist</x-import>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-left="close" hint-size="auto,36px">Not for me</x-import>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.IconButton" icon="copy" label="Copy link" hint-size="36px,36px"></x-import>
+            <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-right="external-link" hint-size="auto,36px">Open on HN</x-import>
+          </div>
+        </div>
+
+        <dc-import name="MatchPanel" variant="assessed" hint-size="100%,260px" style="display:block; width:100%;"></dc-import>
+
+        <!-- fields -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px 20px;">
+          <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Salary</span><span style="font:var(--mono-base); color:var(--text-hi);">$160k–$195k + equity</span></div>
+          <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Location</span><span style="font:var(--mono-base); color:var(--text-hi);">Remote (US/EU)</span></div>
+          <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Remote policy</span><span style="font:var(--mono-base); color:var(--text-hi);">Remote</span></div>
+          <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Company stage</span><span style="font:var(--mono-base); color:var(--text-hi);">YC W25 · 9 people</span></div>
+          <div style="grid-column:1 / -1; display:flex; flex-direction:column; gap:6px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Stack</span><div style="display:flex; flex-wrap:wrap; gap:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">Next.js</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">tRPC</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">Postgres</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">Temporal</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="violet" hint-size="auto,24px">Claude</x-import></div></div>
+          <div style="grid-column:1 / -1; display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Contact</span><a href="{{ mailtoHref }}" style="font:var(--mono-base); color:var(--cyan); text-decoration:none;">{{ contactEmail }}</a></div>
+        </div>
+
+        <dc-import name="OriginalPosting" hint-size="100%,320px" style="display:block; width:100%;"></dc-import>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-top:1px solid var(--divider); flex-shrink:0;">
+        <button style="display:inline-flex; align-items:center; gap:7px; height:30px; padding:0 11px; background:transparent; border:1px solid var(--border); border-radius:var(--radius-control); color:var(--text-mid); font:var(--mono-sm); cursor:pointer;" style-hover="border-color: var(--border-strong)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>Prev<kbd style="font:600 10px/1 var(--font-mono); color:var(--text-low); margin-left:2px;">k</kbd></button>
+        <span style="font:var(--mono-sm); color:var(--text-low-content);">PendulumPay would show <span style="color:var(--amber);">edited 2d ago</span></span>
+        <button style="display:inline-flex; align-items:center; gap:7px; height:30px; padding:0 11px; background:transparent; border:1px solid var(--border); border-radius:var(--radius-control); color:var(--text-mid); font:var(--mono-sm); cursor:pointer;" style-hover="border-color: var(--border-strong)"><kbd style="font:600 10px/1 var(--font-mono); color:var(--text-low); margin-right:2px;">j</kbd>Next<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ VARIANT 2 — FULL PAGE ============ -->
+  <div style="max-width:1440px; margin:56px auto 12px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">B · Full page (deep link · max-width 920)</span></div>
+  <div style="position:relative; width:1440px; max-width:1440px; height:1180px; margin:0 auto; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-panel); transform:translateZ(0);">
+    <dc-import name="RadarShell" active-nav="browse" sweep="healthy" last-sweep="06:00 UTC" month="JUN 2026" hint-size="100%,100%" style="display:block; width:100%; height:100%;">
+      <div class="hr-void" style="position:absolute; inset:0; overflow:auto;">
+        <div style="max-width:920px; margin:0 auto; padding:36px 24px 56px; display:flex; flex-direction:column; gap:24px;">
+
+          <!-- back -->
+          <div style="display:flex; align-items:center; gap:7px; font:var(--mono-sm); color:var(--text-low-content); cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>Back to Browse</div>
+
+          <!-- header -->
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:24px;">
+            <div style="min-width:0;">
+              <div style="display:flex; gap:8px; margin-bottom:12px;">
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="REMOTE" hint-size="auto,20px"></x-import>
+                <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.StatusBadge" status="NEW" hint-size="auto,20px"></x-import>
+              </div>
+              <h1 style="margin:0 0 8px; font-family:var(--font-display); font-weight:700; font-size:26px; letter-spacing:-0.02em; color:var(--text-hi);">Meridian Labs <span style="font:var(--mono-base); color:var(--text-low-content); vertical-align:middle;">(YC W25)</span></h1>
+              <div style="font:var(--text-lg); color:var(--text-mid); margin-bottom:8px;">Senior Full-Stack Engineer (TypeScript)</div>
+              <div style="font:var(--mono-sm); color:var(--text-low-content);">posted 5h ago · <span style="color:var(--text-low);">edited postings show </span><span style="color:var(--amber);">edited 2d ago</span></div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; flex-shrink:0; justify-content:flex-end; max-width:300px;">
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="bookmark" hint-size="auto,36px">Add to shortlist</x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-left="close" hint-size="auto,36px">Not for me</x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.IconButton" icon="copy" label="Copy link" hint-size="36px,36px"></x-import>
+              <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="ghost" icon-right="external-link" hint-size="auto,36px">Open on HN</x-import>
+            </div>
+          </div>
+
+          <!-- match + fields side by side -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:start;">
+            <dc-import name="MatchPanel" variant="assessed" hint-size="100%,260px" style="display:block; width:100%;"></dc-import>
+            <div style="display:flex; flex-direction:column; gap:16px; padding:18px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card);">
+              <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Structured fields</span>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px 18px;">
+                <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Salary</span><span style="font:var(--mono-base); color:var(--text-hi);">$160k–$195k</span></div>
+                <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Location</span><span style="font:var(--mono-base); color:var(--text-hi);">Remote (US/EU)</span></div>
+                <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Remote policy</span><span style="font:var(--mono-base); color:var(--text-hi);">Remote</span></div>
+                <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Company stage</span><span style="font:var(--mono-base); color:var(--text-hi);">YC W25</span></div>
+                <div style="grid-column:1 / -1; display:flex; flex-direction:column; gap:6px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Stack</span><div style="display:flex; flex-wrap:wrap; gap:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">Next.js</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">tRPC</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">Postgres</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" hint-size="auto,24px">Temporal</x-import><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tag" tone="violet" hint-size="auto,24px">Claude</x-import></div></div>
+                <div style="grid-column:1 / -1; display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Contact</span><a href="{{ mailtoHref }}" style="font:var(--mono-base); color:var(--cyan); text-decoration:none;">{{ contactEmail }}</a></div>
+              </div>
+            </div>
+          </div>
+
+          <dc-import name="OriginalPosting" hint-size="100%,320px" style="display:block; width:100%;"></dc-import>
+
+          <!-- footer -->
+          <div style="display:flex; align-items:center; justify-content:space-between; padding-top:8px; border-top:1px solid var(--divider);">
+            <button style="display:inline-flex; align-items:center; gap:8px; height:34px; padding:0 14px; background:transparent; border:1px solid var(--border); border-radius:var(--radius-control); color:var(--text-mid); font:var(--mono-sm); cursor:pointer;" style-hover="border-color: var(--border-strong)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>Prev posting<kbd style="font:600 10px/1 var(--font-mono); color:var(--text-low);">k</kbd></button>
+            <button style="display:inline-flex; align-items:center; gap:8px; height:34px; padding:0 14px; background:transparent; border:1px solid var(--border); border-radius:var(--radius-control); color:var(--text-mid); font:var(--mono-sm); cursor:pointer;" style-hover="border-color: var(--border-strong)"><kbd style="font:600 10px/1 var(--font-mono); color:var(--text-low);">j</kbd>Next posting<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+          </div>
+        </div>
+
+        <!-- not-for-me toast -->
+        <div style="position:absolute; right:20px; bottom:20px; z-index:40;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Toast" tone="info" title="Marked not-for-me" message="Hidden from your radar." undo-seconds="{{ undo8 }}" on-undo="{{ noop }}" on-close="{{ noop }}" hint-size="360px,72px"></x-import>
+        </div>
+      </div>
+    </dc-import>
+  </div>
+
+  <!-- ============ STATES GALLERY ============ -->
+  <div style="max-width:1440px; margin:64px auto 18px; display:flex; align-items:baseline; gap:14px;">
+    <span style="font-family:var(--font-display); font-weight:700; font-size:20px; letter-spacing:-0.02em; color:var(--text-hi);">Detail states</span>
+    <span style="font:var(--text-sm); color:var(--text-low-content);">The raw posting text is always the fallback — never hidden, even when parsing or assessment fails.</span>
+  </div>
+  <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+    <!-- 1 LOADING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">01 · Loading</span>
+      <div style="padding:22px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:360px; display:flex; flex-direction:column; gap:18px;">
+        <div style="display:flex; gap:8px;"><div style="width:70px; height:20px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-sm);"></div><div style="width:50px; height:20px; background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-sm);"></div></div>
+        <div style="width:60%;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="2" hint-size="100%,40px"></x-import></div>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="card" hint-size="100%,120px"></x-import>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Skeleton" variant="text" lines="4" hint-size="100%,70px"></x-import>
+      </div>
+    </div>
+
+    <!-- 2 PARSE INCOMPLETE -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">02 · Parse incomplete</span>
+      <div style="padding:0; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:360px; overflow:hidden;">
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Banner" tone="amber" hint-size="100%,42px">Parsed with low confidence — check the original text below.</x-import>
+        <div style="padding:18px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; margin-bottom:16px;">
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Salary</span><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tooltip" label="Not stated in the posting" hint-size="auto,18px"><span style="font:var(--mono-base); color:var(--text-low); cursor:help;">—</span></x-import></div>
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Location</span><span style="font:var(--mono-base); color:var(--text-hi);">Remote (US/EU)</span></div>
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Remote policy</span><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Tooltip" label="Not stated in the posting" hint-size="auto,18px"><span style="font:var(--mono-base); color:var(--text-low); cursor:help;">—</span></x-import></div>
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Contact</span><a href="{{ mailtoHref }}" style="font:var(--mono-base); color:var(--cyan); text-decoration:none;">{{ contactEmail }}</a></div>
+          </div>
+          <dc-import name="OriginalPosting" hint-size="100%,300px" style="display:block; width:100%;"></dc-import>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 ASSESS RUNNING -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">03 · Assess running</span>
+      <dc-import name="MatchPanel" variant="running" hint-size="100%,240px" style="display:block; width:100%;"></dc-import>
+    </div>
+
+    <!-- 4 ASSESS FAILED -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">04 · Assess failed</span>
+      <dc-import name="MatchPanel" variant="failed" hint-size="100%,240px" style="display:block; width:100%;"></dc-import>
+    </div>
+
+    <!-- 5 LOAD ERROR -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">05 · Load error (drawer chrome stays)</span>
+      <div style="display:flex; flex-direction:column; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:360px; overflow:hidden;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--divider);">
+          <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low);">Posting</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-low-content)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; padding:30px;">
+          <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="static-interference" size="88" hint-size="88px,88px"></x-import>
+          <span style="font:600 15px/1.3 var(--font-ui); color:var(--text-hi);">Couldn't load this posting</span>
+          <span style="font:var(--mono-sm); color:var(--text-low-content);">the index didn't respond</span>
+          <div style="margin-top:6px;"><x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="secondary" icon-left="retry" hint-size="auto,36px">Retry</x-import></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 NOT FOUND -->
+    <div>
+      <span style="display:block; font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-bottom:10px;">06 · Not found (full page)</span>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:8px; padding:30px; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); min-height:360px;">
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.HRIllustration" name="off-the-grid" size="112" hint-size="112px,112px"></x-import>
+        <span style="font:var(--label-mono); letter-spacing:var(--label-tracking); text-transform:uppercase; color:var(--text-low); margin-top:8px;">Error 404 · off the grid</span>
+        <h3 style="margin:6px 0 4px; font-family:var(--font-display); font-weight:600; font-size:19px; color:var(--text-hi);">This posting doesn't exist</h3>
+        <p style="margin:0 0 16px; max-width:320px; font:var(--text-sm); color:var(--text-mid);">It was deleted, or the link is wrong. Nothing to retry.</p>
+        <x-import component-from-global-scope="HiringRadarDesignSystem_e283cd.Button" variant="primary" icon-left="chevron-left" hint-size="auto,36px">Back to Browse</x-import>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1400}}">
+class Component extends DCLogic {
+  renderVals() {
+    const contactEmail = 'jobs' + '@' + 'meridianlabs.dev';
+    return {
+      rng8: [0, 1, 2, 3, 4, 5, 6, 7],
+      undo8: 8,
+      noop: () => {},
+      contactEmail,
+      mailtoHref: 'mailto:' + contactEmail,
+    };
+  }
+}
+</script>
+</body>
+</html>
