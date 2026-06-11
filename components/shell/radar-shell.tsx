@@ -22,6 +22,7 @@ const CHORD_WINDOW_MS = 1200;
 const CHORDS: Record<string, string> = {
   d: "/", // Radar
   b: "/browse",
+  p: "/pipeline",
 };
 
 const isEditable = (target: EventTarget | null): boolean =>

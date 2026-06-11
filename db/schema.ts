@@ -4,6 +4,7 @@ import {
   customType,
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -46,6 +47,12 @@ export const sweepTrigger = pgEnum("sweep_trigger", [
   "manual",
   "cron",
   "backfill",
+]);
+
+export const deadLetterStage = pgEnum("dead_letter_stage", [
+  "fetch",
+  "parse",
+  "embed",
 ]);
 
 export const sweeps = pgTable("sweeps", {
@@ -140,6 +147,29 @@ export const postingEmbeddings = pgTable(
     // created in migration 0001 (drizzle-kit emits HNSW but we keep both ANN/FTS
     // index DDL together with the generated column and CREATE EXTENSION).
   ],
+);
+
+/**
+ * Dead-letter sink for the Inngest pipeline. A row lands here when a stage
+ * exhausts its retries (onFailure handler) — the radar then shows partial data
+ * instead of silently dropping a posting. postingId is set-null so a posting can
+ * be re-ingested without orphaning its failure history; hnId is kept raw because
+ * a fetch-stage failure may predate any postings row.
+ */
+export const deadLetters = pgTable(
+  "dead_letters",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    stage: deadLetterStage("stage").notNull(),
+    postingId: integer("posting_id").references(() => postings.id, {
+      onDelete: "set null",
+    }),
+    hnId: bigint("hn_id", { mode: "number" }),
+    error: text("error").notNull(),
+    payload: jsonb("payload"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("dead_letters_created_idx").on(t.createdAt.desc())],
 );
 
 export const sweepsRelations = relations(sweeps, ({ many }) => ({

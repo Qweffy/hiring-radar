@@ -1,12 +1,10 @@
 import "./env";
-import { eq, inArray, and } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { db } from "@/db";
 import { postings, sweeps } from "@/db/schema";
-import { fetchThread } from "@/lib/hn/algolia";
-import { hnHtmlToText } from "@/lib/hn/html-to-text";
-import { contentHash } from "@/lib/hash";
 import { extractPosting, extractionModel } from "@/lib/llm/extract";
 import { normalizePosting } from "@/lib/llm/normalize";
+import { fetchAndDiff as fetchAndDiffShared } from "@/lib/ingest/fetch-diff";
 
 /* ------------------------------------------------------------------ */
 /* CLI args                                                             */
@@ -64,87 +62,19 @@ async function markStaleRuns(): Promise<void> {
 
 type FetchCounters = { fetched: number; added: number; updated: number };
 
+// Thin CLI wrapper over the shared fetch/diff core (lib/ingest/fetch-diff.ts) —
+// keeps the manual path's logging while the Inngest runSweep shares the logic.
 async function fetchAndDiff(
   sweepId: number,
   threadId: number,
   month: string,
 ): Promise<FetchCounters> {
-  const { postings: live } = await fetchThread(threadId);
-  console.log(`fetched ${live.length} live top-level postings from HN`);
-
-  const stored = await db
-    .select({ hnId: postings.hnId, contentHash: postings.contentHash })
-    .from(postings)
-    .where(eq(postings.threadId, threadId));
-  const storedByHnId = new Map(stored.map((r) => [r.hnId, r.contentHash]));
-
-  const seenIds: number[] = [];
-  const toInsert: (typeof postings.$inferInsert)[] = [];
-  let updated = 0;
-
-  for (const c of live) {
-    seenIds.push(c.id);
-    const hash = contentHash(c.text);
-    const existing = storedByHnId.get(c.id);
-
-    if (existing === undefined) {
-      toInsert.push({
-        hnId: c.id,
-        threadId,
-        month,
-        author: c.author,
-        hnCreatedAt: new Date(c.created_at),
-        points: c.points ?? null,
-        rawHtml: c.text,
-        rawText: hnHtmlToText(c.text),
-        contentHash: hash,
-        firstSweepId: sweepId,
-      });
-    } else if (existing !== hash) {
-      // Edited posting — refresh content and re-parse.
-      await db
-        .update(postings)
-        .set({
-          rawHtml: c.text,
-          rawText: hnHtmlToText(c.text),
-          contentHash: hash,
-          points: c.points ?? null,
-          parseStatus: "pending",
-          parseError: null,
-          isDeleted: false,
-          lastSeenAt: new Date(),
-          updatedAt: new Date(),
-        })
-        .where(eq(postings.hnId, c.id));
-      updated++;
-    }
+  const result = await fetchAndDiffShared(sweepId, threadId, month);
+  console.log(`fetched ${result.counters.fetched} live top-level postings from HN`);
+  if (result.deleted.length > 0) {
+    console.log(`marked ${result.deleted.length} postings as deleted (absent from tree)`);
   }
-
-  for (let i = 0; i < toInsert.length; i += 100) {
-    await db
-      .insert(postings)
-      .values(toInsert.slice(i, i + 100))
-      .onConflictDoNothing({ target: postings.hnId });
-  }
-
-  if (seenIds.length > 0) {
-    await db
-      .update(postings)
-      .set({ lastSeenAt: new Date() })
-      .where(and(eq(postings.threadId, threadId), inArray(postings.hnId, seenIds)));
-
-    // Algolia silently drops deleted comments — absent IDs are deletions.
-    const absent = stored.map((r) => r.hnId).filter((id) => !seenIds.includes(id));
-    if (absent.length > 0) {
-      await db
-        .update(postings)
-        .set({ isDeleted: true, updatedAt: new Date() })
-        .where(inArray(postings.hnId, absent));
-      console.log(`marked ${absent.length} postings as deleted (absent from tree)`);
-    }
-  }
-
-  return { fetched: live.length, added: toInsert.length, updated };
+  return result.counters;
 }
 
 type ParseCounters = { parsed: number; failed: number; skipped: number };

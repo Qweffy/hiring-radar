@@ -26,7 +26,27 @@ npm run dev                  # http://localhost:3000/browse
 | `npm run embed`        | Embed new/changed postings (idempotent by content hash). |
 | `npm run bench:search` | Run the retrieval benchmark (recall@10 / MRR per mode).  |
 | `npm run db:migrate`   | Apply Drizzle migrations against `DATABASE_URL_UNPOOLED`.|
+| `npm run inngest:dev`  | Start the local Inngest Dev Server (auto-discovers `/api/inngest`). |
 | `npm test`             | Vitest unit suite.                                       |
+
+## Pipeline (Inngest)
+
+`npm run ingest` / `npm run embed` are the manual/backfill path. The event-driven
+pipeline runs the same logic incrementally:
+
+- **discoverThreads** — cron (every 6h on days 1–3) finds the latest
+  "Who is hiring?" thread and emits `hn/sweep.requested`.
+- **runSweep** — fetches + diffs the thread, writes a `sweeps` row, and fans out
+  one `hn/posting.upserted` per new/changed posting.
+- **processPosting** — per posting: parse (Groq) → embed, with independent
+  retries. 429 → `RetryAfterError`; deterministic parse failure →
+  `NonRetriableError`; the `onFailure` handler writes a `dead_letters` row.
+
+Local dev requires `INNGEST_DEV=1` in `.env.local` (v4 defaults to cloud mode).
+Run `npm run dev` (port 3000) and `npm run inngest:dev` side by side — the Dev
+Server UI at `localhost:8288` auto-discovers `/api/inngest` and lets you trigger
+events and replay runs. Deployed environments need `INNGEST_EVENT_KEY` +
+`INNGEST_SIGNING_KEY` and a dashboard sync.
 
 ## Retrieval
 
