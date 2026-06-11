@@ -1,0 +1,12 @@
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <defs><filter id="lb_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.4"></feGaussianBlur></filter></defs>
+  <circle cx="60" cy="60" r="46" stroke="#3DFFA2" stroke-opacity="0.20" stroke-width="1.5"></circle>
+  <circle cx="60" cy="60" r="31" stroke="#3DFFA2" stroke-opacity="0.16" stroke-width="1.5"></circle>
+  <circle cx="60" cy="60" r="16" stroke="#3DFFA2" stroke-opacity="0.16" stroke-width="1.5"></circle>
+  <line x1="60" y1="14" x2="60" y2="106" stroke="#3DFFA2" stroke-opacity="0.10" stroke-width="1.5"></line>
+  <line x1="14" y1="60" x2="106" y2="60" stroke="#3DFFA2" stroke-opacity="0.10" stroke-width="1.5"></line>
+  <circle cx="78" cy="44" r="20" stroke="#3DFFA2" stroke-opacity="0.16" stroke-width="1.5"></circle>
+  <circle cx="78" cy="44" r="12" stroke="#3DFFA2" stroke-opacity="0.34" stroke-width="1.5"></circle>
+  <circle cx="78" cy="44" r="7" fill="#3DFFA2" opacity="0.4" filter="url(#lb_g)"></circle>
+  <circle cx="78" cy="44" r="3.2" fill="#3DFFA2"></circle>
+  </svg>

@@ -1,26 +1,51 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Hiring Radar design-system tokens — ported verbatim from the design handoff
+   (docs/design/hiring-radar-design-system/project/tokens/). Tokens are law. */
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/effects.css";
+@import "./tokens/base.css";
 
+/* Expose the core palette to Tailwind utilities (bg-surface, text-hi, border-dim, …) */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-void: var(--bg-void);
+  --color-surface: var(--bg-surface);
+  --color-raised: var(--bg-raised);
+  --color-phosphor: var(--phosphor);
+  --color-cyan: var(--cyan);
+  --color-violet: var(--violet);
+  --color-amber: var(--amber);
+  --color-red: var(--red);
+  --color-hi: var(--text-hi);
+  --color-mid: var(--text-mid);
+  --color-low: var(--text-low);
+  --color-low-content: var(--text-low-content);
+  --color-dim: var(--phosphor-dim);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-mono);
+  --radius-card: var(--radius-card);
+  --radius-control: var(--radius-control);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Skeleton shimmer — phosphor-tinted, reduced-motion safe */
+@keyframes hr-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.hr-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-raised) 25%,
+    rgba(61, 255, 162, 0.07) 50%,
+    var(--bg-raised) 75%
+  );
+  background-size: 200% 100%;
+  animation: hr-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hr-skeleton { animation: none; }
 }

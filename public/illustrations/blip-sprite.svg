@@ -1,0 +1,7 @@
+<svg width="56" height="56" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <defs><filter id="bs_g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.4"></feGaussianBlur></filter></defs>
+  <circle cx="28" cy="28" r="22" stroke="#3DFFA2" stroke-opacity="0.16" stroke-width="1.5"></circle>
+  <circle cx="28" cy="28" r="13" stroke="#3DFFA2" stroke-opacity="0.34" stroke-width="1.5"></circle>
+  <circle cx="28" cy="28" r="8" fill="#3DFFA2" opacity="0.4" filter="url(#bs_g)"></circle>
+  <circle cx="28" cy="28" r="4" fill="#3DFFA2"></circle>
+  </svg>
