@@ -1,0 +1,100 @@
+"use client";
+
+import type { CSSProperties, HTMLAttributes } from "react";
+
+import { cn } from "@/lib/cn";
+import { Sparkline } from "@/components/ui/sparkline";
+import { useCountUp } from "@/components/ui/use-count-up";
+
+export type ScorecardTone = "phosphor" | "violet" | "cyan";
+
+export interface ScorecardProps extends HTMLAttributes<HTMLDivElement> {
+  label: string;
+  value: number;
+  /** Unit suffix in mono, e.g. "USD", "roles". */
+  suffix?: string;
+  /** Signed change vs last sweep. */
+  delta?: number;
+  /** Sparkline series. */
+  spark?: number[];
+  /** @default 'phosphor' */
+  tone?: ScorecardTone;
+}
+
+const TONE_ACCENT: Record<ScorecardTone, string> = {
+  phosphor: "var(--text-hi)",
+  violet: "var(--violet)",
+  cyan: "var(--cyan)",
+};
+
+/**
+ * Metric tile: mono label, big mono number (counts up on mount), optional
+ * delta + sparkline. The atom of the mission-control dashboard.
+ */
+export function Scorecard({
+  label,
+  value,
+  suffix,
+  delta,
+  spark,
+  tone = "phosphor",
+  className,
+  style,
+  ...rest
+}: ScorecardProps) {
+  const shown = useCountUp(value);
+  const accent = TONE_ACCENT[tone];
+  const deltaUp = delta != null && delta >= 0;
+
+  const cardStyle: CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+    padding: "var(--pad-card)",
+    minWidth: 150,
+    background: "var(--bg-raised)",
+    border: "var(--border-1)",
+    borderRadius: "var(--radius-card)",
+    boxShadow: "var(--shadow-card)",
+    ...style,
+  };
+
+  return (
+    <div className={cn(className)} style={cardStyle} {...rest}>
+      <span
+        style={{
+          font: "var(--label-mono)",
+          letterSpacing: "var(--label-tracking)",
+          textTransform: "uppercase",
+          color: "var(--text-label)",
+        }}
+      >
+        {label}
+      </span>
+      <div className="flex items-end justify-between gap-3">
+        <div className="flex items-baseline gap-1.5">
+          <span style={{ font: "var(--mono-xl)", color: accent, letterSpacing: "-0.01em" }}>
+            {shown.toLocaleString("en-US")}
+          </span>
+          {suffix && (
+            <span style={{ font: "var(--mono-base)", color: "var(--text-low-content)" }}>
+              {suffix}
+            </span>
+          )}
+        </div>
+        {spark && <Sparkline data={spark} tone={tone} />}
+      </div>
+      {delta != null && (
+        <span
+          style={{
+            font: "var(--mono-sm)",
+            color: deltaUp ? "var(--phosphor)" : "var(--red)",
+          }}
+        >
+          {deltaUp ? "+" : ""}
+          {delta} <span style={{ color: "var(--text-low-content)" }}>vs last sweep</span>
+        </span>
+      )}
+    </div>
+  );
+}
