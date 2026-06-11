@@ -68,7 +68,8 @@ describe("llmPostingSchema", () => {
   });
 
   it("rejects missing fields (nullable, never optional)", () => {
-    const { contact: _contact, ...missing } = valid;
+    const missing: Record<string, unknown> = { ...valid };
+    delete missing.contact;
     expect(llmPostingSchema.safeParse(missing).success).toBe(false);
   });
 });
