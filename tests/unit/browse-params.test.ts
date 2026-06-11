@@ -5,6 +5,7 @@ describe("parseBrowseSearchParams", () => {
   it("returns defaults for an empty query", () => {
     expect(parseBrowseSearchParams({})).toEqual({
       q: "",
+      mode: "exact", // no query → exact, regardless of ?mode
       remote: [],
       salaryMin: null,
       stack: [],
@@ -28,6 +29,7 @@ describe("parseBrowseSearchParams", () => {
     });
     expect(f).toEqual({
       q: "typescript",
+      mode: "hybrid", // default mode when a query is present
       remote: ["remote", "hybrid"],
       salaryMin: 150000,
       stack: ["TypeScript", "React"],
@@ -36,6 +38,21 @@ describe("parseBrowseSearchParams", () => {
       page: 3,
       selected: 48357992,
     });
+  });
+
+  it("parses the mode param when a query is present", () => {
+    expect(parseBrowseSearchParams({ q: "rust", mode: "semantic" }).mode).toBe(
+      "semantic",
+    );
+    expect(parseBrowseSearchParams({ q: "rust", mode: "exact" }).mode).toBe(
+      "exact",
+    );
+    // garbage mode → default hybrid (query present)
+    expect(parseBrowseSearchParams({ q: "rust", mode: "telepathy" }).mode).toBe(
+      "hybrid",
+    );
+    // mode is ignored without a query → forced exact
+    expect(parseBrowseSearchParams({ mode: "semantic" }).mode).toBe("exact");
   });
 
   it("never throws on garbage — falls back to defaults", () => {
@@ -76,5 +93,16 @@ describe("buildBrowseHref", () => {
     expect(href).toContain("remote=remote");
     expect(href).toContain("salaryMin=120000");
     expect(href).toContain("page=2");
+  });
+
+  it("omits the default mode but emits non-default modes", () => {
+    // hybrid is the default — never in the URL.
+    expect(buildBrowseHref({ q: "rust", mode: "hybrid" })).not.toContain("mode=");
+    expect(buildBrowseHref({ q: "rust", mode: "semantic" })).toContain(
+      "mode=semantic",
+    );
+    expect(buildBrowseHref({ q: "rust", mode: "exact" })).toContain("mode=exact");
+    // mode is meaningless without a query — never emitted.
+    expect(buildBrowseHref({ mode: "semantic" })).toBe("/browse");
   });
 });

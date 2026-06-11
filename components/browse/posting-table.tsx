@@ -32,6 +32,56 @@ export interface PostingTableProps {
 const GRID_TEMPLATE = "200px minmax(0,1fr) 168px 124px 234px 78px 26px";
 const MAX_STACK_TAGS = 4;
 
+// ts_headline wraps matched terms in <mark>…</mark>; everything else is raw
+// posting text. We never inject HTML — split on the marker and let React escape
+// each plain segment, rendering only the matched runs in phosphor.
+const MARK_SPLIT = /<mark>([\s\S]*?)<\/mark>/g;
+
+/** Safe relevance snippet: matched query terms emphasised, rest plain-escaped. */
+function RelevanceSnippet({ snippet }: { snippet: string }) {
+  const nodes: ReactNode[] = [];
+  let lastIndex = 0;
+  let key = 0;
+  for (const match of snippet.matchAll(MARK_SPLIT)) {
+    const start = match.index ?? 0;
+    if (start > lastIndex) {
+      nodes.push(<span key={key++}>{snippet.slice(lastIndex, start)}</span>);
+    }
+    nodes.push(
+      <mark
+        key={key++}
+        style={{
+          background: "var(--phosphor-12)",
+          color: "var(--phosphor)",
+          padding: "0 2px",
+          borderRadius: 2,
+        }}
+      >
+        {match[1]}
+      </mark>,
+    );
+    lastIndex = start + match[0].length;
+  }
+  if (lastIndex < snippet.length) {
+    nodes.push(<span key={key++}>{snippet.slice(lastIndex)}</span>);
+  }
+
+  return (
+    <span
+      role="gridcell"
+      className="truncate"
+      style={{
+        gridColumn: "2 / -1",
+        marginTop: 4,
+        font: "var(--mono-sm)",
+        color: "var(--text-low-content)",
+      }}
+    >
+      {nodes}
+    </span>
+  );
+}
+
 const HEADER_LABELS: { label: string; align?: "right" }[] = [
   { label: "Company" },
   { label: "Role" },
@@ -403,6 +453,11 @@ export function PostingTable({
                     }}
                   />
                 </span>
+
+                {/* Relevance snippet — semantic/hybrid only, spans under role */}
+                {row.relevanceSnippet ? (
+                  <RelevanceSnippet snippet={row.relevanceSnippet} />
+                ) : null}
               </div>
             );
           })}

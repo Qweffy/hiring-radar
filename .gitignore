@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# local model cache (@huggingface/transformers)
+/.cache
+
 # debug
 npm-debug.log*
 yarn-debug.log*

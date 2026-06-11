@@ -17,6 +17,7 @@ import { db } from "@/db";
 import { postings } from "@/db/schema";
 import type { BrowseFilters } from "@/lib/browse-params";
 import { getAvailableMonths, getLatestCompletedSweepId } from "@/lib/queries/sweeps";
+import { searchPostings } from "@/lib/queries/search";
 
 export const PAGE_SIZE = 50;
 
@@ -36,6 +37,11 @@ export type PostingRow = {
   parseStatus: "pending" | "parsed" | "failed" | "skipped";
   /** First raw-text line — the fallback title for unparsed rows. */
   rawTextPreview: string;
+  /**
+   * Best-matching ~140-char window of raw text for semantic/hybrid results,
+   * with matched query terms wrapped in <mark>. Absent for exact mode.
+   */
+  relevanceSnippet?: string;
 };
 
 export type BrowseResult = {
@@ -76,79 +82,148 @@ function buildConditions(f: BrowseFilters, month: string | null): SQL[] {
   return conds;
 }
 
+// One column set, two callers (exact-page query + ranked-id hydration).
+const ROW_COLUMNS = {
+  id: postings.id,
+  hnId: postings.hnId,
+  company: postings.company,
+  role: postings.role,
+  location: postings.location,
+  remotePolicy: postings.remotePolicy,
+  salaryMin: postings.salaryMin,
+  salaryMax: postings.salaryMax,
+  salaryCurrency: postings.salaryCurrency,
+  stackTags: postings.stackTags,
+  hnCreatedAt: postings.hnCreatedAt,
+  parseStatus: postings.parseStatus,
+  firstSweepId: postings.firstSweepId,
+  rawText: postings.rawText,
+} as const;
+
+type RawRow = {
+  id: number;
+  hnId: number;
+  company: string | null;
+  role: string | null;
+  location: string | null;
+  remotePolicy: "remote" | "hybrid" | "onsite" | null;
+  salaryMin: number | null;
+  salaryMax: number | null;
+  salaryCurrency: string | null;
+  stackTags: string[] | null;
+  hnCreatedAt: Date;
+  parseStatus: "pending" | "parsed" | "failed" | "skipped";
+  firstSweepId: number | null;
+  rawText: string;
+};
+
+function toPostingRow(
+  r: RawRow,
+  latestSweepId: number | null,
+  snippet: string | undefined,
+): PostingRow {
+  return {
+    id: r.id,
+    hnId: r.hnId,
+    company: r.company,
+    role: r.role,
+    location: r.location,
+    remotePolicy: r.remotePolicy,
+    salaryMin: r.salaryMin,
+    salaryMax: r.salaryMax,
+    salaryCurrency: r.salaryCurrency,
+    stackTags: r.stackTags ?? [],
+    hnCreatedAt: r.hnCreatedAt,
+    isNew: latestSweepId !== null && r.firstSweepId === latestSweepId,
+    parseStatus: r.parseStatus,
+    rawTextPreview: r.rawText.split("\n")[0]?.slice(0, 120) ?? "",
+    ...(snippet !== undefined ? { relevanceSnippet: snippet } : {}),
+  };
+}
+
+/** True when a relevance-ranked search engine drives the result set. */
+function usesSearchEngine(f: BrowseFilters): boolean {
+  return f.q.length > 0 && (f.mode === "semantic" || f.mode === "hybrid");
+}
+
 export async function getBrowsePostings(f: BrowseFilters): Promise<BrowseResult> {
   const availableMonths = await getAvailableMonths();
   const month = f.month ?? availableMonths[0] ?? null;
 
-  const conds = buildConditions(f, month);
-  const where = and(...conds);
   const monthOnly = and(
     ne(postings.parseStatus, "skipped"),
     not(postings.isDeleted),
     month !== null ? eq(postings.month, month) : undefined,
   );
 
-  const [rows, totalRows, monthRows, stackRows, latestSweepId] =
-    await Promise.all([
-      db
-        .select({
-          id: postings.id,
-          hnId: postings.hnId,
-          company: postings.company,
-          role: postings.role,
-          location: postings.location,
-          remotePolicy: postings.remotePolicy,
-          salaryMin: postings.salaryMin,
-          salaryMax: postings.salaryMax,
-          salaryCurrency: postings.salaryCurrency,
-          stackTags: postings.stackTags,
-          hnCreatedAt: postings.hnCreatedAt,
-          parseStatus: postings.parseStatus,
-          firstSweepId: postings.firstSweepId,
-          rawText: postings.rawText,
-        })
-        .from(postings)
-        .where(where)
-        .orderBy(desc(postings.hnCreatedAt))
-        .limit(PAGE_SIZE)
-        .offset((f.page - 1) * PAGE_SIZE),
-      db.select({ n: count() }).from(postings).where(where),
-      db.select({ n: count() }).from(postings).where(monthOnly),
-      db.execute(sql`
-        select tag, count(*) as n
-        from ${postings}, unnest(${postings.stackTags}) as tag
-        where ${monthOnly}
-        group by tag
-        order by n desc, tag asc
-        limit 30
-      `),
-      getLatestCompletedSweepId(),
-    ]);
+  // Facets + freshness are mode-independent — fetch once, in parallel.
+  const [monthRows, stackRows, latestSweepId] = await Promise.all([
+    db.select({ n: count() }).from(postings).where(monthOnly),
+    db.execute(sql`
+      select tag, count(*) as n
+      from ${postings}, unnest(${postings.stackTags}) as tag
+      where ${monthOnly}
+      group by tag
+      order by n desc, tag asc
+      limit 30
+    `),
+    getLatestCompletedSweepId(),
+  ]);
 
-  return {
-    rows: rows.map((r) => ({
-      id: r.id,
-      hnId: r.hnId,
-      company: r.company,
-      role: r.role,
-      location: r.location,
-      remotePolicy: r.remotePolicy,
-      salaryMin: r.salaryMin,
-      salaryMax: r.salaryMax,
-      salaryCurrency: r.salaryCurrency,
-      stackTags: r.stackTags ?? [],
-      hnCreatedAt: r.hnCreatedAt,
-      isNew: latestSweepId !== null && r.firstSweepId === latestSweepId,
-      parseStatus: r.parseStatus,
-      rawTextPreview: r.rawText.split("\n")[0]?.slice(0, 120) ?? "",
-    })),
-    total: totalRows[0]?.n ?? 0,
+  const facets = {
     totalInMonth: monthRows[0]?.n ?? 0,
     page: f.page,
     pageSize: PAGE_SIZE,
     month,
     availableMonths,
     availableStacks: (stackRows.rows as { tag: string }[]).map((r) => r.tag),
+  };
+
+  if (usesSearchEngine(f)) {
+    const { ids, snippets, total } = await searchPostings(
+      f,
+      month,
+      PAGE_SIZE,
+      (f.page - 1) * PAGE_SIZE,
+    );
+    const rows =
+      ids.length > 0
+        ? await db
+            .select(ROW_COLUMNS)
+            .from(postings)
+            .where(inArray(postings.id, ids))
+        : [];
+    // Re-impose the engine's rank order — SQL `in (...)` doesn't preserve it.
+    const byId = new Map(rows.map((r) => [r.id, r]));
+    const ordered = ids
+      .map((id) => byId.get(id))
+      .filter((r): r is RawRow => r !== undefined);
+    return {
+      rows: ordered.map((r) =>
+        toPostingRow(r, latestSweepId, snippets.get(r.id) ?? ""),
+      ),
+      total,
+      ...facets,
+    };
+  }
+
+  // Exact mode (and the no-query default): ILIKE + recency ordering, unchanged.
+  const where = and(...buildConditions(f, month));
+  const [rows, totalRows] = await Promise.all([
+    db
+      .select(ROW_COLUMNS)
+      .from(postings)
+      .where(where)
+      .orderBy(desc(postings.hnCreatedAt))
+      .limit(PAGE_SIZE)
+      .offset((f.page - 1) * PAGE_SIZE),
+    db.select({ n: count() }).from(postings).where(where),
+  ]);
+
+  return {
+    rows: rows.map((r) => toPostingRow(r, latestSweepId, undefined)),
+    total: totalRows[0]?.n ?? 0,
+    ...facets,
   };
 }
 

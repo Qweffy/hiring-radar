@@ -1,6 +1,7 @@
 import {
   bigint,
   boolean,
+  customType,
   index,
   integer,
   pgEnum,
@@ -8,8 +9,18 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  vector,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+
+// pgvector + tsvector aren't first-class drizzle types for generated columns,
+// so we model search_tsv as a customType. The GENERATED ALWAYS expression and
+// its GIN index live in the hand-written migration 0001 (drizzle can't emit the
+// `to_tsvector(...) STORED` expression), but the column is declared here so app
+// queries (lib/queries/*) can reference postings.searchTsv type-safely.
+const tsvector = customType<{ data: string; driverData: string }>({
+  dataType: () => "tsvector",
+});
 
 export const parseStatus = pgEnum("parse_status", [
   "pending",
@@ -94,6 +105,11 @@ export const postings = pgTable(
     stackTags: text("stack_tags").array(),
     visaSponsorship: boolean("visa_sponsorship"),
     contact: text("contact"),
+    // GENERATED ALWAYS over coalesce(company,'')||role||location||rawText.
+    // The generation expression + GIN index are applied in migration 0001;
+    // drizzle can't emit the STORED expression, so this column is declared
+    // (so queries can reference it) but excluded from inserts by the DB.
+    searchTsv: tsvector("search_tsv"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
@@ -102,6 +118,27 @@ export const postings = pgTable(
     index("postings_month_created_idx").on(t.month, t.hnCreatedAt.desc()),
     index("postings_parse_status_idx").on(t.parseStatus),
     index("postings_stack_tags_idx").using("gin", t.stackTags),
+  ],
+);
+
+export const postingEmbeddings = pgTable(
+  "posting_embeddings",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    postingId: integer("posting_id")
+      .notNull()
+      .references(() => postings.id, { onDelete: "cascade" }),
+    // The posting contentHash the embedding was computed from — gates re-embeds.
+    contentHash: text("content_hash").notNull(),
+    model: text("model").notNull(),
+    embedding: vector("embedding", { dimensions: 384 }).notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("posting_embeddings_posting_id_unique").on(t.postingId),
+    // HNSW (vector_cosine_ops) on embedding + GIN on postings.search_tsv are
+    // created in migration 0001 (drizzle-kit emits HNSW but we keep both ANN/FTS
+    // index DDL together with the generated column and CREATE EXTENSION).
   ],
 );
 
@@ -114,4 +151,18 @@ export const postingsRelations = relations(postings, ({ one }) => ({
     fields: [postings.firstSweepId],
     references: [sweeps.id],
   }),
+  embedding: one(postingEmbeddings, {
+    fields: [postings.id],
+    references: [postingEmbeddings.postingId],
+  }),
 }));
+
+export const postingEmbeddingsRelations = relations(
+  postingEmbeddings,
+  ({ one }) => ({
+    posting: one(postings, {
+      fields: [postingEmbeddings.postingId],
+      references: [postings.id],
+    }),
+  }),
+);

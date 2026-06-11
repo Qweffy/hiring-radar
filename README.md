@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hiring Radar
 
-## Getting Started
+A scanner for Hacker News "Who is hiring?" threads. Ingests each monthly thread,
+parses the free-text postings into structured fields with an LLM, and makes the
+whole corpus searchable — by exact match, by meaning, or by both at once.
 
-First, run the development server:
+Built on Next.js 16 (App Router), Postgres (Neon) with `pgvector`, Drizzle ORM,
+and local `@huggingface/transformers` embeddings.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # fill in DATABASE_URL / DATABASE_URL_UNPOOLED, GROQ_API_KEY
+npm run db:migrate           # apply schema + pgvector / tsvector indexes
+npm run ingest               # pull the latest "Who is hiring?" thread
+npm run embed                # compute embeddings for new/changed postings
+npm run dev                  # http://localhost:3000/browse
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script                 | What it does                                              |
+| ---------------------- | -------------------------------------------------------- |
+| `npm run ingest`       | Fetch + store the current month's HN thread postings.    |
+| `npm run embed`        | Embed new/changed postings (idempotent by content hash). |
+| `npm run bench:search` | Run the retrieval benchmark (recall@10 / MRR per mode).  |
+| `npm run db:migrate`   | Apply Drizzle migrations against `DATABASE_URL_UNPOOLED`.|
+| `npm test`             | Vitest unit suite.                                       |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Retrieval
 
-## Learn More
+Browse supports three search modes, selectable from the toolbar segmented
+control (`?mode=`). With no query the list falls back to recency-ordered Exact.
 
-To learn more about Next.js, take a look at the following resources:
+- **Exact** — `ILIKE` over company / role / location / raw text. Recency-ordered.
+- **Semantic** — vector cosine kNN over `posting_embeddings` (pgvector HNSW),
+  query embedded with `MongoDB/mdbr-leaf-ir` (384-dim, mean-pooled, normalized).
+- **Hybrid** — a lexical branch (`websearch_to_tsquery` over a generated
+  `tsvector` + GIN) and the vector branch, each over-fetched ~40 rows and fused
+  with Reciprocal Rank Fusion (`1/(k+rank)`, `k=60`) in a single SQL statement.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All three apply the same metadata filters (month / remote / stack / salary /
+visa). Semantic and hybrid attach a `<mark>`-highlighted relevance snippet per
+row (`ts_headline`, falling back to a leading window for pure-vector hits).
+`hnsw.ef_search` and `hnsw.iterative_scan = relaxed_order` are set per statement
+so filtered ANN scans keep going until `LIMIT` is satisfied. See
+[`docs/best-practices/pgvector-hybrid-search.md`](docs/best-practices/pgvector-hybrid-search.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Benchmark
 
-## Deploy on Vercel
+`npm run bench:search` evaluates 12 hand-labelled queries against a gold set
+derived from **structured fields** (role / stack tags), not from any single
+retrieval method, so no mode is trivially favoured. Corpus: 294 postings for
+`2026-06`, all embedded.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Mode     | recall@10 | MRR   | avg latency |
+| -------- | --------- | ----- | ----------- |
+| Exact    | 0.140     | 0.156 | ~199 ms     |
+| Semantic | 0.276     | 0.283 | ~351 ms     |
+| Hybrid   | 0.521     | 0.737 | ~348 ms     |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Hybrid roughly doubles semantic recall and lifts MRR to 0.74 — the RRF fusion
+recovers the lexical exact-term hits that pure vectors miss (e.g. a literal
+"Rust" or "Kubernetes") while keeping the semantic matches that `ILIKE` can't
+reach. Exact is fastest (no embedding round-trip) but its recall ceiling is low
+on natural-language queries.
+
+ANN vs exact-scan (vector top-10) is ~150–215 ms either way at 294 vectors —
+both fast at this scale; the HNSW index's advantage widens as the corpus grows.
+
+## Architecture notes
+
+- **Migrations** run against the unpooled connection via `drizzle-kit`; the app
+  uses `neon-http` (no transactions), so per-statement GUCs are set with an
+  inline `set_config(..., true)` CTE rather than `SET LOCAL`.
+- **Embeddings** run locally (CPU) through a process-wide lazy singleton
+  pipeline cached under `.cache/transformers`; index and query vectors must come
+  from the same model + dtype.
+- `lib/search/engine.ts` holds the query logic (importable by the bench CLI);
+  `lib/queries/search.ts` is the `server-only` app-facing wrapper.

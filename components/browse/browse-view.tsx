@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { buildBrowseHref, type BrowseFilters } from "@/lib/browse-params";
+import {
+  buildBrowseHref,
+  DEFAULT_SEARCH_MODE,
+  type BrowseFilters,
+} from "@/lib/browse-params";
 import type {
   BrowseResult,
   PostingDetail,
@@ -64,6 +68,7 @@ export function BrowseView({ filters, result, detail, now }: BrowseViewProps) {
     replaceWith({
       ...filtersRef.current,
       q: "",
+      mode: DEFAULT_SEARCH_MODE,
       remote: [],
       salaryMin: null,
       stack: [],

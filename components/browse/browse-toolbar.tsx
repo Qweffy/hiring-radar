@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import type { BrowseFilters, RemoteValue } from "@/lib/browse-params";
+import type {
+  BrowseFilters,
+  RemoteValue,
+  SearchMode,
+} from "@/lib/browse-params";
 import type { BrowseResult } from "@/lib/queries/postings";
 import { formatMonth } from "@/lib/format";
 import { ProgressLine } from "@/components/ui/progress-line";
@@ -28,18 +32,26 @@ const SALARY_FLOORS = [50_000, 75_000, 100_000, 125_000, 150_000, 175_000, 200_0
 
 const floorLabel = (floor: number): string => `$${floor / 1000}k+`;
 
-const SEARCH_MODES = [
-  { value: "hybrid", label: "Hybrid", disabled: true },
-  { value: "exact", label: "Exact", disabled: false },
-  { value: "semantic", label: "Semantic", disabled: true },
-] as const;
+const SEARCH_MODE_OPTIONS: { value: SearchMode; label: string }[] = [
+  { value: "exact", label: "Exact" },
+  { value: "semantic", label: "Semantic" },
+  { value: "hybrid", label: "Hybrid" },
+];
 
-/** Search-mode toggle: EXACT live; HYBRID/SEMANTIC arrive in M2 (disabled). */
-function SearchModeControl() {
-  return (
+interface SearchModeControlProps {
+  mode: SearchMode;
+  /** Mode only applies with a query — the control is inert when q is empty. */
+  enabled: boolean;
+  onChange: (mode: SearchMode) => void;
+}
+
+/** Search-mode toggle: [EXACT | SEMANTIC | HYBRID], URL-driven via onChange. */
+function SearchModeControl({ mode, enabled, onChange }: SearchModeControlProps) {
+  const control = (
     <div
       role="radiogroup"
       aria-label="Search mode"
+      aria-disabled={!enabled}
       className="inline-flex shrink-0"
       style={{
         padding: 3,
@@ -48,45 +60,49 @@ function SearchModeControl() {
         background: "var(--bg-surface)",
         border: "1px solid var(--border)",
         borderRadius: "var(--radius-control)",
+        opacity: enabled ? 1 : 0.5,
+        pointerEvents: enabled ? undefined : "none",
       }}
     >
-      {SEARCH_MODES.map((mode) => {
-        const segment = (
+      {SEARCH_MODE_OPTIONS.map((option) => {
+        const active = enabled && option.value === mode;
+        return (
           <button
-            key={mode.value}
+            key={option.value}
             type="button"
             role="radio"
-            aria-checked={!mode.disabled}
-            disabled={mode.disabled}
-            className={mode.disabled ? "pointer-events-none" : "cursor-default"}
+            aria-checked={active}
+            disabled={!enabled}
+            onClick={() => onChange(option.value)}
+            className={enabled ? "cursor-pointer" : "pointer-events-none"}
             style={{
               display: "inline-flex",
               alignItems: "center",
               height: "100%",
               padding: "0 10px",
-              background: mode.disabled ? "transparent" : "var(--phosphor-12)",
-              color: mode.disabled ? "var(--text-low)" : "var(--phosphor)",
-              opacity: mode.disabled ? 0.5 : 1,
-              border: mode.disabled
-                ? "1px solid transparent"
-                : "1px solid var(--border-strong)",
+              background: active ? "var(--phosphor-12)" : "transparent",
+              color: active ? "var(--phosphor)" : "var(--text-low)",
+              border: active
+                ? "1px solid var(--border-strong)"
+                : "1px solid transparent",
               borderRadius: "var(--radius-sm)",
               font: "600 11px/1 var(--font-mono)",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
             }}
           >
-            {mode.label}
+            {option.label}
           </button>
-        );
-        if (!mode.disabled) return segment;
-        return (
-          <Tooltip key={mode.value} label="coming in M2" tabIndex={0} className="cursor-not-allowed">
-            {segment}
-          </Tooltip>
         );
       })}
     </div>
+  );
+
+  if (enabled) return control;
+  return (
+    <Tooltip label="enter a query to switch modes" tabIndex={0} className="cursor-not-allowed">
+      {control}
+    </Tooltip>
   );
 }
 
@@ -237,7 +253,11 @@ export function BrowseToolbar({
             aria-label="Scan postings"
           />
         </div>
-        <SearchModeControl />
+        <SearchModeControl
+          mode={filters.mode}
+          enabled={query.trim().length > 0}
+          onChange={(mode) => onPatch({ mode })}
+        />
       </div>
 
       {/* Filter triggers row */}
