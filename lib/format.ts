@@ -45,5 +45,5 @@ export function formatMonth(month: string): string {
     "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
   ];
   const name = names[(m ?? 1) - 1] ?? "—";
-  return `${name} ${y}`;
+  return `${name} ${y ?? ""}`;
 }

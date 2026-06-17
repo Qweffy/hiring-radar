@@ -62,7 +62,7 @@ const MONTH_ABBR = [
 function monthLabel(month: string): string {
   const [y, m] = month.split("-").map(Number);
   const name = MONTH_ABBR[(m ?? 1) - 1] ?? "—";
-  return `${name} ${y}`;
+  return `${name} ${y ?? ""}`;
 }
 
 function hhmmUtc(at: Date): string {

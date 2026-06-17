@@ -69,8 +69,8 @@ export function HRIllustration({
     .replace(/id="([^"]+)"/g, (_m: string, p: string) => `id="${p}-${uid}"`)
     .replace(/url\(#([^)]+)\)/g, (_m: string, p: string) => `url(#${p}-${uid})`);
   const parts = art.vb.split(/\s+/);
-  const vw = Number.parseFloat(parts[2]) || 1;
-  const vh = Number.parseFloat(parts[3]) || 1;
+  const vw = Number.parseFloat(parts[2] ?? "") || 1;
+  const vh = Number.parseFloat(parts[3] ?? "") || 1;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

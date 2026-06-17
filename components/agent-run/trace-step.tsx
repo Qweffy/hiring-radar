@@ -15,8 +15,10 @@ import  { type TraceStep as TraceStepModel } from "@/components/agent-run/trace-
 
 interface Tint { bg: string; border: string; accent: string }
 
+const TOOL_TINT: Tint = { bg: "var(--bg-raised)", border: "var(--border)", accent: "transparent" };
+
 const TINTS: Record<string, Tint> = {
-  tool: { bg: "var(--bg-raised)", border: "var(--border)", accent: "transparent" },
+  tool: TOOL_TINT,
   reasoning: {
     bg: "var(--violet-12)",
     border: "rgba(167,139,250,0.28)",
@@ -54,9 +56,9 @@ function dotColor(step: TraceStepModel): string {
 
 function tintFor(step: TraceStepModel): Tint {
   if (step.type === "decision") {
-    return step.decision === "no" ? TINTS.decisionNo : TINTS.decisionYes;
+    return (step.decision === "no" ? TINTS.decisionNo : TINTS.decisionYes) ?? TOOL_TINT;
   }
-  return TINTS[step.type] ?? TINTS.tool;
+  return TINTS[step.type] ?? TOOL_TINT;
 }
 
 const railStyle: CSSProperties = {

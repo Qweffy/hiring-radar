@@ -31,7 +31,7 @@ const MONTH_ABBR = [
 function monthLabel(month: string): string {
   const [y, m] = month.split("-").map(Number);
   const name = MONTH_ABBR[(m ?? 1) - 1] ?? "—";
-  return `${name} ${y}`;
+  return `${name} ${y ?? ""}`;
 }
 
 /** "May" — title-cased single month name from a "YYYY-MM" string. */
@@ -89,6 +89,7 @@ export default async function PipelinePage() {
   const logLines = events.map(toLogLine);
 
   const latest = sweepRows[0] ?? null;
+  const latestSweepView = sweeps[0] ?? null;
   const latestThreadId = latest?.threadId ?? null;
   const latestMonth = latest?.month ?? null;
   const latestMonthLabel = latest ? monthLabel(latest.month) : "—";
@@ -98,9 +99,9 @@ export default async function PipelinePage() {
   let running: RunningState | null = null;
   let failed: FailedState | null = null;
 
-  if (latest?.status === "running") {
+  if (latest?.status === "running" && latestSweepView) {
     running = {
-      sweep: sweeps[0],
+      sweep: latestSweepView,
       initialSeconds: summary.runningElapsedSeconds ?? 0,
       steps: runningSteps(latest),
     };

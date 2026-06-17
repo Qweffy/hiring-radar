@@ -260,7 +260,7 @@ export async function getDashboardData(): Promise<DashboardData> {
         firstSweepId: postings.firstSweepId,
         matchScore: assessments.score,
         // An agent-sourced shortlist row marks the posting as shortlisted.
-        shortlisted: sql<boolean>`${shortlistEntries.source} = 'agent'`,
+        shortlisted: sql<boolean | null>`${shortlistEntries.source} = 'agent'`,
       })
       .from(postings)
       .leftJoin(assessments, eq(assessments.postingId, postings.id))
@@ -348,8 +348,9 @@ export async function getDashboardData(): Promise<DashboardData> {
   // sweeps (newCount 0) are excluded so the delta never reads "−<all>"; null
   // until at least two real ingests exist (i.e. once M4's monthly cron runs).
   const ingestSweeps = recentSweeps.filter((s) => s.newCount > 0);
+  const priorIngest = ingestSweeps[1];
   const newDelta =
-    ingestSweeps.length >= 2 ? newCount - ingestSweeps[1].newCount : null;
+    priorIngest !== undefined ? newCount - priorIngest.newCount : null;
 
   return {
     month,

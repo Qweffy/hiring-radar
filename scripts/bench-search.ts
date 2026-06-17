@@ -94,7 +94,8 @@ function recallAtK(retrieved: number[], relevant: Set<number>, k: number): numbe
 
 function reciprocalRank(retrieved: number[], relevant: Set<number>): number {
   for (let i = 0; i < retrieved.length; i++) {
-    if (relevant.has(retrieved[i])) return 1 / (i + 1);
+    const id = retrieved[i];
+    if (id !== undefined && relevant.has(id)) return 1 / (i + 1);
   }
   return 0;
 }
@@ -132,7 +133,7 @@ async function main(): Promise<void> {
       agg[mode].mrr += mrr;
       agg[mode].ms += ms;
       agg[mode].n += 1;
-      line.push(`${mode[0].toUpperCase()} r=${r.toFixed(2)} mrr=${mrr.toFixed(2)}`);
+      line.push(`${(mode[0] ?? "").toUpperCase()} r=${r.toFixed(2)} mrr=${mrr.toFixed(2)}`);
     }
     console.log(line.join("  "));
   }

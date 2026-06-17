@@ -97,7 +97,7 @@ async function callOnce(
     messages,
   });
 
-  const content = res.choices[0]?.message?.content;
+  const content = res.choices[0]?.message.content;
   if (!content) throw new Error("Empty completion from Groq");
   return JSON.parse(content);
 }

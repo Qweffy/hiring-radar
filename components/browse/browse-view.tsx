@@ -140,8 +140,9 @@ export function BrowseView({ filters, result, detail, now }: BrowseViewProps) {
           const index = rows.findIndex((r) => r.hnId === selected);
           if (index === -1) return;
           const next = index + delta;
-          if (next < 0 || next >= rows.length) return;
-          navigateToPosting(rows[next].hnId);
+          const nextRow = rows[next];
+          if (nextRow === undefined) return;
+          navigateToPosting(nextRow.hnId);
           return;
         }
         setCursor((c) => {
@@ -153,9 +154,10 @@ export function BrowseView({ filters, result, detail, now }: BrowseViewProps) {
 
       if (event.key === "Enter" && selected === null) {
         const c = cursorRef.current;
-        if (c < 0 || c >= rows.length) return;
+        const cursorRow = rows[c];
+        if (cursorRow === undefined) return;
         event.preventDefault();
-        openPosting(rows[c].hnId);
+        openPosting(cursorRow.hnId);
       }
     };
 

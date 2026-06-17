@@ -121,7 +121,7 @@ function harvestCompanies(observation: unknown, into: Map<number, string>): void
 /** Single-line args preview: compact JSON, no surrounding noise. */
 function compactArgs(args: Record<string, unknown>): string {
   const json = JSON.stringify(args);
-  if (json === "{}" || json === undefined) return "";
+  if (json === "{}") return "";
   // Add a space inside the braces to match the design's spaced one-liner.
   return json.replace(/^\{/, "{ ").replace(/\}$/, " }").replace(/,/g, ", ");
 }
@@ -159,14 +159,15 @@ export function mapTrace(
   for (const row of rows) {
     if (row.kind === "tool_call") {
       const p = row.payload as ToolCallPayload;
-      const tool = p.tool ?? "tool";
-      const args = (p.args ?? {});
+      const tool = p.tool;
+      const args = p.args;
 
       // Find this call's observation: the first observation with idx > the call
       // idx that hasn't been consumed yet.
-      while (
-        obsCursor < observations.length &&
-        observations[obsCursor].idx <= row.idx
+      for (
+        let candidate = observations[obsCursor];
+        candidate !== undefined && candidate.idx <= row.idx;
+        candidate = observations[obsCursor]
       ) {
         obsCursor++;
       }
@@ -219,22 +220,20 @@ export function mapTrace(
       continue;
     }
 
-    if (row.kind === "error") {
-      const p = row.payload as ErrorPayload;
-      steps.push({
-        key: row.idx,
-        type: "error",
-        text: typeof p.message === "string" ? p.message : "Error",
-      });
-      continue;
-    }
+    const p = row.payload as ErrorPayload;
+    steps.push({
+      key: row.idx,
+      type: "error",
+      text: typeof p.message === "string" ? p.message : "Error",
+    });
   }
 
   // Flag the trailing reasoning card live while the run is still running.
   if (running) {
     for (let i = steps.length - 1; i >= 0; i--) {
-      if (steps[i].type === "reasoning") {
-        steps[i] = { ...steps[i], live: true };
+      const step = steps[i];
+      if (step?.type === "reasoning") {
+        steps[i] = { ...step, live: true };
         break;
       }
     }

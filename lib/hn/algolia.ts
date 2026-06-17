@@ -68,9 +68,11 @@ const MONTHS = [
 /** "Ask HN: Who is hiring? (June 2026)" → "2026-06"; falls back to created_at. */
 function monthFromThread(title: string, createdAt: string): string {
   const m = /\(([a-z]+)\s+(\d{4})\)/.exec(title.toLowerCase());
-  if (m) {
-    const idx = MONTHS.indexOf(m[1]);
-    if (idx >= 0) return `${m[2]}-${String(idx + 1).padStart(2, "0")}`;
+  const monthName = m?.[1];
+  const year = m?.[2];
+  if (monthName !== undefined && year !== undefined) {
+    const idx = MONTHS.indexOf(monthName);
+    if (idx >= 0) return `${year}-${String(idx + 1).padStart(2, "0")}`;
   }
   return createdAt.slice(0, 7);
 }

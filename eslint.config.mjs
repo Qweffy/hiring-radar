@@ -94,17 +94,19 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/prefer-nullish-coalescing": "error",
       "@typescript-eslint/prefer-optional-chain": "error",
 
-      // --- NOISY — kept as warnings / tuned so they never block CI. ---
-      // Only trustworthy with noUncheckedIndexedAccess in tsconfig (not on yet).
-      "@typescript-eslint/no-unnecessary-condition": "warn",
+      // --- Trustworthy now that tsconfig has noUncheckedIndexedAccess on, so
+      //     every indexed access is `T | undefined` and these stop false-firing.
+      //     Promoted warn -> error after the audit fixed every occurrence. ---
+      "@typescript-eslint/no-unnecessary-condition": "error",
+      // allowNullish:false keeps null/undefined out of user-facing strings.
       "@typescript-eslint/restrict-template-expressions": [
-        "warn",
+        "error",
         { allowNumber: true, allowBoolean: true, allowNullish: false, allowNever: true },
       ],
       // Tuned so it coexists with the no-floating-promises `void` escape hatch
       // instead of the two rules fighting over `void somePromise()`.
       "@typescript-eslint/no-confusing-void-expression": [
-        "warn",
+        "error",
         { ignoreArrowShorthand: true, ignoreVoidOperator: true },
       ],
 
@@ -223,13 +225,15 @@ const eslintConfig = defineConfig([
     rules: { "no-secrets/no-secrets": "off" },
   },
 
-  // 8b) Tests: relax the noisiest type-aware rules (vitest 4).
+  // 8b) Tests: relax the noisiest type-aware rules (vitest 4). Tests build
+  //     regexes from attack fixtures + markers — not a production attack surface.
   {
     files: ["tests/**/*.{ts,tsx}", "**/*.{test,spec}.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-unnecessary-condition": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       "no-secrets/no-secrets": "off",
+      "security/detect-non-literal-regexp": "off",
       "import-x/no-cycle": "off",
     },
   },

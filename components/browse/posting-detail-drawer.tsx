@@ -396,8 +396,8 @@ export function PostingDetailDrawer({
   onNavigate,
 }: PostingDetailDrawerProps) {
   const index = rows.findIndex((r) => r.hnId === selectedHnId);
-  const prev = index > 0 ? rows[index - 1] : null;
-  const next = index >= 0 && index < rows.length - 1 ? rows[index + 1] : null;
+  const prev = index > 0 ? rows[index - 1] ?? null : null;
+  const next = index >= 0 && index < rows.length - 1 ? rows[index + 1] ?? null : null;
 
   return (
     <Drawer

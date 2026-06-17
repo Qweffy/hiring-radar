@@ -259,6 +259,7 @@ function keywordMatches(keyword: string, haystack: string): boolean {
   }
   // Escape regex metacharacters in the keyword (e.g. "c++", "ci/cd", "next.js").
   const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // eslint-disable-next-line security/detect-non-literal-regexp -- keyword comes from the controlled cluster taxonomy and all regex metacharacters are escaped above, so the pattern stays linear (no ReDoS)
   return new RegExp(`(^|[^a-z0-9+#.])${escaped}([^a-z0-9+#.]|$)`).test(haystack);
 }
 

@@ -60,7 +60,7 @@ const STAGE_META: Record<ShortlistStage, StageMeta> = {
 
 /** Stage tints/colors that drive the card stripe, border, and select. */
 export function stageMeta(stage: ShortlistStage): StageMeta {
-  return STAGE_META[stage] ?? STAGE_META.new;
+  return STAGE_META[stage];
 }
 
 /** Gauge dashoffset for a match score. Circumference 150.8 = 2π·24. */

@@ -60,7 +60,9 @@ export async function pauseRun(
   return runAction("Couldn't pause the run — try again.", async () => {
     const status = await getRunStatus(runId);
     if (status !== "running") {
-      throw new ActionError(`Run #${runId} is not running (it is ${status}).`);
+      throw new ActionError(
+        `Run #${runId} is not running (it is ${status ?? "unknown"}).`,
+      );
     }
     await setRunStatus(runId, "paused");
     revalidatePath(`/agent/${runId}`);
@@ -76,7 +78,7 @@ export async function cancelRun(
     const status = await getRunStatus(runId);
     if (status !== "running" && status !== "paused") {
       throw new ActionError(
-        `Run #${runId} can't be cancelled (it is ${status}).`,
+        `Run #${runId} can't be cancelled (it is ${status ?? "unknown"}).`,
       );
     }
     // Finalize directly: a paused run isn't in the loop, so set the terminal
@@ -96,7 +98,9 @@ export async function resumeRun(
     await enforceLimit("agentScan");
     const status = await getRunStatus(runId);
     if (status !== "paused") {
-      throw new ActionError(`Only paused runs can resume (it is ${status}).`);
+      throw new ActionError(
+        `Only paused runs can resume (it is ${status ?? "unknown"}).`,
+      );
     }
     await setRunStatus(runId, "running");
     await resumeScan(runId);

@@ -38,7 +38,7 @@ async function main(): Promise<void> {
 
   if (existing.length > 0) {
     process.stdout.write(
-      `profile already seeded — latest version ${existing[0]?.version}; skipping.\n`,
+      `profile already seeded — latest version ${existing[0]?.version ?? "unknown"}; skipping.\n`,
     );
     return;
   }

@@ -147,7 +147,7 @@ function rebuildMessages(steps: AgentStepRow[]): ChatMessage[] {
       pendingCalls.push({
         id: toolCallId(s.idx, pendingCalls.length),
         name: p.tool,
-        args: JSON.stringify(p.args ?? {}),
+        args: JSON.stringify(p.args),
       });
     } else if (s.kind === "observation") {
       // First observation after the call batch closes the assistant turn.
@@ -381,8 +381,10 @@ async function drive(
 
     // 4e. Append one observation per call (checkpoint) + the tool message.
     for (let i = 0; i < callSteps.length; i++) {
-      const { call } = callSteps[i];
+      const step = callSteps[i];
       const outcome = outcomes[i];
+      if (step === undefined || outcome === undefined) continue;
+      const { call } = step;
       if (outcome.newPick) state.picksCount += 1;
 
       // Same-call retry guard: count repeated identical failing calls.

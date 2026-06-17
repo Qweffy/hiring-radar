@@ -37,6 +37,7 @@ export function spotlight(content: string): Spotlighted {
   // Remove any occurrence of our fence tokens (case-insensitive, with optional
   // whitespace in the tag) so a posting can't forge a closing delimiter. The
   // marker is random, so this is belt-and-suspenders, but cheap.
+  // eslint-disable-next-line security/detect-non-literal-regexp -- marker is a controlled random hex string (randomBytes(8)), never user input
   const fenceRe = new RegExp(`</?\\s*data-${marker}\\s*>`, "gi");
   const safe = content.replace(fenceRe, "");
   return { fenced: `${open}\n${safe}\n${close}`, marker };

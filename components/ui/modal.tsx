@@ -54,9 +54,9 @@ export function Modal({
       }
       if (event.key === "Tab") {
         const items = focusables();
-        if (items.length === 0) return;
         const head = items[0];
         const tail = items[items.length - 1];
+        if (head === undefined || tail === undefined) return;
         if (event.shiftKey && document.activeElement === head) {
           event.preventDefault();
           tail.focus();

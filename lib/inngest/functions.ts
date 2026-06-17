@@ -200,7 +200,7 @@ export const processPosting = inngest.createFunction(
         stage: "parse",
         postingId: original?.postingId,
         hnId: original?.hnId,
-        error: (error.message ?? "unknown error").slice(0, 1000),
+        error: error.message.slice(0, 1000),
         payload: original ?? { raw: "unparseable failure payload" },
       });
     },

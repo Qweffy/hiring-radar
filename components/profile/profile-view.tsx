@@ -130,9 +130,10 @@ export function ProfileView({
           s.name === name
             ? {
                 ...s,
-                g: SKILL_ORDER[
-                  (SKILL_ORDER.indexOf(s.g) + 1) % SKILL_ORDER.length
-                ],
+                g:
+                  SKILL_ORDER[
+                    (SKILL_ORDER.indexOf(s.g) + 1) % SKILL_ORDER.length
+                  ] ?? s.g,
               }
             : s,
         ),

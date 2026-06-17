@@ -74,6 +74,7 @@ export async function fetchAndDiff(
         contentHash: hash,
         firstSweepId: sweepId,
       });
+      // eslint-disable-next-line security/detect-possible-timing-attacks -- comparing public content hashes for change detection, not a secret; timing leaks nothing
     } else if (existing.contentHash !== hash) {
       // Edited posting — refresh content and re-open it for parse/embed.
       await db

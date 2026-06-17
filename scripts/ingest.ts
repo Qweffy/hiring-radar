@@ -23,7 +23,7 @@ function parseArgs(): Args {
   const argv = process.argv.slice(2);
   const get = (flag: string): string | null => {
     const i = argv.indexOf(flag);
-    return i >= 0 && argv[i + 1] ? argv[i + 1] : null;
+    return i >= 0 ? argv[i + 1] ?? null : null;
   };
   return {
     thread: Number(get("--thread") ?? 48357725),

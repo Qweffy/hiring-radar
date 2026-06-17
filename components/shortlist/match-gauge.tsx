@@ -7,8 +7,10 @@ export interface MatchGaugeProps {
   size?: number;
 }
 
+const GEOMETRY_DEFAULT = { r: 24, circ: 150.8, font: 15 };
+
 const GEOMETRY: Record<number, { r: number; circ: number; font: number }> = {
-  54: { r: 24, circ: 150.8, font: 15 },
+  54: GEOMETRY_DEFAULT,
   48: { r: 21, circ: 131.9, font: 14 },
 };
 
@@ -17,7 +19,7 @@ const GEOMETRY: Record<number, { r: number; circ: number; font: number }> = {
  * Starts at 12 o'clock (rotate -90deg); a higher match fills more of the arc.
  */
 export function MatchGauge({ match, size = 54 }: MatchGaugeProps) {
-  const geo = GEOMETRY[size] ?? GEOMETRY[54];
+  const geo = GEOMETRY[size] ?? GEOMETRY_DEFAULT;
   const center = size / 2;
   return (
     <div style={{ position: "relative", width: size, height: size }}>

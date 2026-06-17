@@ -47,7 +47,7 @@ function RelevanceSnippet({ snippet }: { snippet: string }) {
   let lastIndex = 0;
   let key = 0;
   for (const match of snippet.matchAll(MARK_SPLIT)) {
-    const start = match.index ?? 0;
+    const start = match.index;
     if (start > lastIndex) {
       nodes.push(<span key={key++}>{snippet.slice(lastIndex, start)}</span>);
     }
@@ -103,8 +103,9 @@ function filterHint(filters: BrowseFilters): ReactNode {
   if (filters.matchMin !== null) {
     return <>Try lowering the {monoName(`match ≥ ${filters.matchMin}`)} floor.</>;
   }
-  if (filters.stack.length > 0) {
-    return <>Try removing the {monoName(filters.stack[0])} filter.</>;
+  const firstStack = filters.stack[0];
+  if (firstStack !== undefined) {
+    return <>Try removing the {monoName(firstStack)} filter.</>;
   }
   if (filters.salaryMin !== null) {
     return <>Try lowering the salary floor.</>;

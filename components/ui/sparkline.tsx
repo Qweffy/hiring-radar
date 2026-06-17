@@ -41,8 +41,12 @@ export function Sparkline({
     return [x, y];
   });
   const line = points.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x},${y}`).join(" ");
+  const first = points[0];
   const last = points[points.length - 1];
-  const area = `${line} L${last[0]},${height} L${points[0][0]},${height} Z`;
+  if (first === undefined || last === undefined) {
+    return <svg width={width} height={height} style={style} aria-hidden="true" {...rest} />;
+  }
+  const area = `${line} L${last[0]},${height} L${first[0]},${height} Z`;
 
   // Deterministic (SSR-safe) gradient id: the gradient only depends on the
   // tone, so same-tone sparklines share an identical definition.

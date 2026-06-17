@@ -124,7 +124,7 @@ function DigestSummary({ digest, now }: { digest: AgentDigestData; now: number }
       {digest.topMatch !== null ? (
         <button
           type="button"
-          onClick={() => router.push(`/browse?selected=${digest.topMatch?.hnId}`)}
+          onClick={() => router.push(`/browse?selected=${digest.topMatch?.hnId ?? ""}`)}
           className="flex w-full cursor-pointer items-center text-left hover:[border-color:color-mix(in_srgb,var(--violet)_50%,transparent)]"
           style={{
             gap: 14,
