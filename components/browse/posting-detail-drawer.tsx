@@ -241,6 +241,18 @@ function DetailBody({ detail, now }: { detail: PostingDetail; now: number }) {
   const salaryValue =
     salaryRange !== "—" ? salaryRange : (detail.salaryRaw ?? null);
   const sourceUrl = `https://news.ycombinator.com/item?id=${detail.hnId}`;
+  // Direct "apply" target from the parsed contact: a URL opens in a new tab, an
+  // email becomes a mailto. Anything else stays in the Contact field below only.
+  const contact = detail.contact;
+  const applyHref =
+    contact === null
+      ? null
+      : contact.startsWith("http")
+        ? contact
+        : contact.includes("@")
+          ? `mailto:${contact}`
+          : null;
+  const applyExternal = applyHref?.startsWith("http") ?? false;
 
   return (
     <div className="flex flex-col" style={{ gap: 22, padding: 4 }}>
@@ -288,6 +300,52 @@ function DetailBody({ detail, now }: { detail: PostingDetail; now: number }) {
         >
           by {detail.author} · posted {relativeTime(detail.hnCreatedAt, nowDate)}
         </p>
+      </div>
+
+      {/* Primary CTA — one click to the real posting (and to apply when stated) */}
+      <div className="flex flex-wrap" style={{ gap: 8 }}>
+        <a
+          href={sourceUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center justify-center"
+          style={{
+            gap: 7,
+            height: 38,
+            padding: "0 16px",
+            font: "600 13px/1 var(--font-ui)",
+            color: "var(--bg-void)",
+            background: "var(--phosphor)",
+            borderRadius: "var(--radius-control)",
+            boxShadow: "var(--glow-phosphor)",
+            textDecoration: "none",
+          }}
+        >
+          Open on HN
+          <Icon name="external-link" size={15} />
+        </a>
+        {applyHref !== null ? (
+          <a
+            href={applyHref}
+            target={applyExternal ? "_blank" : undefined}
+            rel="noreferrer"
+            className="inline-flex items-center justify-center"
+            style={{
+              gap: 7,
+              height: 38,
+              padding: "0 16px",
+              font: "600 13px/1 var(--font-ui)",
+              color: "var(--text-hi)",
+              background: "transparent",
+              border: "1px solid var(--border-strong)",
+              borderRadius: "var(--radius-control)",
+              textDecoration: "none",
+            }}
+          >
+            Apply
+            <Icon name="external-link" size={15} />
+          </a>
+        ) : null}
       </div>
 
       {/* Agent match — real verdict when assessed, otherwise the empty state */}

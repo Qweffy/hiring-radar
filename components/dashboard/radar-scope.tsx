@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import  { type CSSProperties } from "react";
 
 import { Icon } from "@/components/ui/icon";
@@ -132,11 +132,27 @@ export function RadarScope({
   newCount,
 }: RadarScopeProps) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
-  const [hovered, setHovered] = useState<number>(0);
+  // hover = transient preview; pin = sticky — only a click opens a card for good.
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [pinned, setPinned] = useState<number | null>(null);
 
   const placed = useMemo(() => placeBlips(blips), [blips]);
 
-  const active = placed[hovered] ?? null;
+  // A pin wins over hover, so a pinned card stays open while you mouse around.
+  const activeIndex = pinned ?? hovered;
+  const active = activeIndex !== null ? (placed[activeIndex] ?? null) : null;
+
+  // Escape closes a pinned card.
+  useEffect(() => {
+    if (pinned === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPinned(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [pinned]);
 
   return (
     <div className="flex flex-col">
@@ -288,13 +304,24 @@ export function RadarScope({
           <BlipDot
             key={`${blip.hnId}-${i}`}
             blip={blip}
-            hovered={hovered === i}
+            active={activeIndex === i}
             onHover={() => setHovered(i)}
+            onLeave={() => setHovered(null)}
+            onTogglePin={() => setPinned((p) => (p === i ? null : i))}
           />
         ))}
 
-        {/* Hover tooltip */}
-        {active && <BlipTooltip blip={active} />}
+        {/* Blip card — transient on hover, sticky (with a close button) on click */}
+        {active && (
+          <BlipTooltip
+            blip={active}
+            pinned={pinned !== null}
+            onClose={() => {
+              setPinned(null);
+              setHovered(null);
+            }}
+          />
+        )}
 
         {/* Legend */}
         <div
@@ -394,12 +421,16 @@ function LegendRow({ children }: { children: React.ReactNode }) {
 
 function BlipDot({
   blip,
-  hovered,
+  active,
   onHover,
+  onLeave,
+  onTogglePin,
 }: {
   blip: PlacedBlip;
-  hovered: boolean;
+  active: boolean;
   onHover: () => void;
+  onLeave: () => void;
+  onTogglePin: () => void;
 }) {
   const fill = `rgba(61,255,162, ${blipFillOpacity(blip.match)})`;
   // A shortlisted blip wears a violet halo (an extra outer ring) at all times.
@@ -411,7 +442,10 @@ function BlipDot({
     <button
       type="button"
       onMouseEnter={onHover}
+      onMouseLeave={onLeave}
       onFocus={onHover}
+      onBlur={onLeave}
+      onClick={onTogglePin}
       aria-label={`${blip.company} — ${blip.role}${blip.salaryLabel ? `, ${blip.salaryLabel}` : ""}${blip.shortlisted ? ", shortlisted" : ""}`}
       className="absolute flex cursor-pointer items-center justify-center border-0 bg-transparent p-0"
       style={{
@@ -420,7 +454,7 @@ function BlipDot({
         width: 20,
         height: 20,
         transform: "translate(-50%, -50%)",
-        zIndex: hovered ? 30 : 10,
+        zIndex: active ? 30 : 10,
       }}
     >
       <span
@@ -429,8 +463,8 @@ function BlipDot({
           height: blip.diameter,
           borderRadius: "50%",
           background: fill,
-          boxShadow: hovered ? hover : resting,
-          transform: hovered ? "scale(1.25)" : "scale(1)",
+          boxShadow: active ? hover : resting,
+          transform: active ? "scale(1.25)" : "scale(1)",
           transition: "box-shadow 120ms, transform 120ms",
         }}
       />
@@ -438,11 +472,22 @@ function BlipDot({
   );
 }
 
-function BlipTooltip({ blip }: { blip: PlacedBlip }) {
+function BlipTooltip({
+  blip,
+  pinned,
+  onClose,
+}: {
+  blip: PlacedBlip;
+  pinned: boolean;
+  onClose: () => void;
+}) {
   const { left, top } = tooltipPosition(blip);
+  const hnUrl = `https://news.ycombinator.com/item?id=${blip.hnId}`;
   return (
     <div
-      className="pointer-events-none absolute"
+      // Transient preview ignores the mouse; a pinned card is interactive
+      // (the close button + the HN link need clicks).
+      className={pinned ? "absolute" : "pointer-events-none absolute"}
       style={{
         left,
         top,
@@ -478,7 +523,20 @@ function BlipTooltip({ blip }: { blip: PlacedBlip }) {
             </div>
           )}
         </div>
-        <ScoreGauge score={blip.match} size={48} />
+        <div className="flex flex-col items-end" style={{ gap: 8 }}>
+          {pinned && (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="flex cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+              style={{ color: "var(--text-low-content)", width: 18, height: 18 }}
+            >
+              <Icon name="close" size={16} />
+            </button>
+          )}
+          <ScoreGauge score={blip.match} size={48} />
+        </div>
       </div>
       <div
         className="flex items-center justify-between"
@@ -501,13 +559,26 @@ function BlipTooltip({ blip }: { blip: PlacedBlip }) {
         >
           {blip.category === "AI-ML" ? "AI · ML" : blip.category}
         </span>
-        <span
-          className="flex items-center"
-          style={{ gap: 4, font: "600 12px/1 var(--font-ui)", color: "var(--cyan)" }}
-        >
-          View
-          <Icon name="arrow-right" size={13} style={{ color: "var(--cyan)" }} />
-        </span>
+        {pinned ? (
+          <a
+            href={hnUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center"
+            style={{ gap: 4, font: "600 12px/1 var(--font-ui)", color: "var(--cyan)" }}
+          >
+            Open on HN
+            <Icon name="external-link" size={13} style={{ color: "var(--cyan)" }} />
+          </a>
+        ) : (
+          <span
+            className="flex items-center"
+            style={{ gap: 4, font: "600 12px/1 var(--font-ui)", color: "var(--text-low-content)" }}
+          >
+            Click to open
+            <Icon name="arrow-right" size={13} />
+          </span>
+        )}
       </div>
     </div>
   );
