@@ -99,3 +99,12 @@ both fast at this scale; the HNSW index's advantage widens as the corpus grows.
   from the same model + dtype.
 - `lib/search/engine.ts` holds the query logic (importable by the bench CLI);
   `lib/queries/search.ts` is the `server-only` app-facing wrapper.
+
+## Engineering conventions
+
+The house style — architecture & data flow, the hard code rules (no `any`,
+parse-before-trust, `server-only` data access, the `runAction`/`ActionError`
+result pattern), AI/agent conventions (zod-on-LLM-output, spotlighting, cost
+budgets), design-system rules, and commit/workflow discipline — lives in
+[`AGENTS.md`](AGENTS.md). Read it before contributing; it's the same doc the
+coding agents follow, and the enforced floor is `npm run lint`.
