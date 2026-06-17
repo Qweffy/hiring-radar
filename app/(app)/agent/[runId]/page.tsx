@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { AgentRunView } from "@/components/agent-run/agent-run-view";
 import { loadRunView } from "@/components/agent-run/loader";
 import { requestNowMs } from "@/components/browse/request-now";
+import { DesktopOnly } from "@/components/shell/desktop-only";
 
 // A run's status, trace, cost and picks change every step — never statically
 // cache. The live feed streams over SSE; this server render is the snapshot the
@@ -21,5 +22,9 @@ export default async function AgentRunPage({ params }: AgentRunPageProps) {
   const view = await loadRunView(runId, requestNowMs());
   if (!view) notFound();
 
-  return <AgentRunView {...view} />;
+  return (
+    <DesktopOnly>
+      <AgentRunView {...view} />
+    </DesktopOnly>
+  );
 }

@@ -8,6 +8,7 @@ import {
 } from "@/components/pipeline/pipeline-view";
 import  { type RunningStep } from "@/components/pipeline/running-sweep";
 import { toDeadLetterView, toSweepView } from "@/components/pipeline/types";
+import { DesktopOnly } from "@/components/shell/desktop-only";
 import { verifySession } from "@/lib/auth";
 import {
   eventTime,
@@ -126,7 +127,7 @@ export default async function PipelinePage() {
   }
 
   return (
-    <>
+    <DesktopOnly>
       <div
         className="absolute"
         style={{ top: 14, right: 18, zIndex: "var(--z-sticky)" }}
@@ -146,6 +147,6 @@ export default async function PipelinePage() {
         running={running}
         failed={failed}
       />
-    </>
+    </DesktopOnly>
   );
 }

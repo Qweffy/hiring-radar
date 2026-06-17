@@ -4,6 +4,7 @@ import { ForbiddenView } from "@/components/auth/forbidden-view";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { SettingsView } from "@/components/settings/settings-view";
 import { toKeyView, type KeyView } from "@/components/settings/types";
+import { DesktopOnly } from "@/components/shell/desktop-only";
 import { verifySession } from "@/lib/auth";
 import { getAppSettings } from "@/lib/queries/settings";
 import { getApiKeys, getDataObjectCounts } from "@/lib/queries/settings-mcp";
@@ -82,7 +83,7 @@ export default async function SettingsPage() {
   );
 
   return (
-    <>
+    <DesktopOnly>
       <div
         className="absolute"
         style={{ top: 14, right: 18, zIndex: "var(--z-sticky)" }}
@@ -105,6 +106,6 @@ export default async function SettingsPage() {
         httpEndpoint={httpEndpoint}
         stdioConfig={stdioConfig}
       />
-    </>
+    </DesktopOnly>
   );
 }
