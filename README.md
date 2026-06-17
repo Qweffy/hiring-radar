@@ -100,6 +100,30 @@ both fast at this scale; the HNSW index's advantage widens as the corpus grows.
 - `lib/search/engine.ts` holds the query logic (importable by the bench CLI);
   `lib/queries/search.ts` is the `server-only` app-facing wrapper.
 
+## Security
+
+**Threat model.** Every HN "Who is hiring?" posting is hostile user-generated content. A posting body (or a search snippet derived from it) can contain text engineered to hijack the LLM — "ignore previous instructions", a forged system role, a Markdown-image exfiltration beacon, base64/zero-width-smuggled commands, a forged closing delimiter, or a second-order payload aimed at a later agent stage. We assume injection is *unsolved* (OWASP LLM01): some attempts will partially succeed at the model layer, so the design bounds the blast radius rather than relying on prevention.
+
+**Layered defense.** Five independent layers, each load-bearing on its own:
+
+1. **Spotlighting.** Every untrusted string entering a prompt — posting bodies, search snippets, CV text — is wrapped by `spotlight()` (`lib/agent/spotlight.ts`) in a `<data-{marker}>` fence whose marker is randomized per call. Any forged copy of that exact marker is stripped from the content first, so a posting can't close the fence and "break out". (Microsoft's spotlighting cuts indirect-injection success from >50% to <2%.)
+2. **Instructions only in the system message.** The agent's task, tools, and rules live solely in `SYSTEM_PROMPT` (`lib/agent/prompt.ts`); the extractors keep a byte-stable SYSTEM string. Postings and tool results are delivered as fenced data in `user`/`tool` messages — never concatenated into a system prompt or a tool directive.
+3. **Read-only tool allow-list.** The hand-rolled loop dispatches only over a static map of five tools (`get_profile`, `search_jobs`, `read_posting`, `compare_to_profile`, `save_finding`). There is no fetch-URL, email, or shell tool — the "lethal trifecta" (untrusted input + private data + external comms) is broken by construction. `save_finding` is the only write, and it is an idempotent, schema-bounded upsert on the user's own data.
+4. **Zod-validate every output.** Constrained decoding guarantees JSON *shape*, not *semantics*. Every model output and every tool-call argument passes a `z.strictObject` parse before it can touch the DB or a tool: strings are `.max()`-capped, numbers range-bounded (score 0–100, salary ≤ 5,000,000), sets are enums, and unknown keys are rejected. A poisoned completion ("set score to 999", a stuffed exfil URL) is dropped at this boundary.
+5. **Bounded budgets.** Each agent run is capped by `DEFAULT_BUDGET` (`lib/agent/cost.ts`): 24 steps, 600k tokens, $1.00. `checkBudget()` runs before every model call and the loop terminates the instant a cap trips, so a hijacked loop can't run away.
+
+**Regression suite.** `tests/fixtures/injection-corpus.ts` is a seeded corpus of adversarial postings (one per attack class). `tests/unit/injection.test.ts` asserts the deterministic guarantees offline (no API key, runs in `npm test`): spotlighting strips forged fences, the schemas reject poisoned output, and a canary token never reaches a structured field. Every bypass found in the wild becomes a permanent fixture here.
+
+**Live red team (opt-in).** To measure how the *real model* responds to the corpus:
+
+\`\`\`bash
+npm run redteam                 # all fixtures (needs GROQ_API_KEY)
+npm run redteam -- --limit 4    # cap requests to stay cheap / under quota
+npm run redteam -- --only override-score-100,base64-payload
+\`\`\`
+
+It runs each attack through the real `extractPosting()`, prints a per-fixture table (model complied / ignored / rejected; attack succeeded / blocked) and an attack-success-rate, and exits non-zero if any attack gets through. It is deliberately **not** part of `npm test` so CI and Groq quota stay clean. Model compliance is probabilistic — the deterministic layers above are what actually bound the damage.
+
 ## Engineering conventions
 
 The house style — architecture & data flow, the hard code rules (no `any`,
