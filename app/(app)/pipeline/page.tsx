@@ -1,3 +1,5 @@
+import { ForbiddenView } from "@/components/auth/forbidden-view";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 import  { type LogLevel, type LogLine } from "@/components/pipeline/event-log";
 import {
   PipelineView,
@@ -6,6 +8,7 @@ import {
 } from "@/components/pipeline/pipeline-view";
 import  { type RunningStep } from "@/components/pipeline/running-sweep";
 import { toDeadLetterView, toSweepView } from "@/components/pipeline/types";
+import { verifySession } from "@/lib/auth";
 import {
   eventTime,
   getDeadLetters,
@@ -69,6 +72,11 @@ function runningSteps(s: SweepRow): RunningStep[] {
 }
 
 export default async function PipelinePage() {
+  // Defense-in-depth: the proxy gate already rewrites unauthenticated requests
+  // to /login, but a matcher refactor must never silently expose this page
+  // (Next 16 data-security guidance — verify in the route, not only the proxy).
+  if (!(await verifySession())) return <ForbiddenView />;
+
   const [summary, sweepRows, deadLetterResult, events] = await Promise.all([
     getPipelineSummary(),
     getSweeps(5),
@@ -108,17 +116,25 @@ export default async function PipelinePage() {
   }
 
   return (
-    <PipelineView
-      summary={summary}
-      sweeps={sweeps}
-      deadLetters={deadLetters}
-      logLines={logLines}
-      latestThreadId={latestThreadId}
-      latestMonth={latestMonth}
-      latestMonthLabel={latestMonthLabel}
-      latestFetched={latestFetched}
-      running={running}
-      failed={failed}
-    />
+    <>
+      <div
+        className="absolute"
+        style={{ top: 14, right: 18, zIndex: "var(--z-sticky)" }}
+      >
+        <SignOutButton />
+      </div>
+      <PipelineView
+        summary={summary}
+        sweeps={sweeps}
+        deadLetters={deadLetters}
+        logLines={logLines}
+        latestThreadId={latestThreadId}
+        latestMonth={latestMonth}
+        latestMonthLabel={latestMonthLabel}
+        latestFetched={latestFetched}
+        running={running}
+        failed={failed}
+      />
+    </>
   );
 }
