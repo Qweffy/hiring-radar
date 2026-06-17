@@ -1,4 +1,4 @@
-import type { AgentStepUsage } from "@/db/schema";
+import  { type AgentStepUsage } from "@/db/schema";
 
 /**
  * Groq pricing for openai/gpt-oss-120b, USD per 1M tokens (verified 2026-06 in
@@ -29,14 +29,14 @@ export function costOfUsage(model: string, usage: AgentStepUsage): number {
  * them trips — defaults are deliberately generous for the interactive scan but
  * bounded so a runaway loop can't drain the Groq budget.
  */
-export type RunBudget = {
+export interface RunBudget {
   /** Max loop iterations (model round-trips). */
   stepBudget: number;
   /** Cumulative prompt+completion tokens across the whole run. */
   maxTokens: number;
   /** Cumulative estimated USD across the whole run. */
   maxUsd: number;
-};
+}
 
 export const DEFAULT_BUDGET: RunBudget = {
   stepBudget: 24,
@@ -45,11 +45,11 @@ export const DEFAULT_BUDGET: RunBudget = {
 };
 
 /** Running totals, accumulated as the loop advances. */
-export type RunTotals = {
+export interface RunTotals {
   steps: number;
   tokens: number;
   usd: number;
-};
+}
 
 export type BudgetVerdict =
   | { exhausted: false }

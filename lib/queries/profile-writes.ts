@@ -1,5 +1,6 @@
 import "server-only";
 import { desc } from "drizzle-orm";
+
 import { db } from "@/db";
 import { profiles, type ProfileSkills } from "@/db/schema";
 
@@ -12,7 +13,7 @@ import { profiles, type ProfileSkills } from "@/db/schema";
  * is the backstop against an accidental duplicate.
  */
 
-export type SaveProfileInput = {
+export interface SaveProfileInput {
   rawCv: string | null;
   summary: string | null;
   skills: ProfileSkills;
@@ -23,7 +24,7 @@ export type SaveProfileInput = {
   companyStages: string[];
   dealbreakers: string[];
   agentInstructions: string | null;
-};
+}
 
 /** Insert a new profile version. Returns the new row's id and version. */
 export async function insertProfileVersion(

@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { hnThreadSchema, type HnComment } from "@/lib/validation";
 
 const ALGOLIA_BASE = "https://hn.algolia.com/api/v1";
@@ -6,12 +7,12 @@ const USER_AGENT = "hiring-radar/0.1 (github.com/Qweffy/hiring-radar)";
 
 export type LivePosting = HnComment & { author: string; text: string };
 
-export type ThreadFetch = {
+export interface ThreadFetch {
   threadId: number;
   title: string | null;
   /** Top-level live comments with author+text — the job postings. */
   postings: LivePosting[];
-};
+}
 
 /**
  * One request returns the full nested comment tree. Algolia silently
@@ -52,12 +53,12 @@ const searchResponseSchema = z.looseObject({
   hits: z.array(searchHitSchema),
 });
 
-export type HiringThread = {
+export interface HiringThread {
   threadId: number;
   title: string;
   /** Posting month derived from the thread title or its creation date. */
   month: string;
-};
+}
 
 const MONTHS = [
   "january", "february", "march", "april", "may", "june",
@@ -66,7 +67,7 @@ const MONTHS = [
 
 /** "Ask HN: Who is hiring? (June 2026)" → "2026-06"; falls back to created_at. */
 function monthFromThread(title: string, createdAt: string): string {
-  const m = title.toLowerCase().match(/\(([a-z]+)\s+(\d{4})\)/);
+  const m = /\(([a-z]+)\s+(\d{4})\)/.exec(title.toLowerCase());
   if (m) {
     const idx = MONTHS.indexOf(m[1]);
     if (idx >= 0) return `${m[2]}-${String(idx + 1).padStart(2, "0")}`;
@@ -95,7 +96,7 @@ export async function findLatestHiringThread(): Promise<HiringThread | null> {
   const match = hits.find(
     (h) => h.title !== null && /^ask hn:\s*who is hiring\?/i.test(h.title),
   );
-  if (!match || match.title === null) return null;
+  if (match?.title == null) return null;
 
   return {
     threadId: Number(match.objectID),

@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { PipelineSummary } from "@/lib/queries/pipeline";
+
+import { BackfillCard } from "@/components/pipeline/backfill-card";
+import { DeadLettersPanel } from "@/components/pipeline/dead-letters-panel";
+import { EmptySweeps } from "@/components/pipeline/empty-sweeps";
+import { EventLog, type LogLine } from "@/components/pipeline/event-log";
+import { FailedBanner } from "@/components/pipeline/failed-banner";
+import { RunningSweep, type RunningStep } from "@/components/pipeline/running-sweep";
 import { StatusStrip } from "@/components/pipeline/status-strip";
 import { SweepsTable } from "@/components/pipeline/sweeps-table";
-import { DeadLettersPanel } from "@/components/pipeline/dead-letters-panel";
-import { BackfillCard } from "@/components/pipeline/backfill-card";
-import { EventLog, type LogLine } from "@/components/pipeline/event-log";
-import { EmptySweeps } from "@/components/pipeline/empty-sweeps";
-import { RunningSweep, type RunningStep } from "@/components/pipeline/running-sweep";
-import { FailedBanner } from "@/components/pipeline/failed-banner";
-import type { DeadLetterView, SweepView } from "@/components/pipeline/types";
+import  { type DeadLetterView, type SweepView } from "@/components/pipeline/types";
+import  { type PipelineSummary } from "@/lib/queries/pipeline";
 
 function fmtElapsed(totalSeconds: number): string {
   const safe = Math.max(0, totalSeconds);

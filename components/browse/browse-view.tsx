@@ -1,20 +1,21 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+
+import { BrowseToolbar } from "@/components/browse/browse-toolbar";
+import { PostingDetailDrawer } from "@/components/browse/posting-detail-drawer";
+import { PostingTable } from "@/components/browse/posting-table";
 import {
   buildBrowseHref,
   DEFAULT_SEARCH_MODE,
   type BrowseFilters,
 } from "@/lib/browse-params";
-import type {
-  BrowseResult,
-  PostingDetail,
-  PostingRow,
+import  {
+  type BrowseResult,
+  type PostingDetail,
+  type PostingRow,
 } from "@/lib/queries/postings";
-import { BrowseToolbar } from "@/components/browse/browse-toolbar";
-import { PostingTable } from "@/components/browse/posting-table";
-import { PostingDetailDrawer } from "@/components/browse/posting-detail-drawer";
 
 export interface BrowseViewProps {
   filters: BrowseFilters;

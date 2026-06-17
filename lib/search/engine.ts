@@ -2,8 +2,9 @@
 // engine directly, like lib/embeddings.ts. The app-facing wrapper that IS
 // server-only lives in lib/queries/search.ts.
 import { sql, type SQL } from "drizzle-orm";
+
 import { db } from "@/db";
-import type { BrowseFilters } from "@/lib/browse-params";
+import  { type BrowseFilters } from "@/lib/browse-params";
 import { embed } from "@/lib/embeddings";
 
 /**
@@ -31,13 +32,13 @@ const MAX_RESULTS = 100;
 // truncated. Sized above MAX_RESULTS to feed the semantic ceiling.
 const EF_SEARCH = 120;
 
-export type SearchResult = {
+export interface SearchResult {
   /** posting ids in ranked order — the page slice the caller asked for. */
   ids: number[];
   /** id → relevance snippet, only for ids on the returned page. */
   snippets: Map<number, string>;
   total: number;
-};
+}
 
 /**
  * The shared metadata predicate, as a raw SQL fragment, so every branch (FTS,
@@ -231,7 +232,7 @@ function rowsToResult(
     ids.push(r.id);
     // ts_headline returns the bare text (no <mark>) when nothing matched — fall
     // back to a clean leading window so semantic-only hits still show context.
-    const hasMark = r.snippet !== null && r.snippet.includes("<mark>");
+    const hasMark = r.snippet?.includes("<mark>") ?? false;
     snippets.set(r.id, hasMark && r.snippet ? r.snippet : plainWindow(r.raw_text));
   }
   return { ids, snippets, total: rows[0]?.n ?? 0 };

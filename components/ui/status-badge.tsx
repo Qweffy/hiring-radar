@@ -1,6 +1,8 @@
-import type { CSSProperties, HTMLAttributes } from "react";
+import  { type CSSProperties, type HTMLAttributes } from "react";
 
 import { cn } from "@/lib/cn";
+
+
 
 export type StatusValue =
   | "NEW"
@@ -19,7 +21,9 @@ export type StatusValue =
   | "BACKFILL";
 
 export interface StatusBadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  status: StatusValue | string;
+  // `string & {}` keeps autocomplete for the known StatusValues while still
+  // accepting arbitrary strings, without `string` swallowing the literal union.
+  status: StatusValue | (string & {});
   /** Override the displayed text (defaults to the uppercased status). */
   label?: string;
 }
@@ -116,7 +120,7 @@ const PULSE_CSS = `
  * and triggers (CRON/MANUAL/BACKFILL).
  */
 export function StatusBadge({ status, label, className, style, ...rest }: StatusBadgeProps) {
-  const key = String(status).toUpperCase();
+  const key = status.toUpperCase();
   const s = isStatusValue(key) ? STATUS_STYLES[key] : FALLBACK;
 
   const badgeStyle: CSSProperties = {
@@ -138,6 +142,9 @@ export function StatusBadge({ status, label, className, style, ...rest }: Status
 
   return (
     <span className={cn(className)} style={badgeStyle} {...rest}>
+      {/* reason: genuine boolean OR — `??` would wrongly return `false` for
+          `dot` and skip `pulse`. dot/pulse are boolean flags, not nullable data. */}
+      {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
       {(s.dot || s.pulse) && (
         <span style={{ position: "relative", width: 6, height: 6, flexShrink: 0 }} aria-hidden="true">
           <span

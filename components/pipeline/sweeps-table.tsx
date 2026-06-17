@@ -1,11 +1,13 @@
 "use client";
 
-import { Fragment } from "react";
-import type { CSSProperties } from "react";
 import { ArrowRight } from "lucide-react";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { Fragment } from "react";
+import  { type CSSProperties } from "react";
+
+import  { type SweepView } from "@/components/pipeline/types";
 import { Icon } from "@/components/ui/icon";
-import type { SweepView } from "@/components/pipeline/types";
+import { StatusBadge } from "@/components/ui/status-badge";
+
 
 const HN_ITEM_URL = (threadId: number) =>
   `https://news.ycombinator.com/item?id=${threadId}`;

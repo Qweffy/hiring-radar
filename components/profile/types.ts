@@ -1,16 +1,16 @@
-import type { ProfileRow } from "@/lib/queries/profile";
+import  { type ProfileRow } from "@/lib/queries/profile";
 
 /** Skill depth bucket. Drives tag tone + group placement. */
 export type SkillGroup = "core" | "familiar" | "learning";
 
 /** A single parsed skill with its current bucket (the bucket cycles on click). */
-export type Skill = { name: string; g: SkillGroup };
+export interface Skill { name: string; g: SkillGroup }
 
 /** Remote policy as the SegmentedControl sees it (the DB enum differs). */
 export type RemoteValue = "remote" | "hybrid" | "any";
 
 /** The editable calibration state — the dirty-tracked form model. */
-export type ProfileFormState = {
+export interface ProfileFormState {
   rawCv: string;
   summary: string | null;
   skills: Skill[];
@@ -21,7 +21,7 @@ export type ProfileFormState = {
   stages: string[]; // selected stage ids (canonical), e.g. "pre-seed"
   dealbreakers: string[];
   agentInstructions: string;
-};
+}
 
 export const SKILL_ORDER: SkillGroup[] = ["core", "familiar", "learning"];
 

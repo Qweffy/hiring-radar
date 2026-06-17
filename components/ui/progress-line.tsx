@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { cn } from "@/lib/cn";
 
 export interface ProgressLineProps extends React.HTMLAttributes<HTMLDivElement> {

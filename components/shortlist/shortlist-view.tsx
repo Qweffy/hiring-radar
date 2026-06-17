@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   useCallback,
   useMemo,
@@ -7,35 +8,35 @@ import {
   useState,
   useTransition,
 } from "react";
-import { useRouter } from "next/navigation";
-import type {
-  ShortlistItem,
-  ShortlistNote,
-  ShortlistStage,
-} from "@/lib/queries/shortlist";
-import { Toast } from "@/components/ui/toast";
-import { ShortlistStyles } from "@/components/shortlist/shortlist-styles";
-import { ShortlistHeader } from "@/components/shortlist/shortlist-header";
-import { FilterTabs } from "@/components/shortlist/filter-tabs";
-import { RunBanner } from "@/components/shortlist/run-banner";
-import { EntryCard } from "@/components/shortlist/entry-card";
-import { RemoveConfirm } from "@/components/shortlist/remove-confirm";
-import {
-  FilteredEmpty,
-  NeverUsedEmpty,
-} from "@/components/shortlist/empty-states";
-import {
-  activeTabLabel,
-  deriveTabs,
-  stageMeta,
-  type TabId,
-} from "@/components/shortlist/view-model";
+
 import {
   addNote,
   moveStage,
   removeEntry,
   runAgentScan,
 } from "@/app/(app)/shortlist/actions";
+import {
+  FilteredEmpty,
+  NeverUsedEmpty,
+} from "@/components/shortlist/empty-states";
+import { EntryCard } from "@/components/shortlist/entry-card";
+import { FilterTabs } from "@/components/shortlist/filter-tabs";
+import { RemoveConfirm } from "@/components/shortlist/remove-confirm";
+import { RunBanner } from "@/components/shortlist/run-banner";
+import { ShortlistHeader } from "@/components/shortlist/shortlist-header";
+import { ShortlistStyles } from "@/components/shortlist/shortlist-styles";
+import {
+  activeTabLabel,
+  deriveTabs,
+  stageMeta,
+  type TabId,
+} from "@/components/shortlist/view-model";
+import { Toast } from "@/components/ui/toast";
+import {
+  type ShortlistItem,
+  type ShortlistNote,
+  type ShortlistStage,
+} from "@/lib/queries/shortlist";
 
 /** The completed run summary that drives the review banner, if any. */
 export interface ReviewBannerData {

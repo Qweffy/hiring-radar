@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { spotlight } from "@/lib/agent/spotlight";
 
 describe("spotlight", () => {

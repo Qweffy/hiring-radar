@@ -1,7 +1,8 @@
 import { connection } from "next/server";
-import { getDashboardData } from "@/lib/queries/dashboard";
-import { DashboardView } from "@/components/dashboard/dashboard-view";
+
 import { requestNowMs } from "@/components/browse/request-now";
+import { DashboardView } from "@/components/dashboard/dashboard-view";
+import { getDashboardData } from "@/lib/queries/dashboard";
 
 /**
  * Radar Dashboard — the root route ("/"). Server component: reads the latest

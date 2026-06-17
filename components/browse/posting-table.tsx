@@ -1,10 +1,7 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
-import type { BrowseFilters } from "@/lib/browse-params";
-import type { PostingRow } from "@/lib/queries/postings";
-import { formatSalary, relativeTime } from "@/lib/format";
-import { scoreToMatchLevel } from "@/lib/radar";
+import  { type CSSProperties, type ReactNode } from "react";
+
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { HRIllustration } from "@/components/ui/hr-illustration";
@@ -12,6 +9,11 @@ import { Icon } from "@/components/ui/icon";
 import { MatchBadge } from "@/components/ui/match-badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Tag } from "@/components/ui/tag";
+import  { type BrowseFilters } from "@/lib/browse-params";
+import { formatSalary, relativeTime } from "@/lib/format";
+import  { type PostingRow } from "@/lib/queries/postings";
+import { scoreToMatchLevel } from "@/lib/radar";
+
 
 export interface PostingTableProps {
   rows: PostingRow[];

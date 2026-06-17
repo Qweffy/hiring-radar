@@ -1,11 +1,12 @@
 "use client";
 
-import { Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { cn } from "@/lib/cn";
+import { Suspense } from "react";
+
 import { Icon } from "@/components/ui/icon";
 import { Kbd } from "@/components/ui/kbd";
 import { Menu } from "@/components/ui/menu";
+import { cn } from "@/lib/cn";
 import { formatMonth } from "@/lib/format";
 
 export type SweepTone = "healthy" | "syncing" | "failed";

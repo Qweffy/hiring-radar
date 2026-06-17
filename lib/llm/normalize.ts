@@ -1,4 +1,4 @@
-import type { LlmPosting } from "@/lib/validation";
+import  { type LlmPosting } from "@/lib/validation";
 
 const collapse = (s: string | null): string | null => {
   if (s === null) return null;

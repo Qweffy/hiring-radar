@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
+
+import { AgentEmpty } from "@/components/agent-run/agent-empty";
 import { getLiveRun, listRuns } from "@/lib/queries/agent-runs";
 import { getLatestProfile } from "@/lib/queries/profile";
-import { AgentEmpty } from "@/components/agent-run/agent-empty";
 
 // The agent index resolves to a concrete run (live, else latest) on each visit,
 // or the idle empty state — always dynamic, never cached.

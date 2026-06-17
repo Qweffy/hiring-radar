@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
 
-type ProfileErrorProps = {
+interface ProfileErrorProps {
   error: Error & { digest?: string };
   unstable_retry: () => void;
-};
+}
 
 /**
  * Load error (state 08) — a FETCH failure, explicitly NOT the onboarding empty

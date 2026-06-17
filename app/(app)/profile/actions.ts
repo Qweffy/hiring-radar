@@ -2,12 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { ActionError, runAction, type ActionResult } from "@/lib/result";
-import { parseOrThrow } from "@/lib/validation";
+
+import { startScan, ScanError } from "@/lib/agent/run";
 import { parseCvSkills } from "@/lib/llm/parse-cv";
 import { insertProfileVersion } from "@/lib/queries/profile-writes";
-import { startScan, ScanError } from "@/lib/agent/run";
-import type { CvSkills } from "@/lib/validation";
+import { ActionError, runAction, type ActionResult } from "@/lib/result";
+import { parseOrThrow } from "@/lib/validation";
+import  { type CvSkills } from "@/lib/validation";
 
 /**
  * Server Actions for the calibration screen. parseCv runs the CV through Groq
@@ -61,13 +62,13 @@ const saveProfileSchema = z.object({
   agentInstructions: z.string().trim().max(2000).nullable(),
 });
 
-export type SaveProfileResult = {
+export interface SaveProfileResult {
   version: number;
   /** Set only when the post-save agent run actually started. */
   runId: number | null;
   /** Human-readable note when the re-run could not start (save still succeeded). */
   rerunNote: string | null;
-};
+}
 
 /**
  * Persist the calibration as a new profile version, then kick off a fresh agent

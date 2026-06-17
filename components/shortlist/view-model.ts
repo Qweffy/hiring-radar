@@ -1,8 +1,10 @@
-import type { CSSProperties } from "react";
-import type {
-  ShortlistItem,
-  ShortlistStage,
+import  { type CSSProperties } from "react";
+
+import  {
+  type ShortlistItem,
+  type ShortlistStage,
 } from "@/lib/queries/shortlist";
+
 
 export type TabId = ShortlistStage | "all";
 
@@ -12,7 +14,7 @@ export interface TabDef {
   count: number;
 }
 
-export const TAB_DEFS: ReadonlyArray<{ id: TabId; label: string }> = [
+export const TAB_DEFS: readonly { id: TabId; label: string }[] = [
   { id: "all", label: "All" },
   { id: "new", label: "New" },
   { id: "applied", label: "Applied" },
@@ -21,10 +23,10 @@ export const TAB_DEFS: ReadonlyArray<{ id: TabId; label: string }> = [
   { id: "archived", label: "Archived" },
 ] as const;
 
-export const STAGE_OPTIONS: ReadonlyArray<{
+export const STAGE_OPTIONS: readonly {
   value: ShortlistStage;
   label: string;
-}> = [
+}[] = [
   { value: "new", label: "New" },
   { value: "applied", label: "Applied" },
   { value: "interviewing", label: "Interviewing" },

@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+
+import { ShellCommandPalette } from "@/components/shell/shell-command-palette";
 import { Sidebar } from "@/components/shell/sidebar";
 import { Topbar, type SweepTone } from "@/components/shell/topbar";
-import { ShellCommandPalette } from "@/components/shell/shell-command-palette";
 
 export type { SweepTone };
 

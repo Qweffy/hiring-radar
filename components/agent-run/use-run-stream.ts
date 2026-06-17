@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type {
-  AgentRunStatus,
-  AgentStepKind,
-  AgentStepRow,
+
+import  { type AgentStepPayload, type AgentStepUsage } from "@/db/schema";
+import  {
+  type AgentRunStatus,
+  type AgentStepKind,
+  type AgentStepRow,
 } from "@/lib/queries/agent-runs";
-import type { AgentStepPayload, AgentStepUsage } from "@/db/schema";
 
 /**
  * Subscribe to a run's live SSE trace (/api/agent/[runId]/stream). The route
@@ -23,13 +24,13 @@ import type { AgentStepPayload, AgentStepUsage } from "@/db/schema";
 
 export type FeedState = "connecting" | "live" | "lost";
 
-type StepEventData = {
+interface StepEventData {
   idx: number;
   kind: AgentStepKind;
   payload: AgentStepPayload;
   usage: AgentStepUsage | null;
   createdAt: string;
-};
+}
 
 export interface RunStream {
   steps: AgentStepRow[];
@@ -115,18 +116,20 @@ export function useRunStream(
         setFeed("live");
       };
 
-      es.addEventListener("step", (event) => {
+      // EventSource dispatches MessageEvent for named events; typing the param
+      // gives event.data the correct `string` type (vs. the generic Event's `any`).
+      es.addEventListener("step", (event: MessageEvent<string>) => {
         try {
-          appendStep(JSON.parse((event as MessageEvent).data) as StepEventData);
+          appendStep(JSON.parse(event.data) as StepEventData);
           setFeed("live");
         } catch {
           // A malformed frame is non-fatal — skip it, keep the stream open.
         }
       });
 
-      es.addEventListener("head", (event) => {
+      es.addEventListener("head", (event: MessageEvent<string>) => {
         try {
-          const { status: s } = JSON.parse((event as MessageEvent).data) as {
+          const { status: s } = JSON.parse(event.data) as {
             status: string;
           };
           if (s !== "unknown") setStatus(s as AgentRunStatus);
@@ -135,9 +138,9 @@ export function useRunStream(
         }
       });
 
-      es.addEventListener("done", (event) => {
+      es.addEventListener("done", (event: MessageEvent<string>) => {
         try {
-          const { status: s } = JSON.parse((event as MessageEvent).data) as {
+          const { status: s } = JSON.parse(event.data) as {
             status: string;
           };
           if (s !== "unknown") setStatus(s as AgentRunStatus);

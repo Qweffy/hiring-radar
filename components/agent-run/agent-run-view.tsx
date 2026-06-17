@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import type {
-  AgentRunStatus,
-  AgentStepRow,
-  RunPick,
-} from "@/lib/queries/agent-runs";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+
 import { cancelRun, pauseRun, resumeRun } from "@/app/(app)/agent/actions";
 import { AgentRunKeyframes } from "@/components/agent-run/agent-run-keyframes";
 import { AutoscrollToggle } from "@/components/agent-run/autoscroll-toggle";
@@ -21,6 +17,7 @@ import {
   PicksCard,
   RunningControls,
 } from "@/components/agent-run/picks-card";
+import { formatElapsed, statusBadge, usd } from "@/components/agent-run/run-format";
 import { StatusCard } from "@/components/agent-run/status-card";
 import {
   BudgetExhaustedCard,
@@ -30,10 +27,14 @@ import {
   FeedLostBanner,
   PausedNotice,
 } from "@/components/agent-run/terminal-cards";
-import { TraceStep } from "@/components/agent-run/trace-step";
 import { mapTrace } from "@/components/agent-run/trace-mapper";
-import { formatElapsed, statusBadge, usd } from "@/components/agent-run/run-format";
+import { TraceStep } from "@/components/agent-run/trace-step";
 import { useRunStream } from "@/components/agent-run/use-run-stream";
+import  {
+  type AgentRunStatus,
+  type AgentStepRow,
+  type RunPick,
+} from "@/lib/queries/agent-runs";
 
 /**
  * The live Agent Run screen — left trace timeline + right status panel, wired

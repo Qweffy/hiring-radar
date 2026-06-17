@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
+
 import { mapTrace } from "@/components/agent-run/trace-mapper";
-import type { AgentStepRow } from "@/lib/queries/agent-runs";
+import  { type AgentStepRow } from "@/lib/queries/agent-runs";
 
 /**
  * The trace mapper folds the persisted append-only step log (tool_call +

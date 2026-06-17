@@ -1,8 +1,10 @@
 import "./env";
 import { performance } from "node:perf_hooks";
+
 import { sql } from "drizzle-orm";
+
 import { db } from "@/db";
-import type { BrowseFilters, SearchMode } from "@/lib/browse-params";
+import  { type BrowseFilters, type SearchMode } from "@/lib/browse-params";
 import { searchPostings } from "@/lib/search/engine";
 
 /* ------------------------------------------------------------------ */

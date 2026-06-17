@@ -1,12 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
+import { resumeScan, ScanError, startScan } from "@/lib/agent/run";
 import {
   finalizeRun,
   getRunStatus,
   setRunStatus,
 } from "@/lib/queries/agent-writes";
-import { resumeScan, ScanError, startScan } from "@/lib/agent/run";
 import { ActionError, runAction, type ActionResult } from "@/lib/result";
 
 /**

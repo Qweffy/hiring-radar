@@ -1,5 +1,6 @@
 import "server-only";
 import { and, desc, eq, ne, not, sql } from "drizzle-orm";
+
 import { db } from "@/db";
 import {
   agentRuns,
@@ -8,6 +9,11 @@ import {
   shortlistEntries,
   sweeps,
 } from "@/db/schema";
+import  { type AgentRunStatus } from "@/lib/queries/agent-runs";
+import {
+  getAvailableMonths,
+  getLatestIngestSweepId,
+} from "@/lib/queries/sweeps";
 import {
   classifyCategory,
   recencyToScore,
@@ -15,11 +21,6 @@ import {
   type Category,
   type Tier,
 } from "@/lib/radar";
-import {
-  getAvailableMonths,
-  getLatestIngestSweepId,
-} from "@/lib/queries/sweeps";
-import type { AgentRunStatus } from "@/lib/queries/agent-runs";
 
 /** Browse/dashboard threshold for the "strong match" scorecard + filter. */
 export const STRONG_MATCH_FLOOR = 80;
@@ -27,7 +28,7 @@ export const STRONG_MATCH_FLOOR = 80;
 /** Hard cap on blips drawn on the scope, for legibility. */
 export const BLIP_CAP = 120;
 
-export type DashboardBlip = {
+export interface DashboardBlip {
   hnId: number;
   company: string;
   role: string;
@@ -48,11 +49,11 @@ export type DashboardBlip = {
   shortlisted: boolean;
   region: string | null;
   isNew: boolean;
-};
+}
 
 export type SignalKind = "completed" | "failed" | "partial" | "running";
 
-export type SignalLine = {
+export interface SignalLine {
   /** Stable key for React lists. */
   id: number;
   /** "06:00" UTC HH:MM of the event. */
@@ -60,9 +61,9 @@ export type SignalLine = {
   text: string;
   badge: string | null;
   kind: SignalKind;
-};
+}
 
-export type DashboardScorecards = {
+export interface DashboardScorecards {
   newCount: number;
   newDelta: number | null;
   remoteSharePct: number;
@@ -71,28 +72,28 @@ export type DashboardScorecards = {
   strongMatchCount: number;
   /** Postings the agent has assessed this month (the "of N" denominator). */
   assessedCount: number;
-};
+}
 
-export type SweepCaption = {
+export interface SweepCaption {
   /** "YYYY-MM" of the data in scope. */
   month: string | null;
   totalPostings: number;
   newCount: number;
-};
+}
 
 /** The single top pick of the latest run — surfaced in the digest card. */
-export type AgentTopMatch = {
+export interface AgentTopMatch {
   hnId: number;
   company: string;
   role: string;
   score: number;
-};
+}
 
 /**
  * Latest agent run summary for the digest card. null when the agent has never
  * run — the card then shows the "hasn't scanned yet" empty state.
  */
-export type AgentDigestData = {
+export interface AgentDigestData {
   runId: number;
   status: AgentRunStatus;
   picksCount: number;
@@ -102,9 +103,9 @@ export type AgentDigestData = {
   startedAt: Date;
   finishedAt: Date | null;
   topMatch: AgentTopMatch | null;
-};
+}
 
-export type DashboardData = {
+export interface DashboardData {
   month: string | null;
   scorecards: DashboardScorecards;
   blips: DashboardBlip[];
@@ -116,7 +117,7 @@ export type DashboardData = {
   agentDigest: AgentDigestData | null;
   /** Whether any non-skipped, non-deleted posting exists in the month. */
   hasPostings: boolean;
-};
+}
 
 const CURRENCY_SYMBOL: Record<string, string> = { USD: "$", EUR: "€", GBP: "£" };
 
@@ -135,8 +136,11 @@ function salaryRange(
   if (min !== null && max !== null) {
     return min === max ? `${sym}${kNotation(min)}` : `${sym}${kNotation(min)}–${sym}${kNotation(max)}`;
   }
-  const single = (min ?? max) as number;
-  return min !== null ? `${sym}${kNotation(single)}+` : `up to ${sym}${kNotation(single)}`;
+  // Exactly one bound is set here (both-null and both-set returned above).
+  // Narrow each side to a non-null number explicitly — no non-null assertion.
+  if (min !== null) return `${sym}${kNotation(min)}+`;
+  if (max !== null) return `up to ${sym}${kNotation(max)}`;
+  return null;
 }
 
 function hhmmUtc(at: Date): string {
@@ -327,9 +331,7 @@ export async function getDashboardData(): Promise<DashboardData> {
       tier: salaryToTier(salaryValue),
       // Real agent score when present; recency fallback otherwise.
       match:
-        score !== null
-          ? score
-          : recencyToScore(r.hnCreatedAt.getTime(), oldestMs, newestMs),
+        score ?? recencyToScore(r.hnCreatedAt.getTime(), oldestMs, newestMs),
       isAssessed,
       shortlisted: r.shortlisted ?? false,
       region,

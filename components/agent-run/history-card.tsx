@@ -1,18 +1,20 @@
-import type { CSSProperties } from "react";
 import Link from "next/link";
+import  { type CSSProperties } from "react";
+
 import { StatusBadge, type StatusValue } from "@/components/ui/status-badge";
+
 
 /**
  * Card 3 of the status panel — the run history list. Each row is a status
  * badge, a mono summary line, and a relative timestamp; clicking opens that
  * run. The summary line is precomputed server-side so this stays presentational.
  */
-export type HistoryRow = {
+export interface HistoryRow {
   runId: number;
   badge: StatusValue;
   summary: string;
   when: string;
-};
+}
 
 export interface HistoryCardProps {
   rows: HistoryRow[];

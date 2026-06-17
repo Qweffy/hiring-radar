@@ -1,5 +1,6 @@
 import "server-only";
 import { desc, eq, inArray, sql } from "drizzle-orm";
+
 import { db } from "@/db";
 import {
   assessments,
@@ -18,13 +19,13 @@ export type ShortlistStage =
 
 export type ShortlistSource = "agent" | "manual";
 
-export type ShortlistNote = {
+export interface ShortlistNote {
   id: number;
   body: string;
   createdAt: Date;
-};
+}
 
-export type ShortlistItem = {
+export interface ShortlistItem {
   entryId: number;
   postingId: number;
   hnId: number;
@@ -47,14 +48,14 @@ export type ShortlistItem = {
   matchReasons: AssessmentReason[] | null;
   // Notes, newest-first.
   notes: ShortlistNote[];
-};
+}
 
 /** Per-stage counts for the pipeline tabs, plus an "all" total. */
 export type ShortlistStageCounts = Record<ShortlistStage, number> & {
   all: number;
 };
 
-type EntryRow = {
+interface EntryRow {
   entryId: number;
   postingId: number;
   hnId: number;
@@ -73,7 +74,7 @@ type EntryRow = {
   stackTags: string[] | null;
   matchScore: number | null;
   matchReasons: AssessmentReason[] | null;
-};
+}
 
 /**
  * Shortlist entries (optionally filtered to one stage), each joined to its

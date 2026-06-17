@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, type HTMLAttributes, type ReactNode } from "react";
-import { cn } from "@/lib/cn";
+
 import { Icon } from "@/components/ui/icon";
+import { cn } from "@/lib/cn";
 
 /** Side panel sliding in from the right/left. Esc closes; focus trapped. */
 export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {

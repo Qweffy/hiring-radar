@@ -1,5 +1,6 @@
 "use client";
 
+import { Upload } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -10,18 +11,13 @@ import {
   type ChangeEvent,
   type CSSProperties,
 } from "react";
-import { Upload } from "lucide-react";
-import { RangeSlider } from "@/components/ui/range-slider";
-import { SegmentedControl } from "@/components/ui/segmented-control";
-import { Tag } from "@/components/ui/tag";
-import { Toast } from "@/components/ui/toast";
-import { ConfirmModal } from "@/components/ui/confirm-modal";
-import { Icon } from "@/components/ui/icon";
+
+import { parseCv, saveProfile } from "@/app/(app)/profile/actions";
+import { DirtyBar } from "@/components/profile/dirty-bar";
+import { PreviewDegraded } from "@/components/profile/preview-fallbacks";
+import { PreviewPanel } from "@/components/profile/preview-panel";
 import { SectionHeader } from "@/components/profile/section-header";
 import { SkillGroups } from "@/components/profile/skill-groups";
-import { DirtyBar } from "@/components/profile/dirty-bar";
-import { PreviewPanel } from "@/components/profile/preview-panel";
-import { PreviewDegraded } from "@/components/profile/preview-fallbacks";
 import {
   REMOTE_OPTIONS,
   SKILL_ORDER,
@@ -30,9 +26,13 @@ import {
   remoteToDb,
   type ProfileFormState,
   type RemoteValue,
-  type SkillGroup,
 } from "@/components/profile/types";
-import { parseCv, saveProfile } from "@/app/(app)/profile/actions";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
+import { Icon } from "@/components/ui/icon";
+import { RangeSlider } from "@/components/ui/range-slider";
+import { SegmentedControl } from "@/components/ui/segmented-control";
+import { Tag } from "@/components/ui/tag";
+import { Toast } from "@/components/ui/toast";
 
 const ACCEPTED = ".md,.txt,.pdf";
 const PARSE_PLACEHOLDER =
@@ -132,7 +132,7 @@ export function ProfileView({
                 ...s,
                 g: SKILL_ORDER[
                   (SKILL_ORDER.indexOf(s.g) + 1) % SKILL_ORDER.length
-                ] as SkillGroup,
+                ],
               }
             : s,
         ),
@@ -317,6 +317,10 @@ export function ProfileView({
     if (!dirty) return;
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
+      // reason: returnValue is deprecated but still required by some browsers
+      // (older Chrome/Safari) to actually show the unload prompt; preventDefault
+      // alone is not honoured everywhere. Kept as a deliberate legacy fallback.
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       e.returnValue = "";
     };
     window.addEventListener("beforeunload", onBeforeUnload);
@@ -339,7 +343,9 @@ export function ProfileView({
         ref={fileRef}
         type="file"
         accept={ACCEPTED}
-        onChange={onFile}
+        // onFile is async (reads file text); the change handler wants a void
+        // return, so fire-and-forget — onFile owns its own error handling.
+        onChange={(e) => void onFile(e)}
         className="sr-only"
         aria-hidden
         tabIndex={-1}

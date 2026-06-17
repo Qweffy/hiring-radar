@@ -1,7 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { TriangleAlert } from "lucide-react";
+import * as React from "react";
+
 import { Icon, type IconName } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 

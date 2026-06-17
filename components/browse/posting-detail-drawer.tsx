@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useTransition, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import type { PostingDetail, PostingRow } from "@/lib/queries/postings";
-import type { AssessmentRow } from "@/lib/queries/assessments";
-import { formatMonth, formatSalary, relativeTime } from "@/lib/format";
+import { useState, useTransition, type CSSProperties, type ReactNode } from "react";
+
 import { runAgentScan } from "@/app/(app)/agent/actions";
 import { Banner } from "@/components/ui/banner";
 import { Button } from "@/components/ui/button";
@@ -15,6 +13,9 @@ import { Kbd } from "@/components/ui/kbd";
 import { ScoreGauge } from "@/components/ui/score-gauge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Tag } from "@/components/ui/tag";
+import { formatMonth, formatSalary, relativeTime } from "@/lib/format";
+import  { type AssessmentRow } from "@/lib/queries/assessments";
+import  { type PostingDetail, type PostingRow } from "@/lib/queries/postings";
 
 export interface PostingDetailDrawerProps {
   detail: PostingDetail | null;
@@ -238,7 +239,7 @@ function DetailBody({ detail, now }: { detail: PostingDetail; now: number }) {
   const nowDate = new Date(now);
   const salaryRange = formatSalary(detail.salaryMin, detail.salaryMax, detail.salaryCurrency);
   const salaryValue =
-    salaryRange !== "—" ? salaryRange : detail.salaryRaw !== null ? detail.salaryRaw : null;
+    salaryRange !== "—" ? salaryRange : (detail.salaryRaw ?? null);
   const sourceUrl = `https://news.ycombinator.com/item?id=${detail.hnId}`;
 
   return (

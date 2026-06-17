@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   ArrowRight,
   Bell,
@@ -36,6 +35,7 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
+import * as React from "react";
 
 /**
  * Icon glyph names from the Hiring Radar set (mirrors the core Icon contract),

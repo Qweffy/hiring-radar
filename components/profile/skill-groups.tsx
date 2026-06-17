@@ -1,7 +1,7 @@
 "use client";
 
-import { Tag } from "@/components/ui/tag";
 import { GROUP_DEFS, TONE_OF, type Skill } from "@/components/profile/types";
+import { Tag } from "@/components/ui/tag";
 
 interface SkillGroupsProps {
   skills: Skill[];

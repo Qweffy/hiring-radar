@@ -1,10 +1,10 @@
-import { formatMonth } from "@/lib/format";
-import type { DashboardData } from "@/lib/queries/dashboard";
+import { AgentDigest } from "@/components/dashboard/agent-digest";
+import { DashboardEmpty } from "@/components/dashboard/dashboard-empty";
 import { RadarScope } from "@/components/dashboard/radar-scope";
 import { Scorecards } from "@/components/dashboard/scorecards";
-import { AgentDigest } from "@/components/dashboard/agent-digest";
 import { SignalFeed } from "@/components/dashboard/signal-feed";
-import { DashboardEmpty } from "@/components/dashboard/dashboard-empty";
+import { formatMonth } from "@/lib/format";
+import  { type DashboardData } from "@/lib/queries/dashboard";
 
 export interface DashboardViewProps {
   data: DashboardData;

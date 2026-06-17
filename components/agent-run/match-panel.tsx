@@ -1,6 +1,8 @@
-import type { CSSProperties } from "react";
-import { HRIllustration } from "@/components/ui/hr-illustration";
+import  { type CSSProperties } from "react";
+
 import { Radial } from "@/components/agent-run/radial";
+import { HRIllustration } from "@/components/ui/hr-illustration";
+
 
 /**
  * Agent assessment panel for the Posting Detail view (MatchPanel.dc.html). Four
@@ -11,11 +13,11 @@ import { Radial } from "@/components/agent-run/radial";
  * presentational and reusable.
  */
 
-export type MatchReason = {
+export interface MatchReason {
   /** '+' = fit (phosphor), '−' = friction (amber). The minus is U+2212. */
   sign: "+" | "−";
   text: string;
-};
+}
 
 export type MatchPanelVariant = "assessed" | "empty" | "running" | "failed";
 

@@ -1,9 +1,10 @@
 "use client";
 
 import { useTransition } from "react";
+
+import { requestSweep } from "@/app/(app)/pipeline/actions";
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
-import { requestSweep } from "@/app/(app)/pipeline/actions";
 
 export interface EmptySweepsProps {
   /** Thread to ingest on first run; null when discovery hasn't found one. */

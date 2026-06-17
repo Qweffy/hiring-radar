@@ -1,7 +1,7 @@
 import "server-only";
-import type { AgentRunSummary } from "@/lib/queries/agent-runs";
-import type { HistoryRow } from "@/components/agent-run/history-card";
+import  { type HistoryRow } from "@/components/agent-run/history-card";
 import { relativeTime, statusBadge, usd } from "@/components/agent-run/run-format";
+import  { type AgentRunSummary } from "@/lib/queries/agent-runs";
 
 /**
  * Build the run-history rows for the status panel from run summaries, excluding

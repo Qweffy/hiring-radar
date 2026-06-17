@@ -30,8 +30,11 @@ export function formatSalary(
   if (min !== null && max !== null) {
     return min === max ? `${sym}${k(min)}` : `${sym}${k(min)}–${sym}${k(max)}`;
   }
-  const single = (min ?? max) as number;
-  return min !== null ? `${sym}${k(single)}+` : `up to ${sym}${k(single)}`;
+  // Exactly one bound is set here (both-null and both-set returned above).
+  // Narrow each side to a non-null number explicitly — no non-null assertion.
+  if (min !== null) return `${sym}${k(min)}+`;
+  if (max !== null) return `up to ${sym}${k(max)}`;
+  return "—";
 }
 
 /** '2026-06' → 'JUN 2026' */

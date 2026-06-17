@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { HRIllustration } from "@/components/ui/hr-illustration";
 import { Icon } from "@/components/ui/icon";
 

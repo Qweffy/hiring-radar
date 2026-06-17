@@ -1,5 +1,6 @@
 import "./env";
 import { and, eq, ne, not, sql } from "drizzle-orm";
+
 import { db } from "@/db";
 import { postingEmbeddings, postings } from "@/db/schema";
 import { embedBatch, EMBEDDING_DIMS, EMBEDDING_MODEL } from "@/lib/embeddings";

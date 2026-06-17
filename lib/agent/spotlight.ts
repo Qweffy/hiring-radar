@@ -17,12 +17,12 @@ function freshMarker(): string {
   return randomBytes(8).toString("hex");
 }
 
-export type Spotlighted = {
+export interface Spotlighted {
   /** The text wrapped in <data-{marker}>…</data-{marker}> fences. */
   fenced: string;
   /** The marker used — so the system prompt can name the exact fence. */
   marker: string;
-};
+}
 
 /**
  * Fence untrusted content for a single LLM message. Strips any literal copy of

@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
 import {
   Check,
   CircleX,
@@ -11,7 +9,11 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import  { type HTMLAttributes, type ReactNode } from "react";
+
 import { cn } from "@/lib/cn";
+
 
 export type ToastTone = "success" | "error" | "warning" | "info";
 

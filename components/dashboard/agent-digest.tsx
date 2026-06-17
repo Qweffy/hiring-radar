@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { HRIllustration } from "@/components/ui/hr-illustration";
+import { useState, useTransition } from "react";
+
+import { runAgentScan } from "@/app/(app)/agent/actions";
 import { Button } from "@/components/ui/button";
+import { HRIllustration } from "@/components/ui/hr-illustration";
 import { Icon } from "@/components/ui/icon";
 import { ScoreGauge } from "@/components/ui/score-gauge";
 import { relativeTime } from "@/lib/format";
-import { runAgentScan } from "@/app/(app)/agent/actions";
-import type { AgentDigestData } from "@/lib/queries/dashboard";
+import  { type AgentDigestData } from "@/lib/queries/dashboard";
 
 export interface AgentDigestProps {
   /** Latest run digest, or null when the agent has never run. */

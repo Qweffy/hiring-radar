@@ -65,7 +65,7 @@ export function isToolName(name: string): name is ToolName {
 }
 
 /** A tool error returned AS DATA in the tool message — never thrown. */
-export type ToolError = {
+export interface ToolError {
   error: {
     type:
       | "InputValidationError"
@@ -76,7 +76,7 @@ export type ToolError = {
     message: string;
     retryable: boolean;
   };
-};
+}
 
 export function toolError(
   type: ToolError["error"]["type"],

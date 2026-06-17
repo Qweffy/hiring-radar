@@ -1,17 +1,19 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import type { CSSProperties } from "react";
-import { Button } from "@/components/ui/button";
-import { ConfirmModal } from "@/components/ui/confirm-modal";
-import { HRIllustration } from "@/components/ui/hr-illustration";
-import { Icon } from "@/components/ui/icon";
-import type { DeadLetterView } from "@/components/pipeline/types";
+import  { type CSSProperties } from "react";
+
 import {
   discardDeadLetter,
   retryAllDeadLetters,
   retryDeadLetter,
 } from "@/app/(app)/pipeline/actions";
+import  { type DeadLetterView } from "@/components/pipeline/types";
+import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
+import { HRIllustration } from "@/components/ui/hr-illustration";
+import { Icon } from "@/components/ui/icon";
+
 
 const cardStyle: CSSProperties = {
   background: "var(--bg-raised)",

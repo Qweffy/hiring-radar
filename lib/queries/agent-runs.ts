@@ -1,5 +1,6 @@
 import "server-only";
 import { and, asc, desc, eq, gt, inArray } from "drizzle-orm";
+
 import { db } from "@/db";
 import {
   agentRuns,
@@ -25,7 +26,7 @@ export type AgentStepKind =
   | "decision"
   | "error";
 
-export type AgentRunSummary = {
+export interface AgentRunSummary {
   id: number;
   profileVersion: number;
   status: AgentRunStatus;
@@ -37,9 +38,9 @@ export type AgentRunSummary = {
   error: string | null;
   startedAt: Date;
   finishedAt: Date | null;
-};
+}
 
-export type AgentStepRow = {
+export interface AgentStepRow {
   id: number;
   runId: number;
   idx: number;
@@ -47,7 +48,7 @@ export type AgentStepRow = {
   payload: AgentStepPayload;
   usage: AgentStepUsage | null;
   createdAt: Date;
-};
+}
 
 export type AgentRunDetail = AgentRunSummary & {
   steps: AgentStepRow[];
@@ -137,12 +138,12 @@ export async function getLatestRunId(): Promise<number | null> {
   return rows[0]?.id ?? null;
 }
 
-export type RunPick = {
+export interface RunPick {
   hnId: number;
   company: string | null;
   role: string | null;
   score: number | null;
-};
+}
 
 /**
  * The shortlist picks this run produced, newest-first — drives the "Picks so

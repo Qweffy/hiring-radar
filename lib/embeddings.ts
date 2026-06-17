@@ -2,12 +2,13 @@
 // Server-only-safe: imported by both the Next.js Node runtime and tsx CLIs.
 // No "server-only" guard here (the embed CLI imports it); never import from a
 // client component or an edge route — @huggingface/transformers needs Node.
+import path from "node:path";
+
 import {
   env,
   pipeline,
   type FeatureExtractionPipeline,
 } from "@huggingface/transformers";
-import path from "node:path";
 
 // MongoDB/mdbr-leaf-ir: 384-dim, MiniLM-speed, #1 BEIR <=100M params. Loads
 // cleanly in transformers v4 and outputs unit-norm vectors with mean pooling.

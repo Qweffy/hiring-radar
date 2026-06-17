@@ -1,11 +1,13 @@
 "use client";
 
-import { Fragment } from "react";
-import type { CSSProperties } from "react";
 import { ArrowRight, Check } from "lucide-react";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { Fragment } from "react";
+import  { type CSSProperties } from "react";
+
+import  { type SweepView } from "@/components/pipeline/types";
 import { Spinner } from "@/components/ui/spinner";
-import type { SweepView } from "@/components/pipeline/types";
+import { StatusBadge } from "@/components/ui/status-badge";
+
 
 export type StepPhase = "done" | "active" | "pending";
 

@@ -1,12 +1,13 @@
 "use client";
 
+import { List, Plus } from "lucide-react";
 import {
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
-import { List, Plus } from "lucide-react";
-import type { ShortlistNote } from "@/lib/queries/shortlist";
+
 import { formatNoteTs } from "@/components/shortlist/view-model";
+import  { type ShortlistNote } from "@/lib/queries/shortlist";
 
 export interface EntryNotesProps {
   notes: ShortlistNote[];

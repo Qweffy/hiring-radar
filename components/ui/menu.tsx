@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from "react";
-import { cn } from "@/lib/cn";
+
 import { Icon, type IconName } from "@/components/ui/icon";
+import { cn } from "@/lib/cn";
 
 export interface MenuItem {
   label?: ReactNode;

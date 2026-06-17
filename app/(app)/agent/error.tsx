@@ -1,13 +1,13 @@
 "use client";
 
-import { Icon } from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
+import { Icon } from "@/components/ui/icon";
 
-type AgentErrorProps = {
+interface AgentErrorProps {
   error: Error & { digest?: string };
   unstable_retry: () => void;
-};
+}
 
 /** Route error boundary for the Agent Run segment — the run failed to load. */
 export default function AgentError({ error, unstable_retry }: AgentErrorProps) {

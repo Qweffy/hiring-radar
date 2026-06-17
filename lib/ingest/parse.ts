@@ -3,11 +3,12 @@
 // JSON-serialisable result so it maps cleanly onto a single Inngest step.
 // No "server-only" guard — kept import-safe for tsx and the Node server runtime.
 import { eq } from "drizzle-orm";
+
 import { db } from "@/db";
 import { postingEmbeddings, postings } from "@/db/schema";
+import { embed, EMBEDDING_MODEL } from "@/lib/embeddings";
 import { extractPosting, extractionModel } from "@/lib/llm/extract";
 import { normalizePosting } from "@/lib/llm/normalize";
-import { embed, EMBEDDING_MODEL } from "@/lib/embeddings";
 
 /** True when an error is a provider rate-limit (HTTP 429 / "rate limit"). */
 export function isRateLimited(error: unknown): boolean {
@@ -20,13 +21,13 @@ export type ParseOutcome =
   | { kind: "skipped" }
   | { kind: "gone" };
 
-type PostingRow = {
+interface PostingRow {
   id: number;
   hnId: number;
   rawText: string;
   isDeleted: boolean;
   parseStatus: "pending" | "parsed" | "failed" | "skipped";
-};
+}
 
 async function loadPosting(postingId: number): Promise<PostingRow | null> {
   const rows = await db

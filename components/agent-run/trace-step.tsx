@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
 import Link from "next/link";
-import type { TraceStep as TraceStepModel } from "@/components/agent-run/trace-types";
+import { useState, type CSSProperties } from "react";
+
+import  { type TraceStep as TraceStepModel } from "@/components/agent-run/trace-types";
 
 /**
  * One row in the agent trace timeline: a violet-threaded rail with a coloured
@@ -12,7 +13,7 @@ import type { TraceStep as TraceStepModel } from "@/components/agent-run/trace-t
  * can expand the raw JSON args; decision cards link to the posting.
  */
 
-type Tint = { bg: string; border: string; accent: string };
+interface Tint { bg: string; border: string; accent: string }
 
 const TINTS: Record<string, Tint> = {
   tool: { bg: "var(--bg-raised)", border: "var(--border)", accent: "transparent" },
@@ -53,9 +54,9 @@ function dotColor(step: TraceStepModel): string {
 
 function tintFor(step: TraceStepModel): Tint {
   if (step.type === "decision") {
-    return step.decision === "no" ? TINTS.decisionNo! : TINTS.decisionYes!;
+    return step.decision === "no" ? TINTS.decisionNo : TINTS.decisionYes;
   }
-  return TINTS[step.type] ?? TINTS.tool!;
+  return TINTS[step.type] ?? TINTS.tool;
 }
 
 const railStyle: CSSProperties = {

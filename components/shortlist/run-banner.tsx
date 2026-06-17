@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+
 import { HRIllustration } from "@/components/ui/hr-illustration";
 
 interface ReviewBannerProps {

@@ -1,16 +1,11 @@
 "use client";
 
-import type { ChangeEvent } from "react";
 import { Bot } from "lucide-react";
-import type {
-  ShortlistItem,
-  ShortlistNote,
-  ShortlistStage,
-} from "@/lib/queries/shortlist";
-import { Tag } from "@/components/ui/tag";
-import { MatchGauge } from "@/components/shortlist/match-gauge";
+import  { type ChangeEvent } from "react";
+
 import { EntryKebab } from "@/components/shortlist/entry-kebab";
 import { EntryNotes } from "@/components/shortlist/entry-notes";
+import { MatchGauge } from "@/components/shortlist/match-gauge";
 import {
   badgeLabel,
   badgeStyle,
@@ -21,6 +16,13 @@ import {
   STAGE_OPTIONS,
   whyLine,
 } from "@/components/shortlist/view-model";
+import { Tag } from "@/components/ui/tag";
+import  {
+  type ShortlistItem,
+  type ShortlistNote,
+  type ShortlistStage,
+} from "@/lib/queries/shortlist";
+
 
 export interface EntryCardProps {
   item: ShortlistItem;

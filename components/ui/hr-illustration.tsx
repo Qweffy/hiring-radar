@@ -1,5 +1,5 @@
 import { useId } from "react";
-import type { SVGProps } from "react";
+import  { type SVGProps } from "react";
 
 /* ============================================================================
    Canonical illustration pack — the ONLY illustrations allowed in Hiring Radar.

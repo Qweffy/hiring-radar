@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { HRIllustration } from "@/components/ui/hr-illustration";
+import { useState, useTransition } from "react";
+
 import { runAgentScan } from "@/app/(app)/agent/actions";
 import { AgentRunKeyframes } from "@/components/agent-run/agent-run-keyframes";
+import { Button } from "@/components/ui/button";
+import { HRIllustration } from "@/components/ui/hr-illustration";
 
 /**
  * The "agent is idle" empty state (Agent Run.dc.html state 09). When a profile

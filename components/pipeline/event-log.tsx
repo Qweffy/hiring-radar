@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { CSSProperties } from "react";
+import  { type CSSProperties } from "react";
 
 export type LogLevel = "INFO" | "WARN" | "ERROR";
 

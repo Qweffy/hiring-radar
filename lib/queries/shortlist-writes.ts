@@ -1,8 +1,9 @@
 import "server-only";
 import { eq } from "drizzle-orm";
+
 import { db } from "@/db";
 import { shortlistEntries, shortlistNotes } from "@/db/schema";
-import type { ShortlistNote, ShortlistStage } from "@/lib/queries/shortlist";
+import  { type ShortlistNote, type ShortlistStage } from "@/lib/queries/shortlist";
 
 /**
  * Write-side helpers for the Shortlist pipeline view. neon-http has no

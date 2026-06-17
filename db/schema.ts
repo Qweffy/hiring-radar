@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   bigint,
   boolean,
@@ -13,7 +14,6 @@ import {
   uniqueIndex,
   vector,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
 
 // pgvector + tsvector aren't first-class drizzle types for generated columns,
 // so we model search_tsv as a customType. The GENERATED ALWAYS expression and
@@ -176,11 +176,11 @@ export const deadLetters = pgTable(
 // ─── M5: profile, shortlist, agent runs, assessments ───────────────────────
 
 /** Skills bucketed by depth. Stored in profiles.skills (jsonb). */
-export type ProfileSkills = {
+export interface ProfileSkills {
   core: string[];
   familiar: string[];
   learning: string[];
-};
+}
 
 /**
  * agentSteps.payload — a discriminated union mirroring agentStepKind. The DB
@@ -194,18 +194,18 @@ export type AgentStepPayload =
   | { message: string };
 
 /** Per-step model accounting, written when a step called the LLM. */
-export type AgentStepUsage = {
+export interface AgentStepUsage {
   promptTokens: number;
   completionTokens: number;
   totalTokens: number;
   costUsd?: number;
-};
+}
 
 /** One fit/friction signal in an assessment. '+' = fit, '-' = friction. */
-export type AssessmentReason = {
+export interface AssessmentReason {
   sign: "+" | "-";
   text: string;
-};
+}
 
 export const remotePref = pgEnum("remote_pref", [
   "remote_only",

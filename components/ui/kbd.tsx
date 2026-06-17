@@ -1,5 +1,6 @@
-import type * as React from "react";
 import { cn } from "@/lib/cn";
+
+import type * as React from "react";
 
 export interface KbdProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;

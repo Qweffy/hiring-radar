@@ -1,8 +1,10 @@
 "use client";
 
-import type { HTMLAttributes, ReactNode } from "react";
 import { Bot, CircleX, TriangleAlert, X, type LucideIcon } from "lucide-react";
+import  { type HTMLAttributes, type ReactNode } from "react";
+
 import { cn } from "@/lib/cn";
+
 
 export type BannerTone = "amber" | "violet" | "red";
 

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, type HTMLAttributes, type ReactNode } from "react";
-import { cn } from "@/lib/cn";
+
 import { Icon } from "@/components/ui/icon";
+import { cn } from "@/lib/cn";
 
 /**
  * Centered dialog on a blurred scrim. Esc closes, focus trapped, focus returns

@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import  { type CSSProperties } from "react";
 
 const SHIMMER: CSSProperties = {
   background:
@@ -8,7 +8,7 @@ const SHIMMER: CSSProperties = {
   animation: "hr-sl-shimmer 1.4s linear infinite",
 };
 
-const BAR_WIDTHS: ReadonlyArray<{ w: number; h: number }> = [
+const BAR_WIDTHS: readonly { w: number; h: number }[] = [
   { w: 90, h: 16 },
   { w: 220, h: 12 },
   { w: 120, h: 12 },

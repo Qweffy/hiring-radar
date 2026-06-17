@@ -1,5 +1,7 @@
-import type { CSSProperties } from "react";
+import  { type CSSProperties } from "react";
+
 import { Skeleton } from "@/components/ui/skeleton";
+
 
 /**
  * Loading / returning user (state 07). Skeletons in the SHAPE of the loaded

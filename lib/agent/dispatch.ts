@@ -1,6 +1,6 @@
 import "server-only";
-import { z } from "zod";
-import { executeTool, type ToolContext, type ToolExecResult } from "@/lib/agent/tools";
+import { type z } from "zod";
+
 import {
   compareToProfileArgs,
   getProfileArgs,
@@ -11,6 +11,7 @@ import {
   toolError,
   type ToolName,
 } from "@/lib/agent/tool-schemas";
+import { executeTool, type ToolContext, type ToolExecResult } from "@/lib/agent/tools";
 
 /**
  * The boundary between the model's raw tool call and execution. Owns: the
@@ -28,13 +29,13 @@ const SCHEMA_BY_NAME: Record<ToolName, z.ZodType> = {
   save_finding: saveFindingArgs,
 };
 
-export type DispatchOutcome = {
+export interface DispatchOutcome {
   /** What goes into the role:"tool" message content (already an object). */
   result: unknown;
   /** Parsed args when valid (for the trace), else null. */
   parsedArgs: Record<string, unknown> | null;
   newPick: boolean;
-};
+}
 
 /**
  * Validate and run one tool call. `rawName` and `rawArgs` come straight off the

@@ -1,9 +1,10 @@
 import "server-only";
 import { count, desc } from "drizzle-orm";
+
 import { db } from "@/db";
 import { profiles, type ProfileSkills } from "@/db/schema";
 
-export type ProfileRow = {
+export interface ProfileRow {
   id: number;
   version: number;
   rawCv: string | null;
@@ -17,7 +18,7 @@ export type ProfileRow = {
   dealbreakers: string[];
   agentInstructions: string | null;
   createdAt: Date;
-};
+}
 
 const PROFILE_COLUMNS = {
   id: profiles.id,

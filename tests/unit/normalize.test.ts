@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
+
 import { normalizePosting } from "@/lib/llm/normalize";
-import type { LlmPosting } from "@/lib/validation";
+import  { type LlmPosting } from "@/lib/validation";
 
 const base: LlmPosting = {
   isJobPosting: true,

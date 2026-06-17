@@ -1,4 +1,8 @@
 import "server-only";
+import  { type AgentRunViewProps } from "@/components/agent-run/agent-run-view";
+import { buildHistoryRows } from "@/components/agent-run/build-history";
+import { utcTime } from "@/components/agent-run/run-format";
+import { DEFAULT_BUDGET } from "@/lib/agent/cost";
 import {
   getRun,
   getRunPicks,
@@ -6,10 +10,6 @@ import {
   type AgentRunDetail,
   type AgentStepRow,
 } from "@/lib/queries/agent-runs";
-import { DEFAULT_BUDGET } from "@/lib/agent/cost";
-import { buildHistoryRows } from "@/components/agent-run/build-history";
-import { utcTime } from "@/components/agent-run/run-format";
-import type { AgentRunViewProps } from "@/components/agent-run/agent-run-view";
 
 /**
  * Assemble everything the live Agent Run screen needs for one run: the run row,
@@ -26,7 +26,7 @@ function countScanned(steps: AgentStepRow[]): number | null {
     const payload = step.payload as { observation?: unknown };
     const obs = payload.observation;
     if (typeof obs === "object" && obs !== null && "hnId" in obs) {
-      const hnId = (obs as { hnId: unknown }).hnId;
+      const hnId = (obs).hnId;
       if (typeof hnId === "number") read.add(hnId);
     }
   }
@@ -36,7 +36,7 @@ function countScanned(steps: AgentStepRow[]): number | null {
 /** Classify why a failed run stopped — a budget cap vs. an actual fault. */
 function endReason(detail: AgentRunDetail): "budget" | "error" | null {
   if (detail.status !== "failed") return null;
-  if (detail.error && detail.error.startsWith("budget_exhausted")) return "budget";
+  if (detail.error?.startsWith("budget_exhausted")) return "budget";
   return "error";
 }
 

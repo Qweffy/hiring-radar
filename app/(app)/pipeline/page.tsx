@@ -1,3 +1,11 @@
+import  { type LogLevel, type LogLine } from "@/components/pipeline/event-log";
+import {
+  PipelineView,
+  type FailedState,
+  type RunningState,
+} from "@/components/pipeline/pipeline-view";
+import  { type RunningStep } from "@/components/pipeline/running-sweep";
+import { toDeadLetterView, toSweepView } from "@/components/pipeline/types";
 import {
   eventTime,
   getDeadLetters,
@@ -7,14 +15,6 @@ import {
   type PipelineEvent,
   type SweepRow,
 } from "@/lib/queries/pipeline";
-import {
-  PipelineView,
-  type FailedState,
-  type RunningState,
-} from "@/components/pipeline/pipeline-view";
-import type { LogLevel, LogLine } from "@/components/pipeline/event-log";
-import type { RunningStep } from "@/components/pipeline/running-sweep";
-import { toDeadLetterView, toSweepView } from "@/components/pipeline/types";
 
 // Pipeline reads live counters + the embedding index on every request; never
 // statically cache it. (Browse/Radar do the same — admin chrome is dynamic.)

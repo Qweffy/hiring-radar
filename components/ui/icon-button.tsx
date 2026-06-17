@@ -1,7 +1,8 @@
-import type * as React from "react";
-import { cn } from "@/lib/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/cn";
+
+import type * as React from "react";
 
 type IconButtonVariant = "ghost" | "solid" | "danger";
 type IconButtonSize = "sm" | "md" | "lg";

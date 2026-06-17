@@ -1,9 +1,12 @@
 "use client";
 
-import type { HTMLAttributes, ReactNode } from "react";
 import { RotateCw } from "lucide-react";
+import  { type HTMLAttributes, type ReactNode } from "react";
+
 import { cn } from "@/lib/cn";
+
 import { HRIllustration } from "./hr-illustration";
+
 
 /**
  * Recovery-oriented error pattern. Always renders a recovery action and a

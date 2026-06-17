@@ -9,7 +9,7 @@ export type SearchMode = (typeof SEARCH_MODES)[number];
 /** Default mode for a non-empty query — semantic exists now, hybrid fuses both. */
 export const DEFAULT_SEARCH_MODE: SearchMode = "hybrid";
 
-export type BrowseFilters = {
+export interface BrowseFilters {
   q: string;
   mode: SearchMode;
   remote: RemoteValue[];
@@ -20,7 +20,7 @@ export type BrowseFilters = {
   month: string | null; // null → latest available month
   page: number;
   selected: number | null; // hnId of the posting open in the drawer
-};
+}
 
 const first = (v: string | string[] | undefined): string | undefined =>
   Array.isArray(v) ? v[0] : v;

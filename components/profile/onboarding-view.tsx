@@ -1,5 +1,6 @@
 "use client";
 
+import { Upload } from "lucide-react";
 import {
   useCallback,
   useRef,
@@ -8,15 +9,15 @@ import {
   type ChangeEvent,
   type CSSProperties,
 } from "react";
-import { Upload } from "lucide-react";
-import { Icon } from "@/components/ui/icon";
+
+import { parseCv } from "@/app/(app)/profile/actions";
 import { PreviewEmpty } from "@/components/profile/preview-fallbacks";
 import { ProfileView } from "@/components/profile/profile-view";
 import {
   type ProfileFormState,
   type Skill,
 } from "@/components/profile/types";
-import { parseCv } from "@/app/(app)/profile/actions";
+import { Icon } from "@/components/ui/icon";
 
 const ACCEPTED = ".md,.txt,.pdf";
 const PLACEHOLDER =
@@ -107,7 +108,9 @@ export function OnboardingView({ lastRunId }: OnboardingViewProps) {
         ref={fileRef}
         type="file"
         accept={ACCEPTED}
-        onChange={onFile}
+        // onFile is async (reads file text); fire-and-forget so the change
+        // handler keeps a void return — onFile owns its own error handling.
+        onChange={(e) => void onFile(e)}
         className="sr-only"
         aria-hidden
         tabIndex={-1}

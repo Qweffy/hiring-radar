@@ -1,9 +1,10 @@
 import "server-only";
 import { and, desc, gt, ne, sql } from "drizzle-orm";
+
 import { db } from "@/db";
 import { postings, sweeps } from "@/db/schema";
 
-export type SweepSummary = {
+export interface SweepSummary {
   id: number;
   month: string;
   status: "running" | "completed" | "failed" | "partial";
@@ -11,7 +12,7 @@ export type SweepSummary = {
   startedAt: Date;
   fetchedCount: number;
   newCount: number;
-};
+}
 
 export async function getLatestSweep(): Promise<SweepSummary | null> {
   const rows = await db

@@ -2,6 +2,7 @@
 // App-facing data access goes through lib/queries/*, which ARE server-only.
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
+
 import * as schema from "./schema";
 
 const connectionString = process.env.DATABASE_URL;

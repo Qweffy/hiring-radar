@@ -1,10 +1,11 @@
 import "./env";
 import { eq, and } from "drizzle-orm";
+
 import { db } from "@/db";
 import { postings, sweeps } from "@/db/schema";
+import { fetchAndDiff as fetchAndDiffShared } from "@/lib/ingest/fetch-diff";
 import { extractPosting, extractionModel } from "@/lib/llm/extract";
 import { normalizePosting } from "@/lib/llm/normalize";
-import { fetchAndDiff as fetchAndDiffShared } from "@/lib/ingest/fetch-diff";
 
 /* ------------------------------------------------------------------ */
 /* CLI args                                                             */

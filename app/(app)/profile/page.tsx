@@ -1,8 +1,8 @@
-import { getLatestProfile } from "@/lib/queries/profile";
-import { getLatestRunId } from "@/lib/queries/agent-runs";
-import { ProfileView } from "@/components/profile/profile-view";
 import { OnboardingView } from "@/components/profile/onboarding-view";
+import { ProfileView } from "@/components/profile/profile-view";
 import { toFormState } from "@/components/profile/types";
+import { getLatestRunId } from "@/lib/queries/agent-runs";
+import { getLatestProfile } from "@/lib/queries/profile";
 
 /**
  * Calibration route. Loads the latest profile version + the most recent agent

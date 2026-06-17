@@ -8,8 +8,9 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { cn } from "@/lib/cn";
+
 import { Icon, type IconName } from "@/components/ui/icon";
+import { cn } from "@/lib/cn";
 
 export interface FilterOption {
   value: string;

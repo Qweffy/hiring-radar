@@ -2,28 +2,29 @@
 // Inngest runSweep function. No "server-only" guard: the tsx CLI imports this.
 // Pure DB/HN I/O — no logging here so each caller owns its own progress output.
 import { and, eq, inArray } from "drizzle-orm";
+
 import { db } from "@/db";
 import { postings } from "@/db/schema";
-import { fetchThread, type LivePosting } from "@/lib/hn/algolia";
-import { hnHtmlToText } from "@/lib/hn/html-to-text";
 import { contentHash } from "@/lib/hash";
+import { fetchThread } from "@/lib/hn/algolia";
+import { hnHtmlToText } from "@/lib/hn/html-to-text";
 
-export type DiffCounters = { fetched: number; added: number; updated: number };
+export interface DiffCounters { fetched: number; added: number; updated: number }
 
 /** One posting that changed in this sweep and now needs (re)parse + (re)embed. */
-export type ChangedPosting = {
+export interface ChangedPosting {
   id: number;
   hnId: number;
   change: "new" | "updated";
-};
+}
 
-export type FetchDiffResult = {
+export interface FetchDiffResult {
   counters: DiffCounters;
   /** Postings to fan out for parse/embed — new inserts + content-changed edits. */
   changed: ChangedPosting[];
   /** hnIds that vanished from the tree and were marked deleted. */
   deleted: number[];
-};
+}
 
 /**
  * Fetch the live thread, diff it against stored postings, and apply the writes:
@@ -55,7 +56,7 @@ export async function fetchAndDiff(
   const toInsert: (typeof postings.$inferInsert)[] = [];
   const updated: number[] = [];
 
-  for (const c of live as LivePosting[]) {
+  for (const c of live) {
     seenIds.push(c.id);
     const hash = contentHash(c.text);
     const existing = storedByHnId.get(c.id);
@@ -127,7 +128,7 @@ export async function fetchAndDiff(
     if (existing) changed.push({ id: existing.id, hnId, change: "updated" });
   }
   if (toInsert.length > 0) {
-    const insertedIds = toInsert.map((p) => p.hnId as number);
+    const insertedIds = toInsert.map((p) => p.hnId);
     const rows = await db
       .select({ id: postings.id, hnId: postings.hnId })
       .from(postings)

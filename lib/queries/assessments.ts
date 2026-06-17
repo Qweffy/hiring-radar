@@ -1,15 +1,16 @@
 import "server-only";
 import { eq, inArray } from "drizzle-orm";
+
 import { db } from "@/db";
 import { assessments, type AssessmentReason } from "@/db/schema";
 
-export type AssessmentRow = {
+export interface AssessmentRow {
   postingId: number;
   runId: number | null;
   score: number;
   reasons: AssessmentReason[];
   createdAt: Date;
-};
+}
 
 const ASSESSMENT_COLUMNS = {
   postingId: assessments.postingId,

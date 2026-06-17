@@ -7,11 +7,12 @@
 // runSweep owns fetch/diff/sweep-row bookkeeping; processPosting owns the
 // per-posting parse → embed with independent retries. This mirrors the manual
 // CLI (scripts/ingest.ts) but per-posting and durable.
-import { NonRetriableError, RetryAfterError } from "inngest";
 import { eq } from "drizzle-orm";
+import { NonRetriableError, RetryAfterError } from "inngest";
+import { z } from "zod";
+
 import { db } from "@/db";
 import { deadLetters, sweeps } from "@/db/schema";
-import { inngest, postingUpserted, sweepRequested } from "@/lib/inngest/client";
 import { findLatestHiringThread } from "@/lib/hn/algolia";
 import { fetchAndDiff } from "@/lib/ingest/fetch-diff";
 import {
@@ -20,11 +21,19 @@ import {
   markParseFailed,
   parsePosting,
 } from "@/lib/ingest/parse";
+import { inngest, postingUpserted, sweepRequested } from "@/lib/inngest/client";
 
 // Groq free tier resets its window slowly; back off generously on a 429.
 const RATE_LIMIT_RETRY_MS = 60_000;
 // One sendEvent caps at 5,000 events; chunk fan-out well under that.
 const FANOUT_CHUNK = 200;
+
+// Shape of the internal "inngest/function.failed" payload we read. Not in our
+// typed registry, so we validate the fields we log to avoid an `any` leak.
+const functionFailedData = z.object({
+  function_id: z.string(),
+  run_id: z.string(),
+});
 
 /* ------------------------------------------------------------------ */
 /* discoverThreads — monthly cron that seeds the pipeline               */
@@ -179,14 +188,20 @@ export const processPosting = inngest.createFunction(
     triggers: [postingUpserted],
     onFailure: async ({ event, error }) => {
       // Fires once after the final retry. `event` here is the failure wrapper;
-      // the original payload is nested under event.data.event.
-      const original = event.data.event.data;
+      // the original payload is nested under event.data.event and is typed `any`
+      // by inngest's FailureEventArgs. Re-validate it with the source-of-truth
+      // schema so the dead-letter write is type-safe (Zod-at-boundary) instead of
+      // trusting an `any`. A malformed wrapper still records a dead letter.
+      const parsedOriginal = postingUpserted.schema.safeParse(
+        event.data.event.data,
+      );
+      const original = parsedOriginal.success ? parsedOriginal.data : null;
       await db.insert(deadLetters).values({
         stage: "parse",
-        postingId: original.postingId,
-        hnId: original.hnId,
+        postingId: original?.postingId,
+        hnId: original?.hnId,
         error: (error.message ?? "unknown error").slice(0, 1000),
-        payload: original,
+        payload: original ?? { raw: "unparseable failure payload" },
       });
     },
   },
@@ -242,9 +257,13 @@ export const failedFunction = inngest.createFunction(
     triggers: [{ event: "inngest/function.failed" }],
   },
   async ({ event, logger }) => {
+    // The internal "inngest/function.failed" payload is not in our typed event
+    // registry, so event.data is `any`. Validate the two fields we log so this
+    // boundary stays type-safe instead of leaking an `any` into the logger.
+    const failure = functionFailedData.safeParse(event.data);
     logger.error("inngest function failed", {
-      function: event.data.function_id,
-      runId: event.data.run_id,
+      function: failure.success ? failure.data.function_id : "unknown",
+      runId: failure.success ? failure.data.run_id : "unknown",
     });
     return { acknowledged: true };
   },

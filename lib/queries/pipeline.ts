@@ -1,5 +1,6 @@
 import "server-only";
 import { desc, sql } from "drizzle-orm";
+
 import { db } from "@/db";
 import { deadLetters, postingEmbeddings, sweeps } from "@/db/schema";
 import { EMBEDDING_MODEL } from "@/lib/embeddings";
@@ -8,7 +9,7 @@ import { EMBEDDING_MODEL } from "@/lib/embeddings";
 /* Sweeps — recent runs with counters/status/trigger/timing            */
 /* ------------------------------------------------------------------ */
 
-export type SweepRow = {
+export interface SweepRow {
   id: number;
   threadId: number;
   month: string;
@@ -23,7 +24,7 @@ export type SweepRow = {
   error: string | null;
   startedAt: Date;
   finishedAt: Date | null;
-};
+}
 
 const DEFAULT_SWEEP_LIMIT = 20;
 
@@ -55,20 +56,20 @@ export async function getSweeps(limit = DEFAULT_SWEEP_LIMIT): Promise<SweepRow[]
 /* Dead letters — rows + total count                                   */
 /* ------------------------------------------------------------------ */
 
-export type DeadLetterRow = {
+export interface DeadLetterRow {
   id: number;
   stage: "fetch" | "parse" | "embed";
   postingId: number | null;
   hnId: number | null;
   error: string;
   createdAt: Date;
-};
+}
 
-export type DeadLettersResult = {
+export interface DeadLettersResult {
   rows: DeadLetterRow[];
   /** Total count across all dead letters, independent of the row limit. */
   count: number;
-};
+}
 
 const DEFAULT_DEAD_LETTER_LIMIT = 50;
 
@@ -106,7 +107,7 @@ export type PipelineEventKind =
   | "running"
   | "dead-letter";
 
-export type PipelineEvent = {
+export interface PipelineEvent {
   /** Stable React key, namespaced by source so sweep/DL ids never collide. */
   id: string;
   /** UTC ISO timestamp the line is sorted by. */
@@ -114,7 +115,7 @@ export type PipelineEvent = {
   text: string;
   badge: string | null;
   kind: PipelineEventKind;
-};
+}
 
 function hhmmUtc(at: Date): string {
   const hh = String(at.getUTCHours()).padStart(2, "0");
@@ -201,7 +202,7 @@ export function eventTime(event: PipelineEvent): string {
 
 export type PipelineHealth = "healthy" | "degraded" | "syncing" | "idle";
 
-export type PipelineSummary = {
+export interface PipelineSummary {
   /** Overall system health, derived from the latest sweep's status. */
   health: PipelineHealth;
   /** "HH:MM UTC" of the latest sweep, or null when none has run. */
@@ -222,7 +223,7 @@ export type PipelineSummary = {
    * component never calls an impure clock during render.
    */
   runningElapsedSeconds: number | null;
-};
+}
 
 const MONTH_ABBR = [
   "JAN", "FEB", "MAR", "APR", "MAY", "JUN",

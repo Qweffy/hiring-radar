@@ -1,9 +1,11 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import  { type CSSProperties } from "react";
+
+import  { type ProfileFormState } from "@/components/profile/types";
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
-import type { ProfileFormState } from "@/components/profile/types";
+
 
 interface Criterion {
   label: string;

@@ -1,5 +1,5 @@
-import type Groq from "groq-sdk";
 import { z } from "zod";
+
 import {
   compareToProfileArgs,
   getProfileArgs,
@@ -7,6 +7,8 @@ import {
   saveFindingArgs,
   searchJobsArgs,
 } from "@/lib/agent/tool-schemas";
+
+import type Groq from "groq-sdk";
 
 /**
  * The tool definitions passed to Groq chat.completions. Parameter schemas are
@@ -26,7 +28,7 @@ type ToolParams = Record<string, unknown>;
 function params(schema: z.ZodType): ToolParams {
   // z.toJSONSchema emits a draft-2020-12 object schema; Groq's function-tool
   // `parameters` accepts a JSON Schema object. Cast through the shared record.
-  return z.toJSONSchema(schema) as ToolParams;
+  return z.toJSONSchema(schema);
 }
 
 export const TOOL_DEFINITIONS: Groq.Chat.ChatCompletionTool[] = [

@@ -1,12 +1,14 @@
 "use client";
 
-import type * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/cn";
+
+import { ADMIN_NAV, MAIN_NAV, activeNavKey, type ShellNavItem } from "@/components/shell/nav-items";
 import { HRIllustration } from "@/components/ui/hr-illustration";
 import { Icon } from "@/components/ui/icon";
-import { ADMIN_NAV, MAIN_NAV, activeNavKey, type ShellNavItem } from "@/components/shell/nav-items";
+import { cn } from "@/lib/cn";
+
+import type * as React from "react";
 
 const ROW_CLASS = cn(
   "flex items-center select-none",

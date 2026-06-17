@@ -1,13 +1,13 @@
 "use client";
 
-import { Icon } from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
+import { Icon } from "@/components/ui/icon";
 
-type PipelineErrorProps = {
+interface PipelineErrorProps {
   error: Error & { digest?: string };
   unstable_retry: () => void;
-};
+}
 
 /** LOST SIGNAL — route error boundary for the pipeline segment. */
 export default function PipelineError({ error, unstable_retry }: PipelineErrorProps) {

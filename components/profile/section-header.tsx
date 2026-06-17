@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import  { type CSSProperties } from "react";
 
 interface SectionHeaderProps {
   /** e.g. "01 · Signal source". */

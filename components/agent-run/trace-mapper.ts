@@ -1,5 +1,5 @@
-import type { AgentStepRow } from "@/lib/queries/agent-runs";
-import type { TraceStep } from "@/components/agent-run/trace-types";
+import  { type TraceStep } from "@/components/agent-run/trace-types";
+import  { type AgentStepRow } from "@/lib/queries/agent-runs";
 
 /**
  * Fold the persisted append-only step log into the richer TraceStep cards the
@@ -14,15 +14,15 @@ import type { TraceStep } from "@/components/agent-run/trace-types";
  * step is flagged `live` only while the run is still running.
  */
 
-type ObservationError = { error: { type: string; message: string } };
+interface ObservationError { error: { type: string; message: string } }
 
 function isErrorObservation(o: unknown): o is ObservationError {
   return (
     typeof o === "object" &&
     o !== null &&
     "error" in o &&
-    typeof (o as { error: unknown }).error === "object" &&
-    (o as { error: unknown }).error !== null
+    typeof (o).error === "object" &&
+    (o).error !== null
   );
 }
 
@@ -126,10 +126,10 @@ function compactArgs(args: Record<string, unknown>): string {
   return json.replace(/^\{/, "{ ").replace(/\}$/, " }").replace(/,/g, ", ");
 }
 
-type ToolCallPayload = { tool: string; args: Record<string, unknown> };
-type ReasoningPayload = { text: string };
-type DecisionPayload = { postingId: number; score: number; verdict: string };
-type ErrorPayload = { message: string };
+interface ToolCallPayload { tool: string; args: Record<string, unknown> }
+interface ReasoningPayload { text: string }
+interface DecisionPayload { postingId: number; score: number; verdict: string }
+interface ErrorPayload { message: string }
 
 /**
  * Map the run's step rows to TraceStep cards. `running` flags the final
@@ -156,19 +156,17 @@ export function mapTrace(
   const observations = rows.filter((r) => r.kind === "observation");
   let obsCursor = 0;
 
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i]!;
-
+  for (const row of rows) {
     if (row.kind === "tool_call") {
       const p = row.payload as ToolCallPayload;
       const tool = p.tool ?? "tool";
-      const args = (p.args ?? {}) as Record<string, unknown>;
+      const args = (p.args ?? {});
 
       // Find this call's observation: the first observation with idx > the call
       // idx that hasn't been consumed yet.
       while (
         obsCursor < observations.length &&
-        observations[obsCursor]!.idx <= row.idx
+        observations[obsCursor].idx <= row.idx
       ) {
         obsCursor++;
       }
@@ -235,8 +233,8 @@ export function mapTrace(
   // Flag the trailing reasoning card live while the run is still running.
   if (running) {
     for (let i = steps.length - 1; i >= 0; i--) {
-      if (steps[i]!.type === "reasoning") {
-        steps[i] = { ...steps[i]!, live: true };
+      if (steps[i].type === "reasoning") {
+        steps[i] = { ...steps[i], live: true };
         break;
       }
     }

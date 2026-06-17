@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { llmPostingSchema } from "@/lib/validation";
 
 const valid = {

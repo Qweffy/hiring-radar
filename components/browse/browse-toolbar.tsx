@@ -8,20 +8,21 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import type {
-  BrowseFilters,
-  RemoteValue,
-  SearchMode,
-} from "@/lib/browse-params";
-import type { BrowseResult } from "@/lib/queries/postings";
-import { formatMonth } from "@/lib/format";
+
+import { FilterChip, chipButtonStyle } from "@/components/browse/filter-chip";
 import { Icon } from "@/components/ui/icon";
 import { ProgressLine } from "@/components/ui/progress-line";
 import { RangeSlider } from "@/components/ui/range-slider";
 import { SearchInput } from "@/components/ui/search-input";
 import { Tag } from "@/components/ui/tag";
 import { Tooltip } from "@/components/ui/tooltip";
-import { FilterChip, chipButtonStyle } from "@/components/browse/filter-chip";
+import  {
+  type BrowseFilters,
+  type RemoteValue,
+  type SearchMode,
+} from "@/lib/browse-params";
+import { formatMonth } from "@/lib/format";
+import  { type BrowseResult } from "@/lib/queries/postings";
 
 export interface BrowseToolbarProps {
   filters: BrowseFilters;

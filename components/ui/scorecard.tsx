@@ -1,10 +1,11 @@
 "use client";
 
-import type { CSSProperties, HTMLAttributes } from "react";
 
-import { cn } from "@/lib/cn";
+import  { type CSSProperties, type HTMLAttributes } from "react";
+
 import { Sparkline } from "@/components/ui/sparkline";
 import { useCountUp } from "@/components/ui/use-count-up";
+import { cn } from "@/lib/cn";
 
 export type ScorecardTone = "phosphor" | "violet" | "cyan";
 

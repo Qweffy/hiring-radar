@@ -1,9 +1,11 @@
 "use client";
 
-import type { CSSProperties, HTMLAttributes } from "react";
+import  { type CSSProperties, type HTMLAttributes } from "react";
 
-import { cn } from "@/lib/cn";
 import { useCountUp } from "@/components/ui/use-count-up";
+import { cn } from "@/lib/cn";
+
+
 
 export interface ScoreGaugeProps extends HTMLAttributes<HTMLDivElement> {
   /** 0-100. */

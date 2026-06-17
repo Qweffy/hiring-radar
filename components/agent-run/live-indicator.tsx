@@ -1,6 +1,8 @@
-import type { CSSProperties } from "react";
-import type { AgentRunStatus } from "@/lib/queries/agent-runs";
-import type { FeedState } from "@/components/agent-run/use-run-stream";
+import  { type CSSProperties } from "react";
+
+import  { type FeedState } from "@/components/agent-run/use-run-stream";
+import  { type AgentRunStatus } from "@/lib/queries/agent-runs";
+
 
 /**
  * The trace-header status marker. While the run is RUNNING and the feed is

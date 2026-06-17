@@ -1,4 +1,4 @@
-import type { SignalKind, SignalLine } from "@/lib/queries/dashboard";
+import  { type SignalKind, type SignalLine } from "@/lib/queries/dashboard";
 
 export interface SignalFeedProps {
   rows: SignalLine[];

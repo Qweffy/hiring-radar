@@ -13,16 +13,17 @@ import {
   sql,
   type SQL,
 } from "drizzle-orm";
+
 import { db } from "@/db";
 import { assessments, postings } from "@/db/schema";
-import type { BrowseFilters } from "@/lib/browse-params";
-import { getAvailableMonths, getLatestCompletedSweepId } from "@/lib/queries/sweeps";
+import  { type BrowseFilters } from "@/lib/browse-params";
 import { getAssessment, type AssessmentRow } from "@/lib/queries/assessments";
 import { searchPostings } from "@/lib/queries/search";
+import { getAvailableMonths, getLatestCompletedSweepId } from "@/lib/queries/sweeps";
 
 export const PAGE_SIZE = 50;
 
-export type PostingRow = {
+export interface PostingRow {
   id: number;
   hnId: number;
   company: string | null;
@@ -45,9 +46,9 @@ export type PostingRow = {
    * with matched query terms wrapped in <mark>. Absent for exact mode.
    */
   relevanceSnippet?: string;
-};
+}
 
-export type BrowseResult = {
+export interface BrowseResult {
   rows: PostingRow[];
   total: number;
   totalInMonth: number;
@@ -56,7 +57,7 @@ export type BrowseResult = {
   month: string | null;
   availableMonths: string[];
   availableStacks: string[];
-};
+}
 
 function buildConditions(f: BrowseFilters, month: string | null): SQL[] {
   const conds: SQL[] = [
@@ -109,7 +110,7 @@ const ROW_COLUMNS = {
   matchScore: assessments.score,
 } as const;
 
-type RawRow = {
+interface RawRow {
   id: number;
   hnId: number;
   company: string | null;
@@ -125,7 +126,7 @@ type RawRow = {
   firstSweepId: number | null;
   rawText: string;
   matchScore: number | null;
-};
+}
 
 function toPostingRow(
   r: RawRow,
@@ -249,7 +250,7 @@ export async function getBrowsePostings(f: BrowseFilters): Promise<BrowseResult>
   };
 }
 
-export type PostingDetail = {
+export interface PostingDetail {
   id: number;
   hnId: number;
   author: string;
@@ -273,7 +274,7 @@ export type PostingDetail = {
   isNew: boolean;
   /** Latest agent assessment for this posting, or null when never scored. */
   assessment: AssessmentRow | null;
-};
+}
 
 export async function getPostingDetail(hnId: number): Promise<PostingDetail | null> {
   const [rows, latestSweepId] = await Promise.all([

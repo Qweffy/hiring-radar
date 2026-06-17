@@ -1,13 +1,13 @@
 "use client";
 
-import { Icon } from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
+import { Icon } from "@/components/ui/icon";
 
-type BrowseErrorProps = {
+interface BrowseErrorProps {
   error: Error & { digest?: string };
   unstable_retry: () => void;
-};
+}
 
 /** LOST SIGNAL — route error boundary for the browse segment. */
 export default function BrowseError({ error, unstable_retry }: BrowseErrorProps) {

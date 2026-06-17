@@ -1,7 +1,7 @@
-import type {
-  DeadLetterRow,
-  PipelineSummary,
-  SweepRow,
+import  {
+  type DeadLetterRow,
+  type PipelineSummary,
+  type SweepRow,
 } from "@/lib/queries/pipeline";
 
 /** Status enum the StatusBadge expects, derived from a sweep's DB status. */

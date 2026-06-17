@@ -1,13 +1,8 @@
 import "server-only";
 import { inArray } from "drizzle-orm";
+
 import { db } from "@/db";
 import { postings } from "@/db/schema";
-import type { BrowseFilters } from "@/lib/browse-params";
-import { getPostingDetail } from "@/lib/queries/postings";
-import { getLatestProfile, type ProfileRow } from "@/lib/queries/profile";
-import { searchPostings } from "@/lib/queries/search";
-import { getAvailableMonths } from "@/lib/queries/sweeps";
-import { saveFinding as persistFinding } from "@/lib/queries/agent-writes";
 import { spotlight } from "@/lib/agent/spotlight";
 import {
   compareToProfileArgs,
@@ -16,9 +11,19 @@ import {
   saveFindingArgs,
   searchJobsArgs,
   toolError,
+  type CompareToProfileArgs,
+  type ReadPostingArgs,
+  type SaveFindingArgs,
+  type SearchJobsArgs,
   type ToolError,
   type ToolName,
 } from "@/lib/agent/tool-schemas";
+import  { type BrowseFilters } from "@/lib/browse-params";
+import { saveFinding as persistFinding } from "@/lib/queries/agent-writes";
+import { getPostingDetail } from "@/lib/queries/postings";
+import { getLatestProfile, type ProfileRow } from "@/lib/queries/profile";
+import { searchPostings } from "@/lib/queries/search";
+import { getAvailableMonths } from "@/lib/queries/sweeps";
 
 /**
  * Tool executors. Each takes the already-Zod-validated args and returns plain
@@ -31,11 +36,11 @@ import {
  */
 
 /** Context the executors need — the month to scan and the run they belong to. */
-export type ToolContext = {
+export interface ToolContext {
   runId: number;
   /** The latest month with postings, e.g. "2026-06". Null if none ingested. */
   month: string | null;
-};
+}
 
 /** Build the tool context once at run start. */
 export async function buildToolContext(runId: number): Promise<ToolContext> {
@@ -43,7 +48,7 @@ export async function buildToolContext(runId: number): Promise<ToolContext> {
   return { runId, month: months[0] ?? null };
 }
 
-type ProfilePayload = {
+interface ProfilePayload {
   summary: string | null;
   skills: ProfileRow["skills"];
   targetRoles: string[];
@@ -53,7 +58,7 @@ type ProfilePayload = {
   companyStages: string[];
   dealbreakers: string[];
   agentInstructions: string | null;
-};
+}
 
 async function execGetProfile(): Promise<ProfilePayload | ToolError> {
   const p = await getLatestProfile();
@@ -77,7 +82,7 @@ async function execGetProfile(): Promise<ProfilePayload | ToolError> {
   };
 }
 
-type SearchHit = {
+interface SearchHit {
   hnId: number;
   company: string | null;
   role: string | null;
@@ -85,15 +90,15 @@ type SearchHit = {
   stack: string[];
   /** Spotlighted relevance snippet — untrusted posting text. */
   snippet: string;
-};
+}
 
-type SearchResultPayload = {
+interface SearchResultPayload {
   month: string | null;
   count: number;
   /** Tells the model the fenced snippets are data, not instructions. */
   note: string;
   results: SearchHit[];
-};
+}
 
 function salaryLabel(
   min: number | null,
@@ -111,7 +116,7 @@ function salaryLabel(
 }
 
 async function execSearchJobs(
-  args: import("@/lib/agent/tool-schemas").SearchJobsArgs,
+  args: SearchJobsArgs,
   ctx: ToolContext,
 ): Promise<SearchResultPayload | ToolError> {
   if (ctx.month === null) {
@@ -178,7 +183,7 @@ async function execSearchJobs(
   };
 }
 
-type PostingPayload = {
+interface PostingPayload {
   hnId: number;
   company: string | null;
   role: string | null;
@@ -194,10 +199,10 @@ type PostingPayload = {
   /** Spotlighted raw posting body — untrusted. */
   rawText: string;
   note: string;
-};
+}
 
 async function execReadPosting(
-  args: import("@/lib/agent/tool-schemas").ReadPostingArgs,
+  args: ReadPostingArgs,
 ): Promise<PostingPayload | ToolError> {
   const d = await getPostingDetail(args.hnId);
   if (!d) {
@@ -221,14 +226,14 @@ async function execReadPosting(
   };
 }
 
-type ComparePayload = {
+interface ComparePayload {
   posting: PostingPayload;
   profile: ProfilePayload;
   note: string;
-};
+}
 
 async function execCompareToProfile(
-  args: import("@/lib/agent/tool-schemas").CompareToProfileArgs,
+  args: CompareToProfileArgs,
 ): Promise<ComparePayload | ToolError> {
   const [posting, profile] = await Promise.all([
     execReadPosting({ hnId: args.hnId }),
@@ -243,16 +248,16 @@ async function execCompareToProfile(
   };
 }
 
-type SaveFindingPayload = {
+interface SaveFindingPayload {
   ok: true;
   hnId: number;
   decision: "shortlist" | "dismiss";
   shortlisted: boolean;
   newPick: boolean;
-};
+}
 
 async function execSaveFinding(
-  args: import("@/lib/agent/tool-schemas").SaveFindingArgs,
+  args: SaveFindingArgs,
   ctx: ToolContext,
 ): Promise<SaveFindingPayload | ToolError> {
   const detail = await getPostingDetail(args.hnId);
@@ -283,10 +288,10 @@ async function execSaveFinding(
  * Result of one executed tool call. `newPick` is surfaced so the loop can keep
  * the run's picksCount accurate without recounting the shortlist.
  */
-export type ToolExecResult = {
+export interface ToolExecResult {
   data: unknown;
   newPick: boolean;
-};
+}
 
 /**
  * Execute a validated tool call. args are already Zod-parsed by the dispatcher
@@ -318,7 +323,7 @@ export async function executeTool(
     case "save_finding": {
       const a = saveFindingArgs.parse(args);
       const data = await execSaveFinding(a, ctx);
-      const newPick = !("error" in data) && data.newPick === true;
+      const newPick = !("error" in data) && data.newPick;
       return { data, newPick };
     }
   }

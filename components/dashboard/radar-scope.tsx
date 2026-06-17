@@ -1,9 +1,11 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
-import type { CSSProperties } from "react";
-import { ScoreGauge } from "@/components/ui/score-gauge";
+import  { type CSSProperties } from "react";
+
 import { Icon } from "@/components/ui/icon";
+import { ScoreGauge } from "@/components/ui/score-gauge";
+import  { type DashboardBlip } from "@/lib/queries/dashboard";
 import {
   CATEGORIES,
   CATEGORY_ANGLE,
@@ -17,7 +19,7 @@ import {
   tierToDiameter,
   type Category,
 } from "@/lib/radar";
-import type { DashboardBlip } from "@/lib/queries/dashboard";
+
 
 /** Sweep beam keyframes — registered once, scoped via the precedence cache. */
 const SWEEP_CSS = `
@@ -31,11 +33,11 @@ const SWEEP_CSS = `
 const SWEEP_CONIC =
   "conic-gradient(from 0deg, rgba(61,255,162,0.20) 0deg, rgba(61,255,162,0.05) 22deg, transparent 46deg, transparent 360deg)";
 
-type RimLabel = { category: Category; x: number; y: number; text: string };
+interface RimLabel { category: Category; x: number; y: number; text: string }
 
-type DegreeTick = { x1: number; y1: number; x2: number; y2: number; major: boolean };
+interface DegreeTick { x1: number; y1: number; x2: number; y2: number; major: boolean }
 
-type Spoke = { x2: number; y2: number };
+interface Spoke { x2: number; y2: number }
 
 /** Positioned blip ready to render — derived once from the data layer. */
 type PlacedBlip = DashboardBlip & {

@@ -1,7 +1,8 @@
-import type { CSSProperties } from "react";
-import { StatusBadge, type StatusValue } from "@/components/ui/status-badge";
+import  { type CSSProperties } from "react";
+
 import { Radial } from "@/components/agent-run/radial";
 import { usd } from "@/components/agent-run/run-format";
+import { StatusBadge, type StatusValue } from "@/components/ui/status-badge";
 
 /**
  * Card 1 of the status panel — run identity, started/elapsed clocks, the

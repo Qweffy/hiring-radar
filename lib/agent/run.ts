@@ -1,10 +1,10 @@
 import "server-only";
-import { getLatestProfile } from "@/lib/queries/profile";
-import { getLiveRun } from "@/lib/queries/agent-runs";
-import { createRun } from "@/lib/queries/agent-writes";
 import { DEFAULT_BUDGET } from "@/lib/agent/cost";
 import { agentModel } from "@/lib/agent/groq-client";
 import { runLoop } from "@/lib/agent/loop";
+import { getLiveRun } from "@/lib/queries/agent-runs";
+import { createRun } from "@/lib/queries/agent-writes";
+import { getLatestProfile } from "@/lib/queries/profile";
 
 /**
  * Orchestration entry points used by the Server Actions. startScan creates the
@@ -56,8 +56,16 @@ export async function startScan(): Promise<{ runId: number }> {
   return { runId };
 }
 
-/** Resume a paused or crashed run. Refuses unless it's paused/running-stale. */
+/**
+ * Resume a paused or crashed run. Refuses unless it's paused/running-stale.
+ * Async by contract (mirrors startScan; callers await it) even though the loop
+ * is fired detached — hence no internal await.
+ */
+// eslint-disable-next-line @typescript-eslint/require-await -- reason: kept async to match startScan's signature; the loop runs fire-and-forget.
 export async function resumeScan(runId: number): Promise<{ runId: number }> {
-  void runLoop(runId).catch(() => {});
+  void runLoop(runId).catch(() => {
+    // Fire-and-forget: runLoop finalizes "failed" internally; the trace/stream
+    // surfaces the error. Nothing to recover here — the caller has the id.
+  });
   return { runId };
 }

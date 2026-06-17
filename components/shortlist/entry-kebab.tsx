@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
 import { ExternalLink, RotateCw, X } from "lucide-react";
+import { useEffect, useRef, type CSSProperties } from "react";
+
 import { IconButton } from "@/components/ui/icon-button";
 
 export interface EntryKebabProps {

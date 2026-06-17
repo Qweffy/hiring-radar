@@ -1,4 +1,4 @@
-import type { AgentStepKind, AgentStepRow } from "@/lib/queries/agent-runs";
+import  { type AgentStepKind, type AgentStepRow } from "@/lib/queries/agent-runs";
 
 /**
  * The view-model the TraceStep card renders, mapped from the persisted
@@ -10,7 +10,7 @@ import type { AgentStepKind, AgentStepRow } from "@/lib/queries/agent-runs";
  */
 export type TraceStepType = "tool" | "reasoning" | "decision" | "error";
 
-export type TraceStep = {
+export interface TraceStep {
   /** Stable key for React — the originating row idx. */
   key: number;
   type: TraceStepType;
@@ -34,6 +34,6 @@ export type TraceStep = {
   chipHnId?: number;
   /** reasoning: the live, still-streaming step → "Thinking…" + pulse. */
   live?: boolean;
-};
+}
 
 export type { AgentStepKind, AgentStepRow };

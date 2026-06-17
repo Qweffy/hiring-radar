@@ -1,13 +1,15 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import  { type CSSProperties } from "react";
+
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
 
-type ShortlistErrorProps = {
+
+interface ShortlistErrorProps {
   error: Error & { digest?: string };
   unstable_retry: () => void;
-};
+}
 
 const TAB: CSSProperties = {
   padding: "0 12px 10px",

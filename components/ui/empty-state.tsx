@@ -1,9 +1,11 @@
 "use client";
 
-import type { HTMLAttributes, ReactNode } from "react";
+import  { type HTMLAttributes, type ReactNode } from "react";
+
 import { cn } from "@/lib/cn";
-import { Icon, type IconName } from "./icon";
+
 import { HRIllustration, type IllustrationName } from "./hr-illustration";
+import { Icon, type IconName } from "./icon";
 
 export { HRIllustration } from "./hr-illustration";
 export type { HRIllustrationProps, IllustrationName } from "./hr-illustration";
@@ -11,6 +13,10 @@ export type { HRIllustrationProps, IllustrationName } from "./hr-illustration";
 /** Centered empty-state: pack illustration + headline + sub-line + optional action. */
 export interface EmptyStateProps extends HTMLAttributes<HTMLDivElement> {
   /** Pack illustration name, or a custom node. @default 'empty-radar' */
+  // reason: ReactNode subsumes string, so IllustrationName is technically
+  // redundant — but it's kept deliberately for autocomplete on the common
+  // string case (the runtime narrows `typeof === "string"` to a pack name).
+  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   illustration?: IllustrationName | ReactNode;
   title?: string;
   description?: ReactNode;

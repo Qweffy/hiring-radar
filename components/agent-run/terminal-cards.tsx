@@ -1,8 +1,9 @@
-import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
+import  { type CSSProperties, type ReactNode } from "react";
+
 import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/ui/status-badge";
 import { Spinner } from "@/components/ui/spinner";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 /**
  * The terminal timeline cards that close out a finished run's trace: the

@@ -1,5 +1,7 @@
-import type { CSSProperties } from "react";
-import type { PipelineHealth, PipelineSummary } from "@/lib/queries/pipeline";
+import  { type CSSProperties } from "react";
+
+import  { type PipelineHealth, type PipelineSummary } from "@/lib/queries/pipeline";
+
 
 const HEALTH_COLOR: Record<PipelineHealth, string> = {
   healthy: "var(--phosphor)",

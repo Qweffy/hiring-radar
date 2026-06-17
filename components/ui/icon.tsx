@@ -1,4 +1,3 @@
-import type * as React from "react";
 import {
   ArrowRight,
   Bell,
@@ -34,6 +33,8 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
+
+import type * as React from "react";
 
 export type IconName =
   | "search"

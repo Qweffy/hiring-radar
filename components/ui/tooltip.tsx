@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
+import  { type CSSProperties, type HTMLAttributes, type ReactNode } from "react";
+
 import { cn } from "@/lib/cn";
+
 
 export type TooltipPosition = "top" | "bottom" | "left" | "right";
 

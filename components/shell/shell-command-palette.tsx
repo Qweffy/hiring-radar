@@ -1,7 +1,8 @@
 "use client";
 
-import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
 import {
   CommandPalette,
   type CommandGroup,

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { hnHtmlToText } from "@/lib/hn/html-to-text";
 
 describe("hnHtmlToText", () => {

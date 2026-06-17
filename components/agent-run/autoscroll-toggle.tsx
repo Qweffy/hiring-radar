@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import  { type CSSProperties } from "react";
 
 /**
  * The "auto-scroll" switch in the trace header. A real switch

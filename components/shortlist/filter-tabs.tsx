@@ -1,7 +1,9 @@
 "use client";
 
-import type { CSSProperties } from "react";
-import type { TabDef, TabId } from "@/components/shortlist/view-model";
+import  { type CSSProperties } from "react";
+
+import  { type TabDef, type TabId } from "@/components/shortlist/view-model";
+
 
 export interface FilterTabsProps {
   tabs: TabDef[];

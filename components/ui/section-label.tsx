@@ -1,6 +1,7 @@
-import type * as React from "react";
-import { cn } from "@/lib/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
+import { cn } from "@/lib/cn";
+
+import type * as React from "react";
 
 type SectionLabelTone = "low" | "phosphor" | "violet" | "amber";
 

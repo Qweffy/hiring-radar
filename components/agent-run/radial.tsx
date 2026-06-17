@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import  { type CSSProperties, type ReactNode } from "react";
 
 /**
  * Generic progress radial used across the Agent Run status panel — the

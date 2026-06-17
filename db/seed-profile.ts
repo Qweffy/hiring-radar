@@ -3,6 +3,7 @@
 // Run with `npm run seed:profile` (tsx, like the ingest/embed CLIs).
 import "@/scripts/env"; // FIRST — loads .env.local before @/db reads DATABASE_URL.
 import { desc } from "drizzle-orm";
+
 import { db } from "@/db";
 import { profiles, type ProfileSkills } from "@/db/schema";
 
@@ -56,7 +57,7 @@ async function main(): Promise<void> {
   );
 }
 
-main().catch((e) => {
-  process.stderr.write(`${e instanceof Error ? e.stack ?? e.message : String(e)}\n`);
+main().catch((e: unknown) => {
+  process.stderr.write(`${e instanceof Error ? (e.stack ?? e.message) : String(e)}\n`);
   process.exit(1);
 });

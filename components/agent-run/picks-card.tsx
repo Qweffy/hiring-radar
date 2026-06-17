@@ -1,8 +1,10 @@
-import type { CSSProperties } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import  { type CSSProperties } from "react";
+
 import { Radial } from "@/components/agent-run/radial";
-import type { RunPick } from "@/lib/queries/agent-runs";
+import { Button } from "@/components/ui/button";
+import  { type RunPick } from "@/lib/queries/agent-runs";
+
 
 /**
  * Card 2 of the status panel — the picks the run has shortlisted so far (each a

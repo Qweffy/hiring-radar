@@ -2,13 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+
+import { startScan, ScanError } from "@/lib/agent/run";
+import  { type ShortlistNote } from "@/lib/queries/shortlist";
 import {
   addEntryNote,
   deleteEntry,
   setEntryStage,
 } from "@/lib/queries/shortlist-writes";
-import type { ShortlistNote } from "@/lib/queries/shortlist";
-import { startScan, ScanError } from "@/lib/agent/run";
 import { ActionError, runAction, type ActionResult } from "@/lib/result";
 
 /**

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { formatMonth, formatSalary, relativeTime } from "@/lib/format";
 
 describe("relativeTime", () => {

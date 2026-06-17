@@ -1,5 +1,5 @@
-import type { AgentRunStatus } from "@/lib/queries/agent-runs";
-import type { StatusValue } from "@/components/ui/status-badge";
+import  { type StatusValue } from "@/components/ui/status-badge";
+import  { type AgentRunStatus } from "@/lib/queries/agent-runs";
 
 /** UTC "HH:MM:SS UTC" for the run's start time. */
 export function utcTime(date: Date): string {

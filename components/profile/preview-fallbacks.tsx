@@ -1,5 +1,7 @@
-import type { CSSProperties } from "react";
+import  { type CSSProperties } from "react";
+
 import { HRIllustration } from "@/components/ui/hr-illustration";
+
 
 const VIOLET_CARD: CSSProperties = {
   background: "var(--violet-12)",

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { buildBrowseHref, parseBrowseSearchParams } from "@/lib/browse-params";
 
 describe("parseBrowseSearchParams", () => {

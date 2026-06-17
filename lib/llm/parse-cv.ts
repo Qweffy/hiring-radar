@@ -1,5 +1,6 @@
 import Groq from "groq-sdk";
 import { z } from "zod";
+
 import { cvSkillsSchema, type CvSkills } from "@/lib/validation";
 
 // Constrained decoding requires gpt-oss (same model as posting extraction).

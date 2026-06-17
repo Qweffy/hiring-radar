@@ -1,5 +1,6 @@
 import "server-only";
 import { eq, sql } from "drizzle-orm";
+
 import { db } from "@/db";
 import {
   agentRuns,
@@ -10,7 +11,7 @@ import {
   type AgentStepUsage,
   type AssessmentReason,
 } from "@/db/schema";
-import type { AgentRunStatus, AgentStepKind } from "@/lib/queries/agent-runs";
+import  { type AgentRunStatus, type AgentStepKind } from "@/lib/queries/agent-runs";
 
 /**
  * Write-side DB helpers for the agent loop. Reads live in lib/queries/agent-runs
@@ -126,11 +127,11 @@ export async function getRunStatus(
   return rows[0]?.status ?? null;
 }
 
-export type SaveFindingResult = {
+export interface SaveFindingResult {
   shortlisted: boolean;
   /** True if this posting was newly added to the shortlist (not already there). */
   newPick: boolean;
-};
+}
 
 /**
  * Persist the agent's verdict for a posting. Always upserts the assessment

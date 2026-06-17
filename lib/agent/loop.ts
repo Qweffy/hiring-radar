@@ -1,14 +1,5 @@
 import "server-only";
-import type Groq from "groq-sdk";
-import type { AgentStepPayload, AgentStepUsage } from "@/db/schema";
-import { getRun, type AgentStepRow } from "@/lib/queries/agent-runs";
-import {
-  appendStep,
-  finalizeRun,
-  getRunStatus,
-  setRunStatus,
-  updateRunProgress,
-} from "@/lib/queries/agent-writes";
+import  { type AgentStepPayload, type AgentStepUsage } from "@/db/schema";
 import {
   checkBudget,
   costOfUsage,
@@ -21,6 +12,16 @@ import { agentModel, groqClient } from "@/lib/agent/groq-client";
 import { SYSTEM_PROMPT } from "@/lib/agent/prompt";
 import { TOOL_DEFINITIONS } from "@/lib/agent/tool-defs";
 import { buildToolContext, type ToolContext } from "@/lib/agent/tools";
+import { getRun, type AgentStepRow } from "@/lib/queries/agent-runs";
+import {
+  appendStep,
+  finalizeRun,
+  getRunStatus,
+  setRunStatus,
+  updateRunProgress,
+} from "@/lib/queries/agent-writes";
+
+import type Groq from "groq-sdk";
 
 /**
  * The hand-rolled observe-act loop. Plain `while` over Groq chat.completions
@@ -48,13 +49,13 @@ export type TerminalStatus =
   | "budget_exhausted"
   | "paused";
 
-export type RunOutcome = {
+export interface RunOutcome {
   runId: number;
   status: TerminalStatus;
   totals: RunTotals;
   picksCount: number;
   finalText: string | null;
-};
+}
 
 const TEMPERATURE = 0.3;
 const MAX_COMPLETION_TOKENS = 1500;
@@ -77,9 +78,9 @@ function isRateLimit(e: unknown): boolean {
 function retryAfterMs(e: unknown): number {
   const msg =
     typeof e === "object" && e !== null && "message" in e
-      ? String((e as { message: unknown }).message)
+      ? String((e).message)
       : "";
-  const m = msg.match(/try again in ([\d.]+)s/);
+  const m = /try again in ([\d.]+)s/.exec(msg);
   if (m) return Math.ceil(Number(m[1]) * 1000) + 250;
   return RATE_LIMIT_FALLBACK_MS;
 }
@@ -91,7 +92,7 @@ class RateLimitExhausted extends Error {}
 function retryMessage(e: unknown): string {
   const msg =
     typeof e === "object" && e !== null && "message" in e
-      ? String((e as { message: unknown }).message)
+      ? String((e).message)
       : "rate limit reached";
   return `Groq rate limit not cleared after ${RATE_LIMIT_RETRIES} retries: ${msg.slice(0, 240)}`;
 }
@@ -166,7 +167,7 @@ function rebuildMessages(steps: AgentStepRow[]): ChatMessage[] {
   return messages;
 }
 
-type LoopState = {
+interface LoopState {
   runId: number;
   budget: RunBudget;
   totals: RunTotals;
@@ -174,7 +175,7 @@ type LoopState = {
   nextIdx: number;
   ctx: ToolContext;
   retryCounts: Map<string, number>;
-};
+}
 
 const usageFromResponse = (
   u: Groq.CompletionUsage | undefined,
@@ -380,8 +381,8 @@ async function drive(
 
     // 4e. Append one observation per call (checkpoint) + the tool message.
     for (let i = 0; i < callSteps.length; i++) {
-      const { call } = callSteps[i]!;
-      const outcome = outcomes[i]!;
+      const { call } = callSteps[i];
+      const outcome = outcomes[i];
       if (outcome.newPick) state.picksCount += 1;
 
       // Same-call retry guard: count repeated identical failing calls.
@@ -534,8 +535,12 @@ export async function runLoop(
         idx: state.nextIdx++,
         kind: "error",
         payload: { message },
-      }).catch(() => {});
-      await setRunStatus(runId, "paused").catch(() => {});
+      }).catch(() => {
+        // Best-effort: we're already on the pause path, nothing to recover.
+      });
+      await setRunStatus(runId, "paused").catch(() => {
+        // Best-effort: status will be reconciled on the next resume.
+      });
       return {
         runId,
         status: "paused",
@@ -550,10 +555,12 @@ export async function runLoop(
       idx: state.nextIdx++,
       kind: "error",
       payload: { message: `Run failed: ${message}` },
-    }).catch(() => {});
-    await finalizeRun({ runId, status: "failed", error: message }).catch(
-      () => {},
-    );
+    }).catch(() => {
+      // Best-effort: we're already on the failure path, nothing to recover.
+    });
+    await finalizeRun({ runId, status: "failed", error: message }).catch(() => {
+      // Best-effort: the run is being marked failed; a write error here is moot.
+    });
     return {
       runId,
       status: "failed",

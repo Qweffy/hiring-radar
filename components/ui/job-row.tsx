@@ -1,12 +1,12 @@
 "use client";
 
-import type { CSSProperties, HTMLAttributes, KeyboardEvent, MouseEvent } from "react";
 import { Bookmark, EllipsisVertical, type LucideIcon } from "lucide-react";
+import  { type CSSProperties, type HTMLAttributes, type KeyboardEvent, type MouseEvent } from "react";
 
-import { cn } from "@/lib/cn";
 import { ScoreGauge } from "@/components/ui/score-gauge";
 import { StatusBadge, type StatusValue } from "@/components/ui/status-badge";
 import { Tag } from "@/components/ui/tag";
+import { cn } from "@/lib/cn";
 
 export interface JobRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
   company: string;
@@ -17,7 +17,8 @@ export interface JobRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSel
   /** Stack tags. */
   tags?: string[];
   /** Status badges (e.g. ['NEW','REMOTE','VISA']). */
-  badges?: (StatusValue | string)[];
+  // `string & {}` keeps StatusValue autocomplete without `string` absorbing it.
+  badges?: (StatusValue | (string & {}))[];
   /** Match score 0-100; renders a ScoreGauge. */
   score?: number;
   selected?: boolean;

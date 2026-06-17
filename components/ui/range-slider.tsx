@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+
 import { cn } from "@/lib/cn";
 
 /** Single-value range slider with phosphor track and mono readout. */
