@@ -237,7 +237,7 @@ export function ShortlistView({ items, review, live }: ShortlistViewProps) {
   return (
     <div className="absolute inset-0 overflow-auto">
       <ShortlistStyles />
-      <div style={{ padding: "26px 28px" }}>
+      <div style={{ padding: "clamp(16px, 4vw, 26px) clamp(14px, 4vw, 28px)" }}>
         <ShortlistHeader
           trackedCount={trackedCount}
           scanning={scanning || live !== null}

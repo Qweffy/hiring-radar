@@ -279,7 +279,7 @@ export function PostingTable({
         {/* Sticky header row */}
         <div
           role="row"
-          className="sticky top-0 grid items-center"
+          className="hr-posting-header sticky top-0 grid items-center"
           style={{
             gridTemplateColumns: GRID_TEMPLATE,
             gap: 12,
@@ -327,7 +327,7 @@ export function PostingTable({
                     onOpen(row.hnId, index);
                   }
                 }}
-                className="group grid cursor-pointer items-center hover:bg-[var(--phosphor-08)] hover:shadow-[inset_0_0_0_1px_var(--phosphor-dim)]"
+                className="hr-posting-row group grid cursor-pointer items-center hover:bg-[var(--phosphor-08)] hover:shadow-[inset_0_0_0_1px_var(--phosphor-dim)]"
                 style={{
                   gridTemplateColumns: GRID_TEMPLATE,
                   gap: 12,
@@ -343,7 +343,11 @@ export function PostingTable({
                 }}
               >
                 {/* Company */}
-                <span role="gridcell" className="flex min-w-0 items-center" style={{ gap: 8 }}>
+                <span
+                  role="gridcell"
+                  className={`flex min-w-0 items-center${row.company === null ? " hr-cell-empty" : ""}`}
+                  style={{ gap: 8 }}
+                >
                   <span
                     className="truncate"
                     style={{
@@ -398,7 +402,11 @@ export function PostingTable({
                 </span>
 
                 {/* Location */}
-                <span role="gridcell" className="flex min-w-0 items-center" style={{ gap: 7 }}>
+                <span
+                  role="gridcell"
+                  className={`flex min-w-0 items-center${row.location === null && row.remotePolicy === null ? " hr-cell-empty" : ""}`}
+                  style={{ gap: 7 }}
+                >
                   {row.remotePolicy !== null ? (
                     <StatusBadge status={row.remotePolicy.toUpperCase()} className="shrink-0" />
                   ) : null}
@@ -417,7 +425,7 @@ export function PostingTable({
                 {/* Salary — mono, right-aligned */}
                 <span
                   role="gridcell"
-                  className="whitespace-nowrap text-right"
+                  className={`whitespace-nowrap text-right${salary === "—" ? " hr-cell-empty" : ""}`}
                   style={{
                     font: "var(--mono-base)",
                     color: salary === "—" ? "var(--text-low)" : "var(--text-hi)",
@@ -429,7 +437,7 @@ export function PostingTable({
                 {/* Stack — 4 tags + overflow count */}
                 <span
                   role="gridcell"
-                  className="flex min-w-0 items-center overflow-hidden"
+                  className="hr-posting-stack flex min-w-0 items-center overflow-hidden"
                   style={{ gap: 6 }}
                 >
                   {row.stackTags.slice(0, MAX_STACK_TAGS).map((tag) => (
@@ -457,7 +465,7 @@ export function PostingTable({
                 </span>
 
                 {/* Peek chevron */}
-                <span role="gridcell" className="flex justify-center">
+                <span role="gridcell" className="hr-posting-chevron flex justify-center">
                   <Icon
                     name="chevron-right"
                     size={16}
@@ -487,6 +495,17 @@ export function PostingTable({
         isPending={isPending}
         onPageChange={onPageChange}
       />
+
+      <style href="hr-posting-table-mobile" precedence="medium">
+        {`@media (max-width:768px){
+  .hr-posting-header{display:none!important}
+  .hr-posting-row{display:flex!important;flex-direction:column;align-items:flex-start;gap:6px;padding:14px 16px!important;grid-template-columns:none!important}
+  .hr-posting-row > [role=gridcell]{width:100%;text-align:left!important;justify-content:flex-start}
+  .hr-posting-stack{flex-wrap:wrap!important;overflow:visible!important}
+  .hr-posting-chevron{display:none!important}
+  .hr-cell-empty{display:none!important}
+}`}
+      </style>
     </div>
   );
 }

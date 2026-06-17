@@ -70,6 +70,7 @@ export function EntryCard({
   return (
     <div className={shaking ? "hr-sl-shake" : undefined} style={cardStyle(stage)}>
       <div
+        className="hr-entry-row"
         style={{
           display: "flex",
           gap: 20,
@@ -79,6 +80,7 @@ export function EntryCard({
       >
         {/* LEFT */}
         <div
+          className="hr-entry-left"
           style={{
             width: 300,
             flexShrink: 0,
@@ -116,7 +118,7 @@ export function EntryCard({
         </div>
 
         {/* CENTER — agent WHY */}
-        <div style={{ flex: 1, minWidth: 0, paddingTop: 24 }}>
+        <div className="hr-entry-center" style={{ flex: 1, minWidth: 0, paddingTop: 24 }}>
           {why ? (
             <div style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
               <Bot
@@ -140,6 +142,7 @@ export function EntryCard({
 
         {/* RIGHT */}
         <div
+          className="hr-entry-right"
           style={{
             display: "flex",
             alignItems: "center",
@@ -173,6 +176,14 @@ export function EntryCard({
       </div>
 
       <EntryNotes notes={notes} onAddNote={onAddNote} saving={savingNote} />
+      <style href="hr-entry-card-mobile" precedence="medium">
+        {`@media (max-width:768px){
+  .hr-entry-row{flex-direction:column;gap:14px;padding:16px}
+  .hr-entry-left{width:100%!important}
+  .hr-entry-center{padding-top:0!important}
+  .hr-entry-right{padding-top:0!important;width:100%;justify-content:space-between}
+}`}
+      </style>
     </div>
   );
 }

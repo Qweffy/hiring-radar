@@ -136,6 +136,8 @@ export function Drawer({
       </div>
       <style>{`@keyframes hr-drawer-slide-right{from{transform:translateX(100%)}to{transform:none}}
 @keyframes hr-drawer-slide-left{from{transform:translateX(-100%)}to{transform:none}}
+@keyframes hr-drawer-slide-up{from{transform:translateY(100%)}to{transform:none}}
+@media (max-width:768px){.hr-drawer-panel{width:100%!important;max-width:100%!important;border-left:none!important;border-right:none!important;animation:hr-drawer-slide-up var(--dur-slow) var(--ease-out)!important}}
 @media (prefers-reduced-motion: reduce){.hr-drawer-panel{animation:none}}`}</style>
     </div>
   );

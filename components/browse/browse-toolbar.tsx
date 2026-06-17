@@ -396,7 +396,7 @@ export function BrowseToolbar({
     <div
       className="relative z-20 shrink-0"
       style={{
-        padding: "16px 24px 14px",
+        padding: "14px clamp(14px, 4vw, 24px)",
         background: "var(--glass)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",

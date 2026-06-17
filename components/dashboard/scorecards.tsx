@@ -21,7 +21,7 @@ export function Scorecards({ data }: ScorecardsProps) {
     data.medianSalary !== null ? `$${Math.round(data.medianSalary / 1000)}k` : "—";
 
   return (
-    <div className="grid gap-4" style={{ gridTemplateColumns: "1fr 1fr" }}>
+    <div className="grid gap-4" style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)" }}>
       <Scorecard
         label="New this month"
         value={data.newCount}

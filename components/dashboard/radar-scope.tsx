@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import  { type CSSProperties } from "react";
 
 import { Icon } from "@/components/ui/icon";
 import { ScoreGauge } from "@/components/ui/score-gauge";
+import { useIsMobile } from "@/lib/hooks/use-is-mobile";
 import  { type DashboardBlip } from "@/lib/queries/dashboard";
 import {
   CATEGORIES,
@@ -27,6 +28,24 @@ const SWEEP_CSS = `
 .hr-sweep { animation: hr-rotate 4s linear infinite; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   .hr-sweep { animation: none !important; }
+}
+/* Scale the fixed 560px scope to fit narrow screens. The scale factor is
+   measured in JS (wrap width / 560) and applied inline — scale() needs a
+   unitless number, which CSS can't derive from a container-query length.
+   All px-positioned blips/labels ride the transform. Desktop caps at 560
+   (scale 1) — visually unchanged. */
+.hr-scope-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 6px auto 0;
+  aspect-ratio: 1;
+}
+.hr-scope {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
 }
 `;
 
@@ -132,9 +151,23 @@ export function RadarScope({
   newCount,
 }: RadarScopeProps) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const isMobile = useIsMobile();
   // hover = transient preview; pin = sticky — only a click opens a card for good.
   const [hovered, setHovered] = useState<number | null>(null);
   const [pinned, setPinned] = useState<number | null>(null);
+
+  // Fluid scope: scale the fixed 560px canvas to the wrapper's measured width.
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [scopeScale, setScopeScale] = useState(1);
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const update = () => setScopeScale(Math.min(1, el.clientWidth / SCOPE_SIZE));
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const placed = useMemo(() => placeBlips(blips), [blips]);
 
@@ -185,9 +218,14 @@ export function RadarScope({
         </span>
       </div>
 
+      <div className="hr-scope-wrap" ref={wrapRef}>
       <div
-        className="relative mx-auto"
-        style={{ width: SCOPE_SIZE, height: SCOPE_SIZE, marginTop: 6 }}
+        className="hr-scope"
+        style={{
+          width: SCOPE_SIZE,
+          height: SCOPE_SIZE,
+          transform: `scale(${scopeScale})`,
+        }}
         role="img"
         aria-label={`Radar scope: ${totalPostings} postings in ${monthLabel}, ${newCount} new this sweep, plotted by category and recency.`}
       >
@@ -311,11 +349,13 @@ export function RadarScope({
           />
         ))}
 
-        {/* Blip card — transient on hover, sticky (with a close button) on click */}
-        {active && (
+        {/* Blip card — transient on hover, sticky (with a close button) on click.
+           Desktop only: anchored to the blip inside the scaled scope. */}
+        {active && !isMobile && (
           <BlipTooltip
             blip={active}
             pinned={pinned !== null}
+            placement="anchored"
             onClose={() => {
               setPinned(null);
               setHovered(null);
@@ -379,6 +419,23 @@ export function RadarScope({
           {SWEEP_CSS}
         </style>
       </div>
+      </div>
+
+      {/* Mobile: the pinned blip renders full-size below the scope (no hover on
+          touch, and the scaled scope would shrink an anchored card unreadably). */}
+      {active && isMobile && (
+        <div style={{ marginTop: 14 }}>
+          <BlipTooltip
+            blip={active}
+            pinned
+            placement="card"
+            onClose={() => {
+              setPinned(null);
+              setHovered(null);
+            }}
+          />
+        </div>
+      )}
 
       {/* Caption */}
       <div
@@ -475,24 +532,30 @@ function BlipDot({
 function BlipTooltip({
   blip,
   pinned,
+  placement,
   onClose,
 }: {
   blip: PlacedBlip;
   pinned: boolean;
+  /** "anchored" floats over the scope at the blip (desktop); "card" sits in
+   * normal flow at full size (mobile, below the scaled scope). */
+  placement: "anchored" | "card";
   onClose: () => void;
 }) {
-  const { left, top } = tooltipPosition(blip);
+  const anchored = placement === "anchored";
+  const pos = anchored ? tooltipPosition(blip) : null;
   const hnUrl = `https://news.ycombinator.com/item?id=${blip.hnId}`;
   return (
     <div
       // Transient preview ignores the mouse; a pinned card is interactive
       // (the close button + the HN link need clicks).
-      className={pinned ? "absolute" : "pointer-events-none absolute"}
+      className={
+        anchored ? (pinned ? "absolute" : "pointer-events-none absolute") : "relative"
+      }
       style={{
-        left,
-        top,
-        width: 250,
-        zIndex: 40,
+        ...(pos !== null
+          ? { left: pos.left, top: pos.top, width: 250, zIndex: 40 }
+          : { width: "100%" }),
         padding: 14,
         background: "var(--glass)",
         backdropFilter: "blur(16px)",

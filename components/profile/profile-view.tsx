@@ -54,6 +54,52 @@ const TIMEZONE_OPTIONS = [
   "UTC+8",
 ] as const;
 
+/** Inline text field that replaces window.prompt for adding a chip. Enter or
+ * blur commits a non-empty value; Escape cancels. Works on touch + keyboard. */
+function InlineAdd({
+  placeholder,
+  onCommit,
+  onClose,
+}: {
+  placeholder: string;
+  onCommit: (value: string) => void;
+  onClose: () => void;
+}) {
+  const [value, setValue] = useState("");
+  return (
+    <input
+      autoFocus
+      value={value}
+      placeholder={placeholder}
+      onChange={(e) => setValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          onCommit(value);
+          onClose();
+        } else if (e.key === "Escape") {
+          onClose();
+        }
+      }}
+      onBlur={() => {
+        if (value.trim()) onCommit(value);
+        onClose();
+      }}
+      style={{
+        height: 30,
+        minWidth: 130,
+        padding: "0 10px",
+        background: "var(--bg-surface)",
+        border: "1px solid var(--border-strong)",
+        borderRadius: "var(--radius-control)",
+        color: "var(--text-hi)",
+        font: "var(--text-sm)",
+        outline: "none",
+      }}
+    />
+  );
+}
+
 type SaveToast = { tone: "success" | "error"; message: string } | null;
 
 interface ProfileViewProps {
@@ -202,27 +248,37 @@ export function ProfileView({
     [ping],
   );
 
-  const addRole = useCallback(() => {
-    const value = window.prompt("Add a desired role")?.trim();
-    if (!value) return;
-    setForm((f) =>
-      f.targetRoles.includes(value)
-        ? f
-        : { ...f, targetRoles: [...f.targetRoles, value] },
-    );
-    ping();
-  }, [ping]);
+  // Inline-add drafts replace window.prompt (unreliable / non-existent on mobile).
+  const [addingRole, setAddingRole] = useState(false);
+  const [addingDeal, setAddingDeal] = useState(false);
 
-  const addDealbreaker = useCallback(() => {
-    const value = window.prompt("Add a dealbreaker")?.trim();
-    if (!value) return;
-    setForm((f) =>
-      f.dealbreakers.includes(value)
-        ? f
-        : { ...f, dealbreakers: [...f.dealbreakers, value] },
-    );
-    ping();
-  }, [ping]);
+  const commitRole = useCallback(
+    (raw: string) => {
+      const value = raw.trim();
+      if (!value) return;
+      setForm((f) =>
+        f.targetRoles.includes(value)
+          ? f
+          : { ...f, targetRoles: [...f.targetRoles, value] },
+      );
+      ping();
+    },
+    [ping],
+  );
+
+  const commitDealbreaker = useCallback(
+    (raw: string) => {
+      const value = raw.trim();
+      if (!value) return;
+      setForm((f) =>
+        f.dealbreakers.includes(value)
+          ? f
+          : { ...f, dealbreakers: [...f.dealbreakers, value] },
+      );
+      ping();
+    },
+    [ping],
+  );
 
   // ---- CV parse ----------------------------------------------------------
   const runParse = useCallback(
@@ -353,6 +409,11 @@ export function ProfileView({
 @keyframes hr-sweep400{0%{background-position:150% 0;opacity:1}100%{background-position:-150% 0;opacity:0}}
 @media (prefers-reduced-motion:reduce){
   [data-sweep],[data-shimmer]{animation:none!important}
+}
+@media (max-width:768px){
+  .hr-profile-grid{grid-template-columns:minmax(0,1fr)!important;gap:20px!important}
+  .hr-profile-targets{grid-template-columns:1fr!important}
+  .hr-profile-preview{position:static!important}
 }`}
       </style>
 
@@ -369,11 +430,12 @@ export function ProfileView({
       />
 
       <div
+        className="hr-profile-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "minmax(0,1.2fr) minmax(0,1fr)",
           gap: 28,
-          padding: 28,
+          padding: "clamp(16px, 4vw, 28px)",
           alignItems: "start",
         }}
       >
@@ -489,12 +551,21 @@ export function ProfileView({
                       {role}
                     </Tag>
                   ))}
-                  <AddChip label="+ add role" onClick={addRole} />
+                  {addingRole ? (
+                    <InlineAdd
+                      placeholder="Role…"
+                      onCommit={commitRole}
+                      onClose={() => setAddingRole(false)}
+                    />
+                  ) : (
+                    <AddChip label="+ add role" onClick={() => setAddingRole(true)} />
+                  )}
                 </div>
               </div>
 
               {/* Salary + timezone */}
               <div
+                className="hr-profile-targets"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
@@ -637,7 +708,15 @@ export function ProfileView({
                       {db}
                     </Tag>
                   ))}
-                  <AddChip label="+ add" onClick={addDealbreaker} />
+                  {addingDeal ? (
+                    <InlineAdd
+                      placeholder="Dealbreaker…"
+                      onCommit={commitDealbreaker}
+                      onClose={() => setAddingDeal(false)}
+                    />
+                  ) : (
+                    <AddChip label="+ add" onClick={() => setAddingDeal(true)} />
+                  )}
                 </div>
               </div>
             </div>
@@ -668,7 +747,7 @@ export function ProfileView({
         </div>
 
         {/* ===== RIGHT — LIVE PREVIEW ===== */}
-        <div style={{ position: "sticky", top: 0 }}>
+        <div className="hr-profile-preview" style={{ position: "sticky", top: 0 }}>
           {previewDegraded ? (
             <PreviewDegraded />
           ) : (
@@ -685,9 +764,10 @@ export function ProfileView({
         </div>
       </div>
 
-      {/* Toasts — fixed, glass, bottom-right */}
+      {/* Toasts — fixed, glass, bottom-right (clears the mobile tab bar). */}
       {saveToast ? (
         <div
+          className="hr-toast-anchor"
           style={{
             position: "fixed",
             right: 24,

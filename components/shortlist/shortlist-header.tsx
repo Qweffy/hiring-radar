@@ -32,7 +32,16 @@ export function ShortlistHeader({
   onSortChange,
 }: ShortlistHeaderProps) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 14,
+        rowGap: 12,
+        marginBottom: 18,
+      }}
+    >
       <h2
         style={{
           margin: 0,

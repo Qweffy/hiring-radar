@@ -19,6 +19,7 @@ export interface FilterTabsProps {
 export function FilterTabs({ tabs, activeTab, onSelect }: FilterTabsProps) {
   return (
     <div
+      className="hr-xscroll"
       style={{
         display: "flex",
         alignItems: "center",
@@ -33,10 +34,12 @@ export function FilterTabs({ tabs, activeTab, onSelect }: FilterTabsProps) {
           display: "inline-flex",
           alignItems: "center",
           gap: 7,
+          flexShrink: 0,
           padding: "0 14px",
           height: 38,
           background: "transparent",
           border: "none",
+          whiteSpace: "nowrap",
           borderBottom: active
             ? "2px solid var(--phosphor)"
             : "2px solid transparent",

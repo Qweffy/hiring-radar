@@ -26,11 +26,14 @@ export function DashboardView({ data, now }: DashboardViewProps) {
   const monthLabel = data.month !== null ? formatMonth(data.month) : "—";
 
   return (
-    <div className="absolute inset-0 overflow-auto" style={{ padding: 24 }}>
+    <div
+      className="absolute inset-0 overflow-auto"
+      style={{ padding: "clamp(14px, 4vw, 24px)" }}
+    >
       <div style={{ maxWidth: "var(--maxw-content)", margin: "0 auto" }}>
         {/* ROW 1 */}
         <div
-          className="grid items-stretch"
+          className="hr-dash-grid grid items-stretch"
           style={{
             gridTemplateColumns: "minmax(0, 1.42fr) minmax(0, 1fr)",
             gap: 24,
@@ -66,6 +69,9 @@ export function DashboardView({ data, now }: DashboardViewProps) {
         {/* ROW 2 */}
         <SignalFeed rows={data.signalFeed} />
       </div>
+      <style href="hr-dashboard-mobile" precedence="medium">
+        {`@media (max-width:768px){.hr-dash-grid{grid-template-columns:minmax(0,1fr)!important;gap:16px!important}}`}
+      </style>
     </div>
   );
 }
