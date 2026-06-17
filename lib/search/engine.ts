@@ -102,8 +102,8 @@ async function semanticSearch(
   month: string | null,
   limit: number,
   offset: number,
+  queryVec: number[],
 ): Promise<SearchResult> {
-  const queryVec = await embed(f.q);
   const vecLiteral = `[${queryVec.join(",")}]`;
   const predicate = metadataPredicate(f, month);
 
@@ -154,8 +154,8 @@ async function hybridSearch(
   month: string | null,
   limit: number,
   offset: number,
+  queryVec: number[],
 ): Promise<SearchResult> {
-  const queryVec = await embed(f.q);
   const vecLiteral = `[${queryVec.join(",")}]`;
   const predicate = metadataPredicate(f, month);
 
@@ -239,9 +239,61 @@ function rowsToResult(
 }
 
 /**
+ * Lexical-only fallback: websearch_to_tsquery over search_tsv, ranked by
+ * ts_rank_cd. Used when query embedding is unavailable (e.g. a runtime without
+ * the onnxruntime native lib) so semantic/hybrid requests still return results.
+ */
+async function ftsOnlySearch(
+  f: BrowseFilters,
+  month: string | null,
+  limit: number,
+  offset: number,
+): Promise<SearchResult> {
+  const predicate = metadataPredicate(f, month);
+  const rows = await db.execute<{
+    id: number;
+    snippet: string | null;
+    raw_text: string;
+    n: number;
+  }>(sql`
+    with q as (
+      select websearch_to_tsquery('english', ${f.q}) as tsq
+    ),
+    matched as (
+      select p.id, ts_rank_cd(p.search_tsv, q.tsq) as score
+      from postings p, q
+      where ${predicate} and p.search_tsv @@ q.tsq
+    )
+    select m.id,
+           (select count(*) from matched) as n,
+           p.raw_text as raw_text,
+           ts_headline('english', p.raw_text, q.tsq, ${HEADLINE_OPTS}) as snippet
+    from matched m
+    join postings p on p.id = m.id, q
+    order by m.score desc, m.id asc
+    limit ${limit} offset ${offset}
+  `);
+  return rowsToResult(rows.rows);
+}
+
+/** Embed the query, or null when the embedding runtime is unavailable. */
+async function tryEmbed(query: string): Promise<number[] | null> {
+  try {
+    return await embed(query);
+  } catch (e) {
+    console.warn(
+      "search: embeddings unavailable, falling back to full-text —",
+      e instanceof Error ? e.message : e,
+    );
+    return null;
+  }
+}
+
+/**
  * Entry point for the semantic/hybrid paths. Returns ranked posting ids for the
  * requested page plus per-row snippets. `exact` is NOT routed here — the caller
- * keeps the existing ILIKE query for exact-match behavior.
+ * keeps the existing ILIKE query for exact-match behavior. When embeddings are
+ * unavailable, both modes degrade to lexical full-text search.
  */
 export async function searchPostings(
   f: BrowseFilters,
@@ -249,8 +301,12 @@ export async function searchPostings(
   limit: number,
   offset: number,
 ): Promise<SearchResult> {
-  if (f.mode === "semantic") {
-    return semanticSearch(f, month, limit, offset);
+  const queryVec = await tryEmbed(f.q);
+  if (queryVec === null) {
+    return ftsOnlySearch(f, month, limit, offset);
   }
-  return hybridSearch(f, month, limit, offset);
+  if (f.mode === "semantic") {
+    return semanticSearch(f, month, limit, offset, queryVec);
+  }
+  return hybridSearch(f, month, limit, offset, queryVec);
 }

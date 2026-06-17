@@ -4,11 +4,8 @@
 // client component or an edge route — @huggingface/transformers needs Node.
 import path from "node:path";
 
-import {
-  env,
-  pipeline,
-  type FeatureExtractionPipeline,
-} from "@huggingface/transformers";
+// Type-only import — erased at compile time, so it never loads the native addon.
+import  { type FeatureExtractionPipeline } from "@huggingface/transformers";
 
 // MongoDB/mdbr-leaf-ir: 384-dim, MiniLM-speed, #1 BEIR <=100M params. Loads
 // cleanly in transformers v4 and outputs unit-norm vectors with mean pooling.
@@ -19,28 +16,35 @@ export const EMBEDDING_DIMS = 384;
 // the same model AND dtype. Node default device is cpu -> fp32.
 const DTYPE = "fp32";
 
-// Own the cache: the default lives in node_modules and dies on reinstall.
-// Resolve from this file when possible (stable regardless of process cwd). In
-// the bundled Next.js server build `import.meta.dirname` is undefined, so fall
-// back to a cwd-relative path — never pass undefined to path.resolve (it throws
-// during page-data collection, breaking the build).
-const moduleDir = import.meta.dirname;
-env.cacheDir = moduleDir
-  ? path.resolve(moduleDir, "..", ".cache", "transformers")
-  : path.resolve(process.cwd(), ".cache", "transformers");
-
 // Process-wide lazy singleton stashed on globalThis so it survives Next.js HMR
 // (re-instantiating per request/HMR cycle leaks a full model copy each time).
 const globalForEmbedder = globalThis as unknown as {
   __embedderPipeline?: Promise<FeatureExtractionPipeline>;
 };
 
+async function buildEmbedder(): Promise<FeatureExtractionPipeline> {
+  // Dynamic import so merely importing THIS module never loads onnxruntime-node's
+  // native addon — only an actual embed() call does. On a runtime without the
+  // native lib (e.g. Vercel serverless), this throws and callers degrade to
+  // full-text search instead of crashing the route (lib/search/engine.ts).
+  const { env, pipeline } = await import("@huggingface/transformers");
+  // Own the cache: the default lives in node_modules and dies on reinstall.
+  // In the bundled Next.js server build `import.meta.dirname` is undefined, so
+  // fall back to a cwd-relative path — never pass undefined to path.resolve.
+  const moduleDir = import.meta.dirname;
+  env.cacheDir = moduleDir
+    ? path.resolve(moduleDir, "..", ".cache", "transformers")
+    : path.resolve(process.cwd(), ".cache", "transformers");
+  return pipeline("feature-extraction", EMBEDDING_MODEL, { dtype: DTYPE });
+}
+
 function getEmbedder(): Promise<FeatureExtractionPipeline> {
-  return (globalForEmbedder.__embedderPipeline ??= pipeline(
-    "feature-extraction",
-    EMBEDDING_MODEL,
-    { dtype: DTYPE },
-  ));
+  globalForEmbedder.__embedderPipeline ??= buildEmbedder().catch((e: unknown) => {
+    // Don't cache the rejection — let a later call retry if the env changes.
+    globalForEmbedder.__embedderPipeline = undefined;
+    throw e;
+  });
+  return globalForEmbedder.__embedderPipeline;
 }
 
 /** Embed a batch of texts → array of 384-dim unit-norm vectors (same order). */
