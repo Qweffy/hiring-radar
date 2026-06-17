@@ -30,7 +30,7 @@ export const MAIN_NAV: ShellNavItem[] = [
 
 export const ADMIN_NAV: ShellNavItem[] = [
   { key: "pipeline", label: "Pipeline", href: "/pipeline", icon: "server", hint: "g p", enabled: true },
-  { key: "settings", label: "Settings", href: "/settings", icon: "settings", hint: "g ,", enabled: false },
+  { key: "settings", label: "Settings", href: "/settings", icon: "settings", hint: "g ,", enabled: true },
 ];
 
 /** Derive the active nav item from the current pathname. */

@@ -27,6 +27,7 @@ const CHORDS: Record<string, string> = {
   r: "/agent",
   u: "/profile",
   p: "/pipeline",
+  ",": "/settings",
 };
 
 const isEditable = (target: EventTarget | null): boolean =>

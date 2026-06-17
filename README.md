@@ -124,6 +124,47 @@ npm run redteam -- --only override-score-100,base64-payload
 
 It runs each attack through the real `extractPosting()`, prints a per-fixture table (model complied / ignored / rejected; attack succeeded / blocked) and an attack-success-rate, and exits non-zero if any attack gets through. It is deliberately **not** part of `npm test` so CI and Groq quota stay clean. Model compliance is probabilistic — the deterministic layers above are what actually bound the damage.
 
+## Connect from Claude (MCP)
+
+Hiring Radar ships an MCP server exposing 3 tools (`search_jobs`, `get_posting`, `manage_shortlist`), 2 resources (monthly digest, current shortlist), and 2 prompts (screen a posting, summarize the month).
+
+### Local (stdio) — Claude Desktop / Claude Code
+
+Runs the server as a local process with full `read_write` access. Add to `claude_desktop_config.json` (Settings -> Developer -> Edit Config):
+
+```json
+{
+  "mcpServers": {
+    "hiring-radar": {
+      "command": "npm",
+      "args": ["run", "mcp"],
+      "cwd": "/absolute/path/to/hiring-radar"
+    }
+  }
+}
+```
+
+`npm run mcp` loads `.env.local` (needs `DATABASE_URL`), so the radar must already be ingested + embedded.
+
+### Remote (Streamable HTTP) — bearer auth
+
+The deployed app serves the same surface at `POST /api/mcp`, gated by a bearer API key minted in Settings. Read-only keys can search/read; `manage_shortlist` requires a `read_write` key.
+
+```bash
+claude mcp add --transport http hiring-radar https://<your-host>/api/mcp \
+  --header "Authorization: Bearer hrk_your_key_here"
+```
+
+A missing/invalid/revoked key returns 401; the endpoint is rate-limited.
+
+### Inspect it
+
+```bash
+npx @modelcontextprotocol/inspector npm run mcp
+```
+
+opens the MCP Inspector against the local stdio server. `npm run mcp:smoke` is a headless integration check that spawns the stdio server and drives it with the SDK client (tools/list + live tool calls).
+
 ## Engineering conventions
 
 The house style — architecture & data flow, the hard code rules (no `any`,
