@@ -16,6 +16,7 @@ export type BrowseFilters = {
   salaryMin: number | null;
   stack: string[];
   visa: boolean;
+  matchMin: number | null; // agent match-score floor (0-100), null → off
   month: string | null; // null → latest available month
   page: number;
   selected: number | null; // hnId of the posting open in the drawer
@@ -31,6 +32,7 @@ const monthSchema = z.string().regex(/^\d{4}-\d{2}$/).catch("");
 const modeSchema = z.enum(SEARCH_MODES).catch(DEFAULT_SEARCH_MODE);
 const pageSchema = z.coerce.number().int().min(1).max(10_000).catch(1);
 const salarySchema = z.coerce.number().int().min(0).max(5_000_000).catch(0);
+const matchSchema = z.coerce.number().int().min(0).max(100).catch(0);
 const hnIdSchema = z.coerce.number().int().positive().catch(0);
 
 /**
@@ -42,6 +44,7 @@ export function parseBrowseSearchParams(
 ): BrowseFilters {
   const month = monthSchema.parse(first(raw.month) ?? "");
   const salary = salarySchema.parse(first(raw.salaryMin) ?? 0);
+  const match = matchSchema.parse(first(raw.matchMin) ?? 0);
   const selected = hnIdSchema.parse(first(raw.selected) ?? 0);
 
   const remote = csv(first(raw.remote)).filter((v): v is RemoteValue =>
@@ -59,6 +62,7 @@ export function parseBrowseSearchParams(
     salaryMin: salary > 0 ? salary : null,
     stack: csv(first(raw.stack)).slice(0, 10).map((s) => s.slice(0, 40)),
     visa: first(raw.visa) === "1",
+    matchMin: match > 0 ? match : null,
     month: month.length > 0 ? month : null,
     page: pageSchema.parse(first(raw.page) ?? 1),
     selected: selected > 0 ? selected : null,
@@ -75,6 +79,7 @@ export function buildBrowseHref(f: Partial<BrowseFilters>): string {
   if (f.salaryMin) params.set("salaryMin", String(f.salaryMin));
   if (f.stack && f.stack.length > 0) params.set("stack", f.stack.join(","));
   if (f.visa) params.set("visa", "1");
+  if (f.matchMin) params.set("matchMin", String(f.matchMin));
   if (f.month) params.set("month", f.month);
   if (f.page && f.page > 1) params.set("page", String(f.page));
   if (f.selected) params.set("selected", String(f.selected));

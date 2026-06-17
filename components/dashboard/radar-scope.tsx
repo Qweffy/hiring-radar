@@ -119,8 +119,9 @@ export interface RadarScopeProps {
  * the legend/caption. Decorative for AT — the caption + the radar's aria-label
  * carry the summary; tooltip content is still reachable via blip focus.
  *
- * M5: blip distance encodes recency today; the agent's real match score will
- * replace it, at which point shortlisted blips also gain the violet halo.
+ * Blip distance encodes the agent's real match score when a posting has been
+ * assessed (recency fallback otherwise); agent-shortlisted blips wear a violet
+ * halo.
  */
 export function RadarScope({
   blips,
@@ -399,15 +400,17 @@ function BlipDot({
   onHover: () => void;
 }) {
   const fill = `rgba(61,255,162, ${blipFillOpacity(blip.match)})`;
-  const resting = "0 0 6px rgba(61,255,162,0.45)";
-  const hover = "0 0 0 2px rgba(232,240,242,0.9), 0 0 14px rgba(61,255,162,0.7)";
+  // A shortlisted blip wears a violet halo (an extra outer ring) at all times.
+  const halo = blip.shortlisted ? ", 0 0 0 3px rgba(167,139,250,0.6)" : "";
+  const resting = `0 0 6px rgba(61,255,162,0.45)${halo}`;
+  const hover = `0 0 0 2px rgba(232,240,242,0.9), 0 0 14px rgba(61,255,162,0.7)${halo}`;
 
   return (
     <button
       type="button"
       onMouseEnter={onHover}
       onFocus={onHover}
-      aria-label={`${blip.company} — ${blip.role}${blip.salaryLabel ? `, ${blip.salaryLabel}` : ""}`}
+      aria-label={`${blip.company} — ${blip.role}${blip.salaryLabel ? `, ${blip.salaryLabel}` : ""}${blip.shortlisted ? ", shortlisted" : ""}`}
       className="absolute flex cursor-pointer items-center justify-center border-0 bg-transparent p-0"
       style={{
         left: blip.x,

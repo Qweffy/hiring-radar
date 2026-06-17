@@ -14,9 +14,10 @@ import {
   type SQL,
 } from "drizzle-orm";
 import { db } from "@/db";
-import { postings } from "@/db/schema";
+import { assessments, postings } from "@/db/schema";
 import type { BrowseFilters } from "@/lib/browse-params";
 import { getAvailableMonths, getLatestCompletedSweepId } from "@/lib/queries/sweeps";
+import { getAssessment, type AssessmentRow } from "@/lib/queries/assessments";
 import { searchPostings } from "@/lib/queries/search";
 
 export const PAGE_SIZE = 50;
@@ -37,6 +38,8 @@ export type PostingRow = {
   parseStatus: "pending" | "parsed" | "failed" | "skipped";
   /** First raw-text line — the fallback title for unparsed rows. */
   rawTextPreview: string;
+  /** Latest agent match score (0-100), or null when never assessed. */
+  matchScore: number | null;
   /**
    * Best-matching ~140-char window of raw text for semantic/hybrid results,
    * with matched query terms wrapped in <mark>. Absent for exact mode.
@@ -79,10 +82,15 @@ function buildConditions(f: BrowseFilters, month: string | null): SQL[] {
     );
   }
   if (f.visa) conds.push(eq(postings.visaSponsorship, true));
+  if (f.matchMin !== null) {
+    conds.push(sql`${assessments.score} >= ${f.matchMin}`);
+  }
   return conds;
 }
 
-// One column set, two callers (exact-page query + ranked-id hydration).
+// One column set, two callers (exact-page query + ranked-id hydration). The
+// assessments LEFT JOIN surfaces the latest agent match score per posting
+// (unique on postingId, so the join never fans rows out).
 const ROW_COLUMNS = {
   id: postings.id,
   hnId: postings.hnId,
@@ -98,6 +106,7 @@ const ROW_COLUMNS = {
   parseStatus: postings.parseStatus,
   firstSweepId: postings.firstSweepId,
   rawText: postings.rawText,
+  matchScore: assessments.score,
 } as const;
 
 type RawRow = {
@@ -115,6 +124,7 @@ type RawRow = {
   parseStatus: "pending" | "parsed" | "failed" | "skipped";
   firstSweepId: number | null;
   rawText: string;
+  matchScore: number | null;
 };
 
 function toPostingRow(
@@ -137,6 +147,7 @@ function toPostingRow(
     isNew: latestSweepId !== null && r.firstSweepId === latestSweepId,
     parseStatus: r.parseStatus,
     rawTextPreview: r.rawText.split("\n")[0]?.slice(0, 120) ?? "",
+    matchScore: r.matchScore,
     ...(snippet !== undefined ? { relevanceSnippet: snippet } : {}),
   };
 }
@@ -191,6 +202,7 @@ export async function getBrowsePostings(f: BrowseFilters): Promise<BrowseResult>
         ? await db
             .select(ROW_COLUMNS)
             .from(postings)
+            .leftJoin(assessments, eq(assessments.postingId, postings.id))
             .where(inArray(postings.id, ids))
         : [];
     // Re-impose the engine's rank order — SQL `in (...)` doesn't preserve it.
@@ -207,17 +219,27 @@ export async function getBrowsePostings(f: BrowseFilters): Promise<BrowseResult>
     };
   }
 
-  // Exact mode (and the no-query default): ILIKE + recency ordering, unchanged.
+  // Exact mode (and the no-query default): ILIKE filtering, joined to the latest
+  // assessment. A Match ≥ floor sorts strongest-first; otherwise recency wins.
   const where = and(...buildConditions(f, month));
+  const orderBy =
+    f.matchMin !== null
+      ? [desc(assessments.score), desc(postings.hnCreatedAt)]
+      : [desc(postings.hnCreatedAt)];
   const [rows, totalRows] = await Promise.all([
     db
       .select(ROW_COLUMNS)
       .from(postings)
+      .leftJoin(assessments, eq(assessments.postingId, postings.id))
       .where(where)
-      .orderBy(desc(postings.hnCreatedAt))
+      .orderBy(...orderBy)
       .limit(PAGE_SIZE)
       .offset((f.page - 1) * PAGE_SIZE),
-    db.select({ n: count() }).from(postings).where(where),
+    db
+      .select({ n: count() })
+      .from(postings)
+      .leftJoin(assessments, eq(assessments.postingId, postings.id))
+      .where(where),
   ]);
 
   return {
@@ -249,6 +271,8 @@ export type PostingDetail = {
   visaSponsorship: boolean | null;
   contact: string | null;
   isNew: boolean;
+  /** Latest agent assessment for this posting, or null when never scored. */
+  assessment: AssessmentRow | null;
 };
 
 export async function getPostingDetail(hnId: number): Promise<PostingDetail | null> {
@@ -258,6 +282,7 @@ export async function getPostingDetail(hnId: number): Promise<PostingDetail | nu
   ]);
   const r = rows[0];
   if (!r || r.isDeleted) return null;
+  const assessment = await getAssessment(r.id);
   return {
     id: r.id,
     hnId: r.hnId,
@@ -280,5 +305,6 @@ export async function getPostingDetail(hnId: number): Promise<PostingDetail | nu
     visaSponsorship: r.visaSponsorship,
     contact: r.contact,
     isNew: latestSweepId !== null && r.firstSweepId === latestSweepId,
+    assessment,
   };
 }

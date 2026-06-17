@@ -23,9 +23,9 @@ export interface ShellNavItem {
 export const MAIN_NAV: ShellNavItem[] = [
   { key: "radar", label: "Radar", href: "/", icon: "radar", hint: "g d", enabled: true },
   { key: "browse", label: "Browse", href: "/browse", icon: "search", hint: "g b", enabled: true },
-  { key: "shortlist", label: "Shortlist", href: "/shortlist", icon: "bookmark", hint: "g s", enabled: false },
-  { key: "agent", label: "Agent Runs", href: "/agent", icon: "bot", hint: "g r", enabled: false },
-  { key: "profile", label: "Profile", href: "/profile", icon: "user", hint: "g u", enabled: false },
+  { key: "shortlist", label: "Shortlist", href: "/shortlist", icon: "bookmark", hint: "g s", enabled: true },
+  { key: "agent", label: "Agent Runs", href: "/agent", icon: "bot", hint: "g r", enabled: true },
+  { key: "profile", label: "Profile", href: "/profile", icon: "user", hint: "g u", enabled: true },
 ];
 
 export const ADMIN_NAV: ShellNavItem[] = [

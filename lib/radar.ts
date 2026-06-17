@@ -95,8 +95,9 @@ export function polarToCartesian(
  * Match score (0-100) → distance from center. Closer = stronger match.
  * match 100 → r=40 (near center), match 0 → r=200 (near rim).
  *
- * M5: until the agent wires real match scores, callers pass a recency-derived
- * pseudo-score (newest posting ≈ strongest). See `recencyToScore`.
+ * Callers pass the agent's real assessment score when a posting has been
+ * scored, falling back to a recency-derived pseudo-score otherwise. See
+ * `recencyToScore`.
  */
 export function matchToRadius(match: number): number {
   const clamped = Math.max(0, Math.min(100, match));
@@ -143,11 +144,11 @@ export function tierToDiameter(tier: Tier): number {
 }
 
 /**
- * Recency → pseudo-match score (0-100) for the M5-less radar: the newest
- * posting in the window maps to ~100 (near center), the oldest to ~0 (near
- * rim). Linear across the [oldest, newest] span; a single posting → 100.
- *
- * M5: replace this with the agent's real semantic match score per posting.
+ * Recency → pseudo-match score (0-100): the newest posting in the window maps
+ * to ~100 (near center), the oldest to ~0 (near rim). Linear across the
+ * [oldest, newest] span; a single posting → 100. Used as the blip distance
+ * only for postings the agent hasn't scored yet — assessed postings use their
+ * real match score instead.
  */
 export function recencyToScore(
   createdAtMs: number,
@@ -284,4 +285,11 @@ export function classifyCategory(
 export function blipFillOpacity(match: number): number {
   const clamped = Math.max(0, Math.min(100, match));
   return 0.55 + (clamped / 100) * 0.45;
+}
+
+/** Match strength band for the violet MatchBadge: HIGH ≥80, MED ≥50, else LOW. */
+export function scoreToMatchLevel(score: number): "HIGH" | "MED" | "LOW" {
+  if (score >= 80) return "HIGH";
+  if (score >= 50) return "MED";
+  return "LOW";
 }

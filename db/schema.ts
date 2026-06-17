@@ -7,6 +7,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  real,
   text,
   timestamp,
   uniqueIndex,
@@ -172,6 +173,206 @@ export const deadLetters = pgTable(
   (t) => [index("dead_letters_created_idx").on(t.createdAt.desc())],
 );
 
+// ─── M5: profile, shortlist, agent runs, assessments ───────────────────────
+
+/** Skills bucketed by depth. Stored in profiles.skills (jsonb). */
+export type ProfileSkills = {
+  core: string[];
+  familiar: string[];
+  learning: string[];
+};
+
+/**
+ * agentSteps.payload — a discriminated union mirroring agentStepKind. The DB
+ * column is one jsonb blob; the kind column says which variant it holds.
+ */
+export type AgentStepPayload =
+  | { tool: string; args: Record<string, unknown> }
+  | { observation: unknown }
+  | { text: string }
+  | { postingId: number; score: number; verdict: string }
+  | { message: string };
+
+/** Per-step model accounting, written when a step called the LLM. */
+export type AgentStepUsage = {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  costUsd?: number;
+};
+
+/** One fit/friction signal in an assessment. '+' = fit, '-' = friction. */
+export type AssessmentReason = {
+  sign: "+" | "-";
+  text: string;
+};
+
+export const remotePref = pgEnum("remote_pref", [
+  "remote_only",
+  "hybrid_ok",
+  "any",
+]);
+
+/**
+ * Single-user profile, versioned: a save never updates in place — it inserts a
+ * new row with version+1, so the latest profile is the highest version. The
+ * agent run records the profileVersion it ran against, keeping past runs
+ * reproducible after the profile changes.
+ */
+export const profiles = pgTable(
+  "profiles",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    version: integer("version").notNull(),
+    rawCv: text("raw_cv"),
+    summary: text("summary"),
+    // { core: string[]; familiar: string[]; learning: string[] }
+    skills: jsonb("skills").$type<ProfileSkills>(),
+    targetRoles: text("target_roles").array(),
+    salaryFloor: integer("salary_floor"),
+    remotePref: remotePref("remote_pref"),
+    timezone: text("timezone"),
+    companyStages: text("company_stages").array(),
+    dealbreakers: text("dealbreakers").array(),
+    agentInstructions: text("agent_instructions"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("profiles_version_unique").on(t.version)],
+);
+
+export const agentRunStatus = pgEnum("agent_run_status", [
+  "running",
+  "completed",
+  "failed",
+  "cancelled",
+  "paused",
+]);
+
+/**
+ * One autonomous agent pass over the postings. stepsUsed/costUsd accrue as the
+ * run advances; picksCount is the number of postings it shortlisted. A run is
+ * append-only once finished — re-running starts a fresh row.
+ */
+export const agentRuns = pgTable(
+  "agent_runs",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    profileVersion: integer("profile_version").notNull(),
+    status: agentRunStatus("status").notNull().default("running"),
+    model: text("model").notNull(),
+    stepBudget: integer("step_budget").notNull(),
+    stepsUsed: integer("steps_used").notNull().default(0),
+    costUsd: real("cost_usd").notNull().default(0),
+    picksCount: integer("picks_count").notNull().default(0),
+    error: text("error"),
+    startedAt: timestamp("started_at").notNull().defaultNow(),
+    finishedAt: timestamp("finished_at"),
+  },
+  (t) => [index("agent_runs_started_idx").on(t.startedAt.desc())],
+);
+
+export const agentStepKind = pgEnum("agent_step_kind", [
+  "tool_call",
+  "observation",
+  "reasoning",
+  "decision",
+  "error",
+]);
+
+/**
+ * Append-only trace of an agent run, ordered by idx. payload shape varies by
+ * kind: a tool call carries { tool, args }, an observation carries its result,
+ * reasoning/decision carry text or { postingId, score, verdict }. usage is the
+ * per-step token/cost accounting when the step hit the model.
+ */
+export const agentSteps = pgTable(
+  "agent_steps",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    runId: integer("run_id")
+      .notNull()
+      .references(() => agentRuns.id, { onDelete: "cascade" }),
+    idx: integer("idx").notNull(),
+    kind: agentStepKind("kind").notNull(),
+    payload: jsonb("payload").$type<AgentStepPayload>().notNull(),
+    usage: jsonb("usage").$type<AgentStepUsage>(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("agent_steps_run_idx_unique").on(t.runId, t.idx)],
+);
+
+export const shortlistStage = pgEnum("shortlist_stage", [
+  "new",
+  "applied",
+  "interviewing",
+  "offer",
+  "archived",
+]);
+
+export const shortlistSource = pgEnum("shortlist_source", ["agent", "manual"]);
+
+/**
+ * One entry per posting in the user's pipeline (unique on postingId). source
+ * records whether the agent or the user added it; runId links agent picks back
+ * to the run that produced them (set null if the run is purged).
+ */
+export const shortlistEntries = pgTable(
+  "shortlist_entries",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    postingId: integer("posting_id")
+      .notNull()
+      .references(() => postings.id, { onDelete: "cascade" }),
+    stage: shortlistStage("stage").notNull().default("new"),
+    source: shortlistSource("source").notNull(),
+    runId: integer("run_id").references(() => agentRuns.id, {
+      onDelete: "set null",
+    }),
+    addedAt: timestamp("added_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("shortlist_entries_posting_id_unique").on(t.postingId),
+    index("shortlist_entries_stage_idx").on(t.stage),
+  ],
+);
+
+/** Free-text notes attached to a shortlist entry, newest-first by createdAt. */
+export const shortlistNotes = pgTable(
+  "shortlist_notes",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    entryId: integer("entry_id")
+      .notNull()
+      .references(() => shortlistEntries.id, { onDelete: "cascade" }),
+    body: text("body").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("shortlist_notes_entry_idx").on(t.entryId, t.createdAt.desc())],
+);
+
+/**
+ * The agent's match verdict for a posting. Unique on postingId — the latest
+ * assessment wins via upsert. reasons is an ordered list of {sign,text} signals
+ * ('+' for a fit signal, '-' for a friction). runId links to the producing run.
+ */
+export const assessments = pgTable(
+  "assessments",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    postingId: integer("posting_id")
+      .notNull()
+      .references(() => postings.id, { onDelete: "cascade" }),
+    runId: integer("run_id").references(() => agentRuns.id, {
+      onDelete: "set null",
+    }),
+    score: integer("score").notNull(),
+    reasons: jsonb("reasons").$type<AssessmentReason[]>().notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("assessments_posting_id_unique").on(t.postingId)],
+);
+
 export const sweepsRelations = relations(sweeps, ({ many }) => ({
   firstSeenPostings: many(postings),
 }));
@@ -196,3 +397,49 @@ export const postingEmbeddingsRelations = relations(
     }),
   }),
 );
+
+export const agentRunsRelations = relations(agentRuns, ({ many }) => ({
+  steps: many(agentSteps),
+  picks: many(shortlistEntries),
+  assessments: many(assessments),
+}));
+
+export const agentStepsRelations = relations(agentSteps, ({ one }) => ({
+  run: one(agentRuns, {
+    fields: [agentSteps.runId],
+    references: [agentRuns.id],
+  }),
+}));
+
+export const shortlistEntriesRelations = relations(
+  shortlistEntries,
+  ({ one, many }) => ({
+    posting: one(postings, {
+      fields: [shortlistEntries.postingId],
+      references: [postings.id],
+    }),
+    run: one(agentRuns, {
+      fields: [shortlistEntries.runId],
+      references: [agentRuns.id],
+    }),
+    notes: many(shortlistNotes),
+  }),
+);
+
+export const shortlistNotesRelations = relations(shortlistNotes, ({ one }) => ({
+  entry: one(shortlistEntries, {
+    fields: [shortlistNotes.entryId],
+    references: [shortlistEntries.id],
+  }),
+}));
+
+export const assessmentsRelations = relations(assessments, ({ one }) => ({
+  posting: one(postings, {
+    fields: [assessments.postingId],
+    references: [postings.id],
+  }),
+  run: one(agentRuns, {
+    fields: [assessments.runId],
+    references: [agentRuns.id],
+  }),
+}));

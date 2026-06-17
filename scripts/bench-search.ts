@@ -44,6 +44,7 @@ const baseFilters = (query: string, mode: SearchMode): BrowseFilters => ({
   salaryMin: null,
   stack: [],
   visa: false,
+  matchMin: null,
   month: MONTH,
   page: 1,
   selected: null,

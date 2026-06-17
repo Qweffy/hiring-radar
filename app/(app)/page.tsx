@@ -1,6 +1,7 @@
 import { connection } from "next/server";
 import { getDashboardData } from "@/lib/queries/dashboard";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
+import { requestNowMs } from "@/components/browse/request-now";
 
 /**
  * Radar Dashboard — the root route ("/"). Server component: reads the latest
@@ -15,5 +16,5 @@ import { DashboardView } from "@/components/dashboard/dashboard-view";
 export default async function RadarPage() {
   await connection();
   const data = await getDashboardData();
-  return <DashboardView data={data} />;
+  return <DashboardView data={data} now={requestNowMs()} />;
 }

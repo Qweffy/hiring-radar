@@ -18,10 +18,13 @@ export interface RadarShellProps {
 
 const CHORD_WINDOW_MS = 1200;
 
-/** Chord targets that exist in M1 — the rest of the g-chords arm when their routes land. */
+/** Chord targets for live routes — the rest arm as their screens land. */
 const CHORDS: Record<string, string> = {
   d: "/", // Radar
   b: "/browse",
+  s: "/shortlist",
+  r: "/agent",
+  u: "/profile",
   p: "/pipeline",
 };
 

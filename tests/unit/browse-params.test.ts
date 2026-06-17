@@ -10,6 +10,7 @@ describe("parseBrowseSearchParams", () => {
       salaryMin: null,
       stack: [],
       visa: false,
+      matchMin: null,
       month: null,
       page: 1,
       selected: null,
@@ -34,6 +35,7 @@ describe("parseBrowseSearchParams", () => {
       salaryMin: 150000,
       stack: ["TypeScript", "React"],
       visa: true,
+      matchMin: null,
       month: "2026-06",
       page: 3,
       selected: 48357992,
@@ -72,6 +74,13 @@ describe("parseBrowseSearchParams", () => {
 
   it("takes the first value of repeated params", () => {
     expect(parseBrowseSearchParams({ q: ["a", "b"] }).q).toBe("a");
+  });
+
+  it("parses matchMin within 0-100, dropping 0 and garbage to null", () => {
+    expect(parseBrowseSearchParams({ matchMin: "80" }).matchMin).toBe(80);
+    expect(parseBrowseSearchParams({ matchMin: "0" }).matchMin).toBeNull();
+    expect(parseBrowseSearchParams({ matchMin: "200" }).matchMin).toBeNull();
+    expect(parseBrowseSearchParams({ matchMin: "nope" }).matchMin).toBeNull();
   });
 });
 

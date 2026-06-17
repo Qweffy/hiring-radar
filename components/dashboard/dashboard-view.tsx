@@ -8,6 +8,8 @@ import { DashboardEmpty } from "@/components/dashboard/dashboard-empty";
 
 export interface DashboardViewProps {
   data: DashboardData;
+  /** Server timestamp (epoch ms) — keeps digest relative times hydration-stable. */
+  now: number;
 }
 
 /**
@@ -16,7 +18,7 @@ export interface DashboardViewProps {
  * is the full-width signal feed. Each widget owns its own degradation — the
  * route error boundary catches a crash without blanking the chrome.
  */
-export function DashboardView({ data }: DashboardViewProps) {
+export function DashboardView({ data, now }: DashboardViewProps) {
   if (!data.hasPostings) {
     return <DashboardEmpty />;
   }
@@ -57,7 +59,7 @@ export function DashboardView({ data }: DashboardViewProps) {
           {/* Right column */}
           <div className="flex flex-col" style={{ gap: 24 }}>
             <Scorecards data={data.scorecards} />
-            <AgentDigest />
+            <AgentDigest digest={data.agentDigest} now={now} />
           </div>
         </div>
 

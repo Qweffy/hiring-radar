@@ -73,6 +73,7 @@ export function BrowseView({ filters, result, detail, now }: BrowseViewProps) {
       salaryMin: null,
       stack: [],
       visa: false,
+      matchMin: null,
       month: null,
       page: 1,
     });
@@ -167,6 +168,7 @@ export function BrowseView({ filters, result, detail, now }: BrowseViewProps) {
     filters.salaryMin !== null ||
     filters.stack.length > 0 ||
     filters.visa ||
+    filters.matchMin !== null ||
     filters.month !== null;
 
   return (

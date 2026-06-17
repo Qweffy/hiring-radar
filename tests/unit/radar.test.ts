@@ -11,6 +11,7 @@ import {
   polarToCartesian,
   recencyToScore,
   salaryToTier,
+  scoreToMatchLevel,
   tierToDiameter,
   toRadians,
 } from "@/lib/radar";
@@ -163,6 +164,17 @@ describe("blipFillOpacity", () => {
   it("clamps out-of-range matches", () => {
     expect(blipFillOpacity(-10)).toBeCloseTo(0.55, 6);
     expect(blipFillOpacity(150)).toBeCloseTo(1.0, 6);
+  });
+});
+
+describe("scoreToMatchLevel", () => {
+  it("bands scores: HIGH ≥ 80, MED ≥ 50, LOW below", () => {
+    expect(scoreToMatchLevel(100)).toBe("HIGH");
+    expect(scoreToMatchLevel(80)).toBe("HIGH");
+    expect(scoreToMatchLevel(79)).toBe("MED");
+    expect(scoreToMatchLevel(50)).toBe("MED");
+    expect(scoreToMatchLevel(49)).toBe("LOW");
+    expect(scoreToMatchLevel(0)).toBe("LOW");
   });
 });
 

@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import type {
   BrowseFilters,
   RemoteValue,
@@ -8,7 +15,9 @@ import type {
 } from "@/lib/browse-params";
 import type { BrowseResult } from "@/lib/queries/postings";
 import { formatMonth } from "@/lib/format";
+import { Icon } from "@/components/ui/icon";
 import { ProgressLine } from "@/components/ui/progress-line";
+import { RangeSlider } from "@/components/ui/range-slider";
 import { SearchInput } from "@/components/ui/search-input";
 import { Tag } from "@/components/ui/tag";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -103,6 +112,153 @@ function SearchModeControl({ mode, enabled, onChange }: SearchModeControlProps) 
     <Tooltip label="enter a query to switch modes" tabIndex={0} className="cursor-not-allowed">
       {control}
     </Tooltip>
+  );
+}
+
+/** Step the Match ≥ slider moves in. */
+const MATCH_STEP = 5;
+
+interface MatchChipProps {
+  /** Active floor (0-100), or null when the filter is off. */
+  value: number | null;
+  onChange: (value: number | null) => void;
+}
+
+/**
+ * Violet "Match ≥" filter chip → a popover holding a phosphor-... no, violet
+ * range slider that floors postings by the agent's assessment score. Off by
+ * default (null); the slider edits a draft and commits to the URL on release.
+ */
+function MatchChip({ value, onChange }: MatchChipProps) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLSpanElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuId = useId();
+  const active = value !== null;
+  // Draft mirrors the slider while dragging; commits on pointer/key release.
+  const [draft, setDraft] = useState(value ?? 80);
+  const [syncedValue, setSyncedValue] = useState(value);
+  if (value !== syncedValue) {
+    setDraft(value ?? 80);
+    setSyncedValue(value);
+  }
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!(event.target instanceof Node)) return;
+      if (rootRef.current?.contains(event.target)) return;
+      setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
+  const violetChipStyle: CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 7,
+    height: 30,
+    padding: "0 12px",
+    background: active ? "var(--violet-12)" : "transparent",
+    border: `1px solid ${
+      active
+        ? "color-mix(in srgb, var(--violet) 50%, transparent)"
+        : "var(--border)"
+    }`,
+    borderRadius: "var(--radius-control)",
+    font: "var(--mono-sm)",
+    color: active ? "var(--violet)" : "var(--text-mid)",
+    cursor: "pointer",
+    whiteSpace: "nowrap",
+    transition: "border-color var(--dur-fast), background var(--dur-fast)",
+  };
+
+  return (
+    <span
+      ref={rootRef}
+      className="relative inline-flex"
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && open) {
+          event.stopPropagation();
+          setOpen(false);
+          triggerRef.current?.focus();
+        }
+      }}
+    >
+      <button
+        ref={triggerRef}
+        type="button"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-controls={open ? menuId : undefined}
+        onClick={() => setOpen((o) => !o)}
+        className="hover:[border-color:color-mix(in_srgb,var(--violet)_50%,transparent)]"
+        style={violetChipStyle}
+      >
+        <Icon name="bot" size={13} />
+        {active ? `Match ≥ ${value}` : "Match ≥"}
+        <Icon name="chevron-down" size={13} style={{ opacity: 0.6 }} />
+      </button>
+      {open ? (
+        <div
+          id={menuId}
+          role="dialog"
+          aria-label="Filter by agent match score"
+          className="absolute left-0 top-full"
+          style={{
+            zIndex: "var(--z-dropdown)",
+            marginTop: 6,
+            width: 248,
+            padding: 14,
+            background: "var(--bg-raised)",
+            border: "1px solid var(--border)",
+            borderRadius: "var(--radius-control)",
+            boxShadow: "var(--shadow-pop)",
+          }}
+        >
+          <RangeSlider
+            label="Agent match floor"
+            min={0}
+            max={100}
+            step={MATCH_STEP}
+            value={draft}
+            onChange={(event) => setDraft(Number(event.target.value))}
+            onPointerUp={() => onChange(draft)}
+            onKeyUp={() => onChange(draft)}
+            format={(v) => `≥ ${v}`}
+          />
+          <div
+            className="flex items-center justify-between"
+            style={{ marginTop: 12 }}
+          >
+            <span style={{ font: "var(--text-xs)", color: "var(--text-low-content)" }}>
+              Only assessed postings
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setDraft(80);
+                onChange(null);
+                setOpen(false);
+                triggerRef.current?.focus();
+              }}
+              className="cursor-pointer bg-transparent"
+              style={{
+                padding: 0,
+                border: "none",
+                font: "var(--text-xs)",
+                color: active ? "var(--cyan)" : "var(--text-low)",
+                cursor: active ? "pointer" : "default",
+              }}
+              disabled={!active}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </span>
   );
 }
 
@@ -224,6 +380,16 @@ export function BrowseToolbar({
       ),
     });
   }
+  if (filters.matchMin !== null) {
+    activeChips.push({
+      key: "matchMin",
+      node: (
+        <Tag tone="violet" onRemove={() => onPatch({ matchMin: null })}>
+          MATCH ≥ {filters.matchMin}
+        </Tag>
+      ),
+    });
+  }
 
   return (
     <div
@@ -331,31 +497,10 @@ export function BrowseToolbar({
         >
           Visa
         </button>
-        <Tooltip label="coming in M5" tabIndex={0} className="cursor-not-allowed">
-          <button
-            type="button"
-            disabled
-            className="pointer-events-none"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              height: 30,
-              padding: "0 12px",
-              background: "var(--violet-12)",
-              border: "1px solid color-mix(in srgb, var(--violet) 40%, transparent)",
-              borderRadius: "var(--radius-control)",
-              font: "600 11px/1 var(--font-mono)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: "var(--violet)",
-              opacity: 0.5,
-              whiteSpace: "nowrap",
-            }}
-          >
-            Match ≥
-          </button>
-        </Tooltip>
+        <MatchChip
+          value={filters.matchMin}
+          onChange={(matchMin) => onPatch({ matchMin })}
+        />
         <div className="flex-1" />
         <span
           className="whitespace-nowrap"

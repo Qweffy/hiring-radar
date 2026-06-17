@@ -13,6 +13,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
+    "seed:profile": "tsx db/seed-profile.ts",
     "ingest": "tsx scripts/ingest.ts",
     "embed": "tsx scripts/embed.ts",
     "bench:search": "tsx scripts/bench-search.ts",

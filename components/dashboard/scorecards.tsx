@@ -1,6 +1,9 @@
 import { Scorecard } from "@/components/ui/scorecard";
 import { Sparkline } from "@/components/ui/sparkline";
-import type { DashboardScorecards } from "@/lib/queries/dashboard";
+import {
+  STRONG_MATCH_FLOOR,
+  type DashboardScorecards,
+} from "@/lib/queries/dashboard";
 
 export interface ScorecardsProps {
   data: DashboardScorecards;
@@ -10,8 +13,8 @@ export interface ScorecardsProps {
  * 2×2 instrument tiles. Three are DS `Scorecard`s; the fourth (Median salary)
  * is a bespoke card pairing a mono number with an inline sparkline + delta.
  *
- * Card 2 is an honest "Parsed" share, NOT the prototype's "Match ≥ 80" — real
- * match scores arrive with the agent (M5), at which point this becomes that.
+ * Card 2 is the agent's real "Match ≥ 80" count — postings scored at or above
+ * STRONG_MATCH_FLOOR — over the postings it has assessed this month.
  */
 export function Scorecards({ data }: ScorecardsProps) {
   const medianLabel =
@@ -24,7 +27,12 @@ export function Scorecards({ data }: ScorecardsProps) {
         value={data.newCount}
         delta={data.newDelta ?? undefined}
       />
-      <Scorecard label="Parsed" value={data.parsedCount} suffix={`/ ${data.parsedTotal}`} tone="violet" />
+      <Scorecard
+        label={`Match ≥ ${STRONG_MATCH_FLOOR}`}
+        value={data.strongMatchCount}
+        suffix={data.assessedCount > 0 ? `/ ${data.assessedCount}` : undefined}
+        tone="violet"
+      />
       <Scorecard label="Remote share" value={data.remoteSharePct} suffix="%" tone="cyan" />
 
       {/* Bespoke median-salary card */}

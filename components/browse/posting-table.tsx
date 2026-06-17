@@ -4,10 +4,12 @@ import type { CSSProperties, ReactNode } from "react";
 import type { BrowseFilters } from "@/lib/browse-params";
 import type { PostingRow } from "@/lib/queries/postings";
 import { formatSalary, relativeTime } from "@/lib/format";
+import { scoreToMatchLevel } from "@/lib/radar";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { HRIllustration } from "@/components/ui/hr-illustration";
 import { Icon } from "@/components/ui/icon";
+import { MatchBadge } from "@/components/ui/match-badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Tag } from "@/components/ui/tag";
 
@@ -96,6 +98,9 @@ function filterHint(filters: BrowseFilters): ReactNode {
   const monoName = (name: string) => (
     <span style={{ font: "var(--mono-sm)", color: "var(--text-hi)" }}>{name}</span>
   );
+  if (filters.matchMin !== null) {
+    return <>Try lowering the {monoName(`match ≥ ${filters.matchMin}`)} floor.</>;
+  }
   if (filters.stack.length > 0) {
     return <>Try removing the {monoName(filters.stack[0])} filter.</>;
   }
@@ -345,6 +350,14 @@ export function PostingTable({
                   >
                     {row.company ?? "—"}
                   </span>
+                  {row.matchScore !== null ? (
+                    <MatchBadge
+                      level={scoreToMatchLevel(row.matchScore)}
+                      score={row.matchScore}
+                      className="shrink-0"
+                      title={`Agent match score: ${row.matchScore}`}
+                    />
+                  ) : null}
                   {row.isNew ? <StatusBadge status="NEW" className="shrink-0" /> : null}
                 </span>
 

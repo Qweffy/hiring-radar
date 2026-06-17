@@ -1,7 +1,13 @@
 import "server-only";
 import { and, desc, eq, ne, not, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { postings, sweeps } from "@/db/schema";
+import {
+  agentRuns,
+  assessments,
+  postings,
+  shortlistEntries,
+  sweeps,
+} from "@/db/schema";
 import {
   classifyCategory,
   recencyToScore,
@@ -13,6 +19,10 @@ import {
   getAvailableMonths,
   getLatestIngestSweepId,
 } from "@/lib/queries/sweeps";
+import type { AgentRunStatus } from "@/lib/queries/agent-runs";
+
+/** Browse/dashboard threshold for the "strong match" scorecard + filter. */
+export const STRONG_MATCH_FLOOR = 80;
 
 /** Hard cap on blips drawn on the scope, for legibility. */
 export const BLIP_CAP = 120;
@@ -27,8 +37,15 @@ export type DashboardBlip = {
   salaryValue: number | null;
   category: Category;
   tier: Tier;
-  /** Recency-derived pseudo-match (0-100). M5: real agent match score. */
+  /**
+   * Blip distance score (0-100). The agent's real assessment score when this
+   * posting has been scored; a recency-derived pseudo-score otherwise.
+   */
   match: number;
+  /** True when `match` is the agent's real score (vs. a recency fallback). */
+  isAssessed: boolean;
+  /** True when the agent shortlisted this posting — drives the violet halo. */
+  shortlisted: boolean;
   region: string | null;
   isNew: boolean;
 };
@@ -50,9 +67,10 @@ export type DashboardScorecards = {
   newDelta: number | null;
   remoteSharePct: number;
   medianSalary: number | null;
-  /** Parsed share — honest stand-in until M5 ships "Match ≥ 80". */
-  parsedCount: number;
-  parsedTotal: number;
+  /** Postings the agent scored at or above STRONG_MATCH_FLOOR this month. */
+  strongMatchCount: number;
+  /** Postings the agent has assessed this month (the "of N" denominator). */
+  assessedCount: number;
 };
 
 export type SweepCaption = {
@@ -60,6 +78,30 @@ export type SweepCaption = {
   month: string | null;
   totalPostings: number;
   newCount: number;
+};
+
+/** The single top pick of the latest run — surfaced in the digest card. */
+export type AgentTopMatch = {
+  hnId: number;
+  company: string;
+  role: string;
+  score: number;
+};
+
+/**
+ * Latest agent run summary for the digest card. null when the agent has never
+ * run — the card then shows the "hasn't scanned yet" empty state.
+ */
+export type AgentDigestData = {
+  runId: number;
+  status: AgentRunStatus;
+  picksCount: number;
+  stepsUsed: number;
+  stepBudget: number;
+  costUsd: number;
+  startedAt: Date;
+  finishedAt: Date | null;
+  topMatch: AgentTopMatch | null;
 };
 
 export type DashboardData = {
@@ -70,6 +112,8 @@ export type DashboardData = {
   blipsCapped: boolean;
   signalFeed: SignalLine[];
   sweepCaption: SweepCaption;
+  /** Latest agent run digest, or null when the agent has never run. */
+  agentDigest: AgentDigestData | null;
   /** Whether any non-skipped, non-deleted posting exists in the month. */
   hasPostings: boolean;
 };
@@ -170,13 +214,14 @@ export async function getDashboardData(): Promise<DashboardData> {
         newDelta: null,
         remoteSharePct: 0,
         medianSalary: null,
-        parsedCount: 0,
-        parsedTotal: 0,
+        strongMatchCount: 0,
+        assessedCount: 0,
       },
       blips: [],
       blipsCapped: false,
       signalFeed: [],
       sweepCaption: { month: null, totalPostings: 0, newCount: 0 },
+      agentDigest: null,
       hasPostings: false,
     };
   }
@@ -193,6 +238,7 @@ export async function getDashboardData(): Promise<DashboardData> {
     aggRows,
     medianRows,
     recentSweeps,
+    agentDigest,
   ] = await Promise.all([
     getLatestIngestSweepId(),
     db
@@ -208,17 +254,25 @@ export async function getDashboardData(): Promise<DashboardData> {
         parseStatus: postings.parseStatus,
         hnCreatedAt: postings.hnCreatedAt,
         firstSweepId: postings.firstSweepId,
+        matchScore: assessments.score,
+        // An agent-sourced shortlist row marks the posting as shortlisted.
+        shortlisted: sql<boolean>`${shortlistEntries.source} = 'agent'`,
       })
       .from(postings)
+      .leftJoin(assessments, eq(assessments.postingId, postings.id))
+      .leftJoin(shortlistEntries, eq(shortlistEntries.postingId, postings.id))
       .where(inMonth)
       .orderBy(desc(postings.hnCreatedAt)),
     db
       .select({
         total: sql<number>`count(*)::int`,
         remote: sql<number>`count(*) filter (where ${postings.remotePolicy} = 'remote')::int`,
-        parsed: sql<number>`count(*) filter (where ${postings.parseStatus} = 'parsed')::int`,
+        // Real match aggregates over the latest assessment per posting.
+        strongMatch: sql<number>`count(*) filter (where ${assessments.score} >= ${STRONG_MATCH_FLOOR})::int`,
+        assessed: sql<number>`count(*) filter (where ${assessments.score} is not null)::int`,
       })
       .from(postings)
+      .leftJoin(assessments, eq(assessments.postingId, postings.id))
       .where(inMonth),
     // Median of coalesce(salaryMax, salaryMin) where a value is present.
     db
@@ -243,15 +297,16 @@ export async function getDashboardData(): Promise<DashboardData> {
       .from(sweeps)
       .orderBy(desc(sweeps.id))
       .limit(6),
+    getAgentDigest(),
   ]);
 
-  const agg = aggRows[0] ?? { total: 0, remote: 0, parsed: 0 };
+  const agg = aggRows[0] ?? { total: 0, remote: 0, strongMatch: 0, assessed: 0 };
   const total = agg.total;
   const newCount = latestSweepId === null
     ? 0
     : rows.filter((r) => r.firstSweepId === latestSweepId).length;
 
-  // Recency window for the pseudo-match score (M5: replaced by real match).
+  // Recency window for the fallback score used by not-yet-assessed postings.
   const times = rows.map((r) => r.hnCreatedAt.getTime());
   const newestMs = times.length > 0 ? Math.max(...times) : 0;
   const oldestMs = times.length > 0 ? Math.min(...times) : 0;
@@ -260,6 +315,8 @@ export async function getDashboardData(): Promise<DashboardData> {
     const stackTags = r.stackTags ?? [];
     const salaryValue = r.salaryMax ?? r.salaryMin;
     const region = r.remotePolicy !== null ? REMOTE_LABEL[r.remotePolicy] : null;
+    const score = r.matchScore;
+    const isAssessed = score !== null;
     return {
       hnId: r.hnId,
       company: r.company ?? "Unknown",
@@ -268,7 +325,13 @@ export async function getDashboardData(): Promise<DashboardData> {
       salaryValue,
       category: classifyCategory(stackTags, r.role),
       tier: salaryToTier(salaryValue),
-      match: recencyToScore(r.hnCreatedAt.getTime(), oldestMs, newestMs),
+      // Real agent score when present; recency fallback otherwise.
+      match:
+        score !== null
+          ? score
+          : recencyToScore(r.hnCreatedAt.getTime(), oldestMs, newestMs),
+      isAssessed,
+      shortlisted: r.shortlisted ?? false,
       region,
       isNew: latestSweepId !== null && r.firstSweepId === latestSweepId,
     };
@@ -293,13 +356,74 @@ export async function getDashboardData(): Promise<DashboardData> {
       newDelta,
       remoteSharePct: total > 0 ? Math.round((agg.remote / total) * 100) : 0,
       medianSalary: medianRows[0]?.median ?? null,
-      parsedCount: agg.parsed,
-      parsedTotal: total,
+      strongMatchCount: agg.strongMatch,
+      assessedCount: agg.assessed,
     },
     blips,
     blipsCapped: allBlips.length > BLIP_CAP,
     signalFeed,
     sweepCaption: { month, totalPostings: total, newCount },
+    agentDigest,
     hasPostings: total > 0,
+  };
+}
+
+/**
+ * Latest agent run + its single strongest pick, for the digest card. The top
+ * match is the highest-scoring assessment produced by that run; null if the run
+ * scored nothing. Returns null when the agent has never run.
+ */
+async function getAgentDigest(): Promise<AgentDigestData | null> {
+  const runRows = await db
+    .select({
+      id: agentRuns.id,
+      status: agentRuns.status,
+      picksCount: agentRuns.picksCount,
+      stepsUsed: agentRuns.stepsUsed,
+      stepBudget: agentRuns.stepBudget,
+      costUsd: agentRuns.costUsd,
+      startedAt: agentRuns.startedAt,
+      finishedAt: agentRuns.finishedAt,
+    })
+    .from(agentRuns)
+    .orderBy(desc(agentRuns.startedAt))
+    .limit(1);
+
+  const run = runRows[0];
+  if (!run) return null;
+
+  const topRows = await db
+    .select({
+      hnId: postings.hnId,
+      company: postings.company,
+      role: postings.role,
+      score: assessments.score,
+    })
+    .from(assessments)
+    .innerJoin(postings, eq(postings.id, assessments.postingId))
+    .where(eq(assessments.runId, run.id))
+    .orderBy(desc(assessments.score))
+    .limit(1);
+
+  const top = topRows[0];
+  const topMatch: AgentTopMatch | null = top
+    ? {
+        hnId: top.hnId,
+        company: top.company ?? "Unknown",
+        role: top.role ?? "Untitled role",
+        score: top.score,
+      }
+    : null;
+
+  return {
+    runId: run.id,
+    status: run.status,
+    picksCount: run.picksCount,
+    stepsUsed: run.stepsUsed,
+    stepBudget: run.stepBudget,
+    costUsd: run.costUsd,
+    startedAt: run.startedAt,
+    finishedAt: run.finishedAt,
+    topMatch,
   };
 }

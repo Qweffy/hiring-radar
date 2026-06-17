@@ -1,13 +1,18 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import { useState, useTransition, type CSSProperties, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import type { PostingDetail, PostingRow } from "@/lib/queries/postings";
+import type { AssessmentRow } from "@/lib/queries/assessments";
 import { formatMonth, formatSalary, relativeTime } from "@/lib/format";
+import { runAgentScan } from "@/app/(app)/agent/actions";
 import { Banner } from "@/components/ui/banner";
+import { Button } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
 import { HRIllustration } from "@/components/ui/hr-illustration";
 import { Icon } from "@/components/ui/icon";
 import { Kbd } from "@/components/ui/kbd";
+import { ScoreGauge } from "@/components/ui/score-gauge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Tag } from "@/components/ui/tag";
 
@@ -67,24 +72,123 @@ function FieldCell({
   );
 }
 
-/** Violet agent panel — M1 renders only its empty variant (agent lands later). */
+const VIOLET_PANEL_STYLE: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: 14,
+  padding: 18,
+  background: "var(--violet-12)",
+  border: "1px solid color-mix(in srgb, var(--violet) 32%, transparent)",
+  borderRadius: "var(--radius-card)",
+  boxShadow: "0 0 24px color-mix(in srgb, var(--violet) 10%, transparent)",
+};
+
+/**
+ * Kick off a fresh agent scan and route to its live trace. The agent re-scores
+ * every in-month posting against the current profile, so this doubles as a
+ * "re-assess this posting" affordance. A start failure (no profile, run already
+ * live) surfaces inline. Follows the AgentEmpty pattern.
+ */
+function ReassessButton({ label }: { label: string }) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+
+  const onRun = (): void => {
+    setError(null);
+    startTransition(async () => {
+      const result = await runAgentScan();
+      if (result.ok) {
+        router.push(`/agent/${result.data.runId}`);
+      } else {
+        setError(result.error);
+      }
+    });
+  };
+
+  return (
+    <div className="flex flex-col" style={{ gap: 8 }}>
+      <Button
+        variant="secondary"
+        size="sm"
+        iconLeft="bot"
+        onClick={onRun}
+        loading={pending}
+      >
+        {label}
+      </Button>
+      {error ? (
+        <span style={{ font: "var(--mono-sm)", color: "var(--red)" }} role="alert">
+          {error}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+/** Real agent verdict: gauge, fit/friction reasons, provenance + re-assess. */
+function MatchPanel({ assessment }: { assessment: AssessmentRow }) {
+  return (
+    <div style={VIOLET_PANEL_STYLE}>
+      <div className="flex items-center justify-between">
+        <span className="hr-label" style={{ color: "var(--violet)" }}>
+          Agent match
+        </span>
+        <span style={{ font: "var(--mono-sm)", color: "var(--text-low-content)" }}>
+          {assessment.runId !== null
+            ? `assessed by run #${assessment.runId}`
+            : "assessed"}
+        </span>
+      </div>
+
+      <div className="flex items-start" style={{ gap: 16 }}>
+        <ScoreGauge score={assessment.score} size={64} />
+        <ul
+          className="m-0 flex min-w-0 flex-1 flex-col list-none"
+          style={{ gap: 8, padding: 0 }}
+        >
+          {assessment.reasons.length > 0 ? (
+            assessment.reasons.map((reason, i) => (
+              <li
+                key={i}
+                className="flex items-start"
+                style={{ gap: 8, font: "var(--text-sm)", color: "var(--text-mid)" }}
+              >
+                <span
+                  aria-hidden="true"
+                  className="shrink-0"
+                  style={{
+                    font: "600 13px/1.5 var(--font-mono)",
+                    color:
+                      reason.sign === "+" ? "var(--phosphor)" : "var(--amber)",
+                  }}
+                >
+                  {reason.sign === "+" ? "+" : "−"}
+                </span>
+                <span style={{ overflowWrap: "anywhere" }}>{reason.text}</span>
+              </li>
+            ))
+          ) : (
+            <li
+              className="m-0"
+              style={{ font: "var(--text-sm)", color: "var(--text-low-content)" }}
+            >
+              The agent left no reasoning for this score.
+            </li>
+          )}
+        </ul>
+      </div>
+
+      <ReassessButton label="Re-assess" />
+    </div>
+  );
+}
+
+/** Empty variant — the posting has never been scored. */
 function MatchPanelEmpty() {
   return (
-    <div
-      className="flex flex-col"
-      style={{
-        gap: 14,
-        padding: 18,
-        background: "var(--violet-12)",
-        border: "1px solid color-mix(in srgb, var(--violet) 32%, transparent)",
-        borderRadius: "var(--radius-card)",
-        boxShadow: "0 0 24px color-mix(in srgb, var(--violet) 10%, transparent)",
-      }}
-    >
-      <span
-        className="hr-label"
-        style={{ color: "var(--violet)" }}
-      >
+    <div style={VIOLET_PANEL_STYLE}>
+      <span className="hr-label" style={{ color: "var(--violet)" }}>
         Agent match
       </span>
       <div
@@ -98,8 +202,9 @@ function MatchPanelEmpty() {
         <span
           style={{ font: "var(--text-sm)", color: "var(--text-mid)", maxWidth: 280 }}
         >
-          Ask the agent to score this posting against your profile.
+          Run the agent to score this posting against your profile.
         </span>
+        <ReassessButton label="Run a scan" />
       </div>
     </div>
   );
@@ -184,8 +289,12 @@ function DetailBody({ detail, now }: { detail: PostingDetail; now: number }) {
         </p>
       </div>
 
-      {/* Agent match — empty variant only in M1 */}
-      <MatchPanelEmpty />
+      {/* Agent match — real verdict when assessed, otherwise the empty state */}
+      {detail.assessment !== null ? (
+        <MatchPanel assessment={detail.assessment} />
+      ) : (
+        <MatchPanelEmpty />
+      )}
 
       {/* Structured fields */}
       <div className="grid grid-cols-2" style={{ gap: "16px 20px" }}>

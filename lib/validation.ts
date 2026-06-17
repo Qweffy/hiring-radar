@@ -72,3 +72,20 @@ export const llmPostingSchema = z.strictObject({
 });
 
 export type LlmPosting = z.infer<typeof llmPostingSchema>;
+
+/* ------------------------------------------------------------------ */
+/* CV skill extraction — the agent reads pasted CV text and buckets    */
+/* skills by depth. Strict mode: every field required (constrained     */
+/* decoding), but the zod parse is the trust boundary, never the model.*/
+/* ------------------------------------------------------------------ */
+
+const cvSkillList = z.array(z.string().trim().min(1).max(40)).max(24);
+
+export const cvSkillsSchema = z.strictObject({
+  core: cvSkillList,
+  familiar: cvSkillList,
+  learning: cvSkillList,
+  summary: z.string().trim().min(1).max(600).nullable(),
+});
+
+export type CvSkills = z.infer<typeof cvSkillsSchema>;
