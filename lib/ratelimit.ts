@@ -23,7 +23,7 @@ import { Redis } from "@upstash/redis";
  */
 
 /** Named limiters, one per AI concern. Each gets its own Redis key prefix. */
-export type LimiterName = "agentScan" | "cvParse" | "streamConnect";
+export type LimiterName = "agentScan" | "cvParse" | "streamConnect" | "mcp";
 
 interface LimiterSpec {
   /** Max requests inside the window, per identity. */
@@ -44,6 +44,9 @@ const SPECS: Record<LimiterName, LimiterSpec> = {
   agentScan: { tokens: 5, window: "1 m", prefix: "rl:agent-scan" },
   cvParse: { tokens: 10, window: "1 m", prefix: "rl:cv-parse" },
   streamConnect: { tokens: 30, window: "1 m", prefix: "rl:stream" },
+  // MCP tool/resource calls over Streamable HTTP — one JSON-RPC POST each, so
+  // generous headroom for a single connected client's tool loop.
+  mcp: { tokens: 60, window: "1 m", prefix: "rl:mcp" },
 };
 
 /** The outcome of a limit check. `retryAfterSeconds` is set only when blocked. */

@@ -17,11 +17,14 @@
     "ingest": "tsx scripts/ingest.ts",
     "embed": "tsx scripts/embed.ts",
     "bench:search": "tsx scripts/bench-search.ts",
+    "mcp": "tsx scripts/mcp.ts",
+    "mcp:smoke": "tsx scripts/mcp-smoke.ts",
     "redteam": "tsx scripts/redteam.ts",
     "inngest:dev": "npx inngest-cli@latest dev"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.2.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@neondatabase/serverless": "^1.1.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",

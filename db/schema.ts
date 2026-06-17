@@ -373,6 +373,49 @@ export const assessments = pgTable(
   (t) => [uniqueIndex("assessments_posting_id_unique").on(t.postingId)],
 );
 
+// ─── M7: MCP API keys + app settings ───────────────────────────────────────
+
+export const apiKeyScope = pgEnum("api_key_scope", ["read", "read_write"]);
+
+/**
+ * MCP bearer keys. The raw key (`hrk_…`) is shown ONCE at creation and never
+ * stored — only its sha256 (`keyHash`) for verification and the first ~8 chars
+ * (`keyPrefix`) for display ("hrk_3a9f…"). `lastUsedAt` is bumped on every
+ * successful verify, which is what keeps the Settings "connected clients"
+ * indicator live. A revoked key keeps its row (revokedAt set) for the audit
+ * trail; verify treats any non-null revokedAt as invalid.
+ */
+export const apiKeys = pgTable(
+  "api_keys",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    name: text("name").notNull(),
+    scope: apiKeyScope("scope").notNull().default("read"),
+    keyPrefix: text("key_prefix").notNull(),
+    keyHash: text("key_hash").notNull(),
+    lastUsedAt: timestamp("last_used_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    revokedAt: timestamp("revoked_at"),
+  },
+  (t) => [uniqueIndex("api_keys_key_hash_unique").on(t.keyHash)],
+);
+
+/**
+ * Single-row typed settings store. A fixed primary key (id = 1) means the table
+ * holds at most one row; reads seed-on-miss with the DEFAULT_BUDGET-derived
+ * defaults and writes upsert onto id=1, so there's never more than one row and
+ * neon-http's lack of transactions can't race two rows into existence.
+ */
+export const appSettings = pgTable("app_settings", {
+  id: integer("id").primaryKey().default(1),
+  agentStepBudget: integer("agent_step_budget").notNull().default(24),
+  agentMaxUsd: real("agent_max_usd").notNull().default(1.0),
+  notifySweep: boolean("notify_sweep").notNull().default(true),
+  notifyAgentRun: boolean("notify_agent_run").notNull().default(true),
+  notifyHighMatch: boolean("notify_high_match").notNull().default(true),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 export const sweepsRelations = relations(sweeps, ({ many }) => ({
   firstSeenPostings: many(postings),
 }));
