@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 
 import { resumeScan, ScanError, startScan } from "@/lib/agent/run";
 import {
@@ -8,6 +9,7 @@ import {
   getRunStatus,
   setRunStatus,
 } from "@/lib/queries/agent-writes";
+import { checkLimit, clientIdentity, type LimiterName } from "@/lib/ratelimit";
 import { ActionError, runAction, type ActionResult } from "@/lib/result";
 
 /**
@@ -23,9 +25,24 @@ function toScanError(e: unknown): never {
   throw e;
 }
 
+/**
+ * Enforce a frequency limit on an LLM-triggering action. No-ops when Upstash
+ * isn't configured; otherwise throws a user-safe ActionError that reaches the
+ * client verbatim (lib/result.ts) and surfaces through the existing error toast.
+ */
+async function enforceLimit(name: LimiterName): Promise<void> {
+  const limit = await checkLimit(name, clientIdentity(await headers()));
+  if (!limit.ok) {
+    throw new ActionError(
+      `Scanning too fast — try again in ${limit.retryAfterSeconds}s.`,
+    );
+  }
+}
+
 /** Start a new scan. Returns the run id to navigate to. */
 export async function runAgentScan(): Promise<ActionResult<{ runId: number }>> {
   return runAction("Couldn't start the agent — try again.", async () => {
+    await enforceLimit("agentScan");
     try {
       const { runId } = await startScan();
       revalidatePath("/agent");
@@ -76,6 +93,7 @@ export async function resumeRun(
   runId: number,
 ): Promise<ActionResult<{ runId: number }>> {
   return runAction("Couldn't resume the run — try again.", async () => {
+    await enforceLimit("agentScan");
     const status = await getRunStatus(runId);
     if (status !== "paused") {
       throw new ActionError(`Only paused runs can resume (it is ${status}).`);

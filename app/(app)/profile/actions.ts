@@ -1,11 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { z } from "zod";
 
 import { startScan, ScanError } from "@/lib/agent/run";
 import { parseCvSkills } from "@/lib/llm/parse-cv";
 import { insertProfileVersion } from "@/lib/queries/profile-writes";
+import { checkLimit, clientIdentity } from "@/lib/ratelimit";
 import { ActionError, runAction, type ActionResult } from "@/lib/result";
 import { parseOrThrow } from "@/lib/validation";
 import  { type CvSkills } from "@/lib/validation";
@@ -30,6 +32,12 @@ export async function parseCv(
   input: unknown,
 ): Promise<ActionResult<CvSkills>> {
   return runAction("Couldn't parse the CV — paste the text instead.", async () => {
+    const limit = await checkLimit("cvParse", clientIdentity(await headers()));
+    if (!limit.ok) {
+      throw new ActionError(
+        `Parsing too fast — try again in ${limit.retryAfterSeconds}s.`,
+      );
+    }
     const { cv } = parseOrThrow(cvInputSchema, input);
     try {
       return await parseCvSkills(cv);

@@ -3,6 +3,7 @@ import {
   getStepsAfter,
   type AgentStepRow,
 } from "@/lib/queries/agent-runs";
+import { checkLimit, clientIdentity } from "@/lib/ratelimit";
 
 /**
  * Live trace transport for a run, over Server-Sent Events.
@@ -45,6 +46,20 @@ export async function GET(
   req: Request,
   ctx: { params: Promise<{ runId: string }> },
 ): Promise<Response> {
+  // Frequency brake before any DB work or holding a connection open. No-ops
+  // (allow) when Upstash isn't configured. SSE auto-reconnects, so this caps
+  // reconnect storms, not legitimate single subscribers.
+  const limit = await checkLimit("streamConnect", clientIdentity(req.headers));
+  if (!limit.ok) {
+    return new Response("Too many connections", {
+      status: 429,
+      headers: {
+        "Retry-After": String(limit.retryAfterSeconds),
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+
   const { runId: runIdRaw } = await ctx.params;
   const runId = Number(runIdRaw);
   if (!Number.isInteger(runId) || runId <= 0) {
