@@ -74,7 +74,9 @@ export function Menu({
       style={style}
       {...rest}
     >
-      <span onClick={() => setOpen(!open)}>{trigger}</span>
+      <span onClick={() => setOpen(!open)} style={{ display: "contents" }}>
+        {trigger}
+      </span>
       {open && (
         <div
           role="menu"

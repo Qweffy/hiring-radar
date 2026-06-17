@@ -2,21 +2,34 @@
 
 import { Bot, ChevronDown } from "lucide-react";
 
+import { Menu } from "@/components/ui/menu";
+
+export type ShortlistSort = "match" | "added";
+
+const SORT_LABEL: Record<ShortlistSort, string> = {
+  match: "Match",
+  added: "Recent",
+};
+
 export interface ShortlistHeaderProps {
   trackedCount: number;
   scanning: boolean;
   onRunScan: () => void;
+  sort: ShortlistSort;
+  onSortChange: (sort: ShortlistSort) => void;
 }
 
 /**
- * In-shell production header: title, "{N} TRACKED" mono count, a Sort trigger
- * (default and only option: Match, descending), and the violet "Run agent scan"
- * CTA. The CTA is disabled while a run is live.
+ * In-shell production header: title, "{N} TRACKED" mono count, a Sort menu
+ * (Match descending / Recently added), and the violet "Run agent scan" CTA.
+ * The CTA is disabled while a run is live.
  */
 export function ShortlistHeader({
   trackedCount,
   scanning,
   onRunScan,
+  sort,
+  onSortChange,
 }: ShortlistHeaderProps) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
@@ -38,26 +51,46 @@ export function ShortlistHeader({
 
       <span style={{ flex: 1 }} />
 
-      <button
-        type="button"
-        className="hr-sort-btn"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 8,
-          height: 30,
-          padding: "0 11px",
-          background: "transparent",
-          border: "1px solid var(--border)",
-          borderRadius: "var(--radius-control)",
-          color: "var(--text-mid)",
-          font: "var(--mono-sm)",
-          cursor: "pointer",
-        }}
-      >
-        Sort: Match
-        <ChevronDown size={13} strokeWidth={1.5} aria-hidden style={{ opacity: 0.6 }} />
-      </button>
+      <Menu
+        align="right"
+        items={[
+          {
+            label: "Match (high → low)",
+            onSelect: () => onSortChange("match"),
+          },
+          {
+            label: "Recently added",
+            onSelect: () => onSortChange("added"),
+          },
+        ]}
+        trigger={
+          <button
+            type="button"
+            className="hr-sort-btn"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              height: 30,
+              padding: "0 11px",
+              background: "transparent",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius-control)",
+              color: "var(--text-mid)",
+              font: "var(--mono-sm)",
+              cursor: "pointer",
+            }}
+          >
+            Sort: {SORT_LABEL[sort]}
+            <ChevronDown
+              size={13}
+              strokeWidth={1.5}
+              aria-hidden
+              style={{ opacity: 0.6 }}
+            />
+          </button>
+        }
+      />
 
       <button
         type="button"

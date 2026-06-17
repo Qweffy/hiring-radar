@@ -23,7 +23,10 @@ import { EntryCard } from "@/components/shortlist/entry-card";
 import { FilterTabs } from "@/components/shortlist/filter-tabs";
 import { RemoveConfirm } from "@/components/shortlist/remove-confirm";
 import { RunBanner } from "@/components/shortlist/run-banner";
-import { ShortlistHeader } from "@/components/shortlist/shortlist-header";
+import {
+  ShortlistHeader,
+  type ShortlistSort,
+} from "@/components/shortlist/shortlist-header";
 import { ShortlistStyles } from "@/components/shortlist/shortlist-styles";
 import {
   activeTabLabel,
@@ -77,6 +80,7 @@ export function ShortlistView({ items, review, live }: ShortlistViewProps) {
   const [scanning, startScan] = useTransition();
 
   const [activeTab, setActiveTab] = useState<TabId>("all");
+  const [sort, setSort] = useState<ShortlistSort>("match");
   const [kebabId, setKebabId] = useState<number | null>(null);
   const [confirmId, setConfirmId] = useState<number | null>(null);
   const [removing, setRemoving] = useState(false);
@@ -123,6 +127,19 @@ export function ShortlistView({ items, review, live }: ShortlistViewProps) {
         : liveItems.filter((item) => stageOf(item) === activeTab),
     [liveItems, activeTab, stageOf],
   );
+
+  const sortedVisible = useMemo(() => {
+    const next = [...visible];
+    if (sort === "match") {
+      // Highest match first; unscored entries sink to the bottom.
+      next.sort(
+        (a, b) => (b.matchScore ?? -1) - (a.matchScore ?? -1),
+      );
+    } else {
+      next.sort((a, b) => b.addedAt.getTime() - a.addedAt.getTime());
+    }
+    return next;
+  }, [visible, sort]);
 
   const neverUsed = liveItems.length === 0;
   const filteredEmpty = !neverUsed && visible.length === 0;
@@ -225,6 +242,8 @@ export function ShortlistView({ items, review, live }: ShortlistViewProps) {
           trackedCount={trackedCount}
           scanning={scanning || live !== null}
           onRunScan={onRunScan}
+          sort={sort}
+          onSortChange={setSort}
         />
 
         <FilterTabs tabs={tabs} activeTab={activeTab} onSelect={selectTab} />
@@ -253,7 +272,7 @@ export function ShortlistView({ items, review, live }: ShortlistViewProps) {
           <FilteredEmpty activeLabel={activeTabLabel(activeTab)} />
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {visible.map((item) => (
+            {sortedVisible.map((item) => (
               <EntryCard
                 key={item.entryId}
                 item={item}

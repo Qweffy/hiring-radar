@@ -52,6 +52,25 @@ export async function getSweeps(limit = DEFAULT_SWEEP_LIMIT): Promise<SweepRow[]
     .limit(limit);
 }
 
+export interface AvailableMonth {
+  month: string;
+  threadId: number;
+}
+
+/**
+ * Distinct months we've swept, with the latest thread id per month — drives the
+ * Pipeline backfill picker. DISTINCT ON month keeps the newest sweep's thread.
+ */
+export async function getAvailableMonths(): Promise<AvailableMonth[]> {
+  return db
+    .selectDistinctOn([sweeps.month], {
+      month: sweeps.month,
+      threadId: sweeps.threadId,
+    })
+    .from(sweeps)
+    .orderBy(sweeps.month, desc(sweeps.id));
+}
+
 /* ------------------------------------------------------------------ */
 /* Dead letters — rows + total count                                   */
 /* ------------------------------------------------------------------ */

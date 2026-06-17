@@ -29,6 +29,7 @@ import {
 } from "@/components/profile/types";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { Icon } from "@/components/ui/icon";
+import { Menu } from "@/components/ui/menu";
 import { RangeSlider } from "@/components/ui/range-slider";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Tag } from "@/components/ui/tag";
@@ -37,6 +38,21 @@ import { Toast } from "@/components/ui/toast";
 const ACCEPTED = ".md,.txt,.pdf";
 const PARSE_PLACEHOLDER =
   "Paste your CV or résumé text here — the agent extracts your skills automatically. Or upload a .md / .txt / .pdf.";
+
+// Common UTC offsets for the timezone-overlap picker. The agent reads the
+// stored "UTC±N" string verbatim, so keep the labels in that exact format.
+const TIMEZONE_OPTIONS = [
+  "UTC-8",
+  "UTC-6",
+  "UTC-5",
+  "UTC-3",
+  "UTC+0",
+  "UTC+1",
+  "UTC+2",
+  "UTC+3",
+  "UTC+5:30",
+  "UTC+8",
+] as const;
 
 type SaveToast = { tone: "success" | "error"; message: string } | null;
 
@@ -498,27 +514,44 @@ export function ProfileView({
                 </div>
                 <div>
                   <label style={BLOCK_LABEL}>Timezone overlap</label>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      height: 36,
-                      padding: "0 12px",
-                      background: "var(--bg-surface)",
-                      border: "1px solid var(--border)",
-                      borderRadius: "var(--radius-control)",
-                    }}
-                  >
-                    <span style={{ font: "var(--mono-base)", color: "var(--text-hi)" }}>
-                      {form.timezone} ±4h
-                    </span>
-                    <Icon
-                      name="chevron-down"
-                      size={14}
-                      style={{ color: "var(--text-low-content)" }}
-                    />
-                  </div>
+                  <Menu
+                    style={{ width: "100%" }}
+                    items={TIMEZONE_OPTIONS.map((tz) => ({
+                      label: `${tz} ±4h`,
+                      onSelect: () => patch({ timezone: tz }),
+                    }))}
+                    trigger={
+                      <button
+                        type="button"
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          height: 36,
+                          padding: "0 12px",
+                          background: "var(--bg-surface)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "var(--radius-control)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <span
+                          style={{
+                            font: "var(--mono-base)",
+                            color: "var(--text-hi)",
+                          }}
+                        >
+                          {form.timezone} ±4h
+                        </span>
+                        <Icon
+                          name="chevron-down"
+                          size={14}
+                          style={{ color: "var(--text-low-content)" }}
+                        />
+                      </button>
+                    }
+                  />
                 </div>
               </div>
 

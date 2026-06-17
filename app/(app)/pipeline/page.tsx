@@ -11,6 +11,7 @@ import { toDeadLetterView, toSweepView } from "@/components/pipeline/types";
 import { verifySession } from "@/lib/auth";
 import {
   eventTime,
+  getAvailableMonths,
   getDeadLetters,
   getEventLog,
   getPipelineSummary,
@@ -77,12 +78,20 @@ export default async function PipelinePage() {
   // (Next 16 data-security guidance — verify in the route, not only the proxy).
   if (!(await verifySession())) return <ForbiddenView />;
 
-  const [summary, sweepRows, deadLetterResult, events] = await Promise.all([
-    getPipelineSummary(),
-    getSweeps(5),
-    getDeadLetters(50),
-    getEventLog(30),
-  ]);
+  const [summary, sweepRows, deadLetterResult, events, monthRows] =
+    await Promise.all([
+      getPipelineSummary(),
+      getSweeps(5),
+      getDeadLetters(50),
+      getEventLog(30),
+      getAvailableMonths(),
+    ]);
+
+  // Newest month first; attach the human label the picker renders.
+  const backfillMonths = monthRows
+    .slice()
+    .sort((a, b) => b.month.localeCompare(a.month))
+    .map((m) => ({ ...m, label: monthLabel(m.month) }));
 
   const sweeps = sweepRows.map(toSweepView);
   const deadLetters = deadLetterResult.rows.map(toDeadLetterView);
@@ -132,6 +141,7 @@ export default async function PipelinePage() {
         latestThreadId={latestThreadId}
         latestMonth={latestMonth}
         latestMonthLabel={latestMonthLabel}
+        backfillMonths={backfillMonths}
         latestFetched={latestFetched}
         running={running}
         failed={failed}

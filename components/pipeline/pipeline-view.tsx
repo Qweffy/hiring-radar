@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import { BackfillCard } from "@/components/pipeline/backfill-card";
+import {
+  BackfillCard,
+  type BackfillMonth,
+} from "@/components/pipeline/backfill-card";
 import { DeadLettersPanel } from "@/components/pipeline/dead-letters-panel";
 import { EmptySweeps } from "@/components/pipeline/empty-sweeps";
 import { EventLog, type LogLine } from "@/components/pipeline/event-log";
@@ -61,6 +64,8 @@ export interface PipelineViewProps {
   latestThreadId: number | null;
   latestMonth: string | null;
   latestMonthLabel: string;
+  /** Months available to backfill, newest-first (drives the range picker). */
+  backfillMonths: BackfillMonth[];
   /** Postings fetched by the latest sweep (denominator for the DL summary). */
   latestFetched: number;
   /** Non-null when the latest sweep is RUNNING. */
@@ -82,6 +87,7 @@ export function PipelineView({
   latestThreadId,
   latestMonth,
   latestMonthLabel,
+  backfillMonths,
   latestFetched,
   running,
   failed,
@@ -179,9 +185,9 @@ export function PipelineView({
               total={latestFetched}
             />
             <BackfillCard
-              threadId={latestThreadId}
-              month={latestMonth}
-              rangeLabel={latestMonthLabel}
+              months={backfillMonths}
+              defaultMonth={latestMonth}
+              defaultLabel={latestMonthLabel}
               threadCount={1}
               postingEstimate={postingEstimate}
             />
