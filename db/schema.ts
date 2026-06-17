@@ -373,6 +373,42 @@ export const assessments = pgTable(
   (t) => [uniqueIndex("assessments_posting_id_unique").on(t.postingId)],
 );
 
+// ─── M8: agent long-term memory ────────────────────────────────────────────
+
+export const memoryKind = pgEnum("memory_kind", [
+  "fact",
+  "preference",
+  "verdict",
+]);
+
+/**
+ * The agent's long-term memory: durable facts, learned preferences, and prior
+ * verdicts, recalled by semantic similarity and ranked by a decaying salience.
+ * embedding is the content's vector (same model + dims as posting_embeddings).
+ * salience is the intrinsic importance (0..1); accessCount + lastAccessedAt feed
+ * the time-decay/reinforcement model in lib/memory/decay.ts. postingId/company
+ * scope a verdict to its subject (set null so a re-ingest doesn't orphan it);
+ * sourceRunId links a memory back to the run that wrote it (set null on purge).
+ * The HNSW (vector_cosine_ops) index on embedding is created in migration 0005.
+ */
+export const agentMemories = pgTable("agent_memories", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  kind: memoryKind("kind").notNull(),
+  content: text("content").notNull(),
+  postingId: integer("posting_id").references(() => postings.id, {
+    onDelete: "set null",
+  }),
+  company: text("company"),
+  embedding: vector("embedding", { dimensions: 384 }).notNull(),
+  salience: real("salience").notNull(),
+  accessCount: integer("access_count").notNull().default(0),
+  lastAccessedAt: timestamp("last_accessed_at").notNull().defaultNow(),
+  sourceRunId: integer("source_run_id").references(() => agentRuns.id, {
+    onDelete: "set null",
+  }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // ─── M7: MCP API keys + app settings ───────────────────────────────────────
 
 export const apiKeyScope = pgEnum("api_key_scope", ["read", "read_write"]);
@@ -483,6 +519,17 @@ export const assessmentsRelations = relations(assessments, ({ one }) => ({
   }),
   run: one(agentRuns, {
     fields: [assessments.runId],
+    references: [agentRuns.id],
+  }),
+}));
+
+export const agentMemoriesRelations = relations(agentMemories, ({ one }) => ({
+  posting: one(postings, {
+    fields: [agentMemories.postingId],
+    references: [postings.id],
+  }),
+  sourceRun: one(agentRuns, {
+    fields: [agentMemories.sourceRunId],
     references: [agentRuns.id],
   }),
 }));

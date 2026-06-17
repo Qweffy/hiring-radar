@@ -8,11 +8,15 @@ import {
   compareToProfileArgs,
   getProfileArgs,
   readPostingArgs,
+  recallMemoryArgs,
+  rememberArgs,
   saveFindingArgs,
   searchJobsArgs,
   toolError,
   type CompareToProfileArgs,
   type ReadPostingArgs,
+  type RecallMemoryArgs,
+  type RememberArgs,
   type SaveFindingArgs,
   type SearchJobsArgs,
   type ToolError,
@@ -20,6 +24,7 @@ import {
 } from "@/lib/agent/tool-schemas";
 import  { type BrowseFilters } from "@/lib/browse-params";
 import { saveFinding as persistFinding } from "@/lib/queries/agent-writes";
+import { recallMemories, rememberMemory } from "@/lib/queries/memory";
 import { getPostingDetail } from "@/lib/queries/postings";
 import { getLatestProfile, type ProfileRow } from "@/lib/queries/profile";
 import { searchPostings } from "@/lib/queries/search";
@@ -284,6 +289,69 @@ async function execSaveFinding(
   };
 }
 
+interface RecalledMemory {
+  kind: "fact" | "preference" | "verdict";
+  text: string;
+  company?: string;
+  salience: number;
+}
+
+interface RecallPayload {
+  count: number;
+  note: string;
+  memories: RecalledMemory[];
+}
+
+async function execRecallMemory(
+  args: RecallMemoryArgs,
+): Promise<RecallPayload | ToolError> {
+  const rows = await recallMemories({ query: args.query, k: args.k });
+  const memories: RecalledMemory[] = rows.map((m) => ({
+    kind: m.kind,
+    text: m.content,
+    ...(m.company !== null ? { company: m.company } : {}),
+    salience: Math.round(m.salience * 100) / 100,
+  }));
+  return {
+    count: memories.length,
+    note:
+      memories.length === 0
+        ? "Nothing recalled yet for this query — no prior memory matched."
+        : "Recalled from past runs. Use verdicts to skip re-assessing unchanged companies; honor learned preferences.",
+    memories,
+  };
+}
+
+interface RememberPayload {
+  ok: true;
+  action: "inserted" | "reinforced";
+}
+
+async function execRemember(
+  args: RememberArgs,
+  ctx: ToolContext,
+): Promise<RememberPayload | ToolError> {
+  try {
+    const res = await rememberMemory({
+      kind: args.kind,
+      text: args.text,
+      salience: args.salience,
+      postingId: args.postingId ?? undefined,
+      sourceRunId: ctx.runId,
+    });
+    return { ok: true, action: res.action };
+  } catch (e) {
+    // rememberMemory embeds the text directly; embed() throws on a runtime
+    // without the native onnx lib. Degrade to a tool-error so the model can move
+    // on instead of crashing the run.
+    return toolError(
+      "Upstream",
+      `Could not persist memory: ${e instanceof Error ? e.message : String(e)}`,
+      false,
+    );
+  }
+}
+
 /**
  * Result of one executed tool call. `newPick` is surfaced so the loop can keep
  * the run's picksCount accurate without recounting the shortlist.
@@ -325,6 +393,14 @@ export async function executeTool(
       const data = await execSaveFinding(a, ctx);
       const newPick = !("error" in data) && data.newPick;
       return { data, newPick };
+    }
+    case "recall_memory": {
+      const a = recallMemoryArgs.parse(args);
+      return { data: await execRecallMemory(a), newPick: false };
+    }
+    case "remember": {
+      const a = rememberArgs.parse(args);
+      return { data: await execRemember(a, ctx), newPick: false };
     }
   }
 }

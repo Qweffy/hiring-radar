@@ -1,5 +1,6 @@
 import "server-only";
 import  { type AgentStepPayload, type AgentStepUsage } from "@/db/schema";
+import { consolidateRun } from "@/lib/agent/consolidate";
 import {
   checkBudget,
   costOfUsage,
@@ -12,6 +13,7 @@ import { agentModel, groqClient } from "@/lib/agent/groq-client";
 import { SYSTEM_PROMPT } from "@/lib/agent/prompt";
 import { TOOL_DEFINITIONS } from "@/lib/agent/tool-defs";
 import { buildToolContext, type ToolContext } from "@/lib/agent/tools";
+import { PRIMING_N } from "@/lib/memory/decay";
 import { getRun, type AgentStepRow } from "@/lib/queries/agent-runs";
 import {
   appendStep,
@@ -20,6 +22,8 @@ import {
   setRunStatus,
   updateRunProgress,
 } from "@/lib/queries/agent-writes";
+import { recallMemories } from "@/lib/queries/memory";
+import { getLatestProfile } from "@/lib/queries/profile";
 
 import type Groq from "groq-sdk";
 
@@ -165,6 +169,49 @@ function rebuildMessages(steps: AgentStepRow[]): ChatMessage[] {
   }
   flushAssistant();
   return messages;
+}
+
+/**
+ * Prime a fresh run with what the agent remembers. Recalls the most relevant
+ * memories against the profile summary, formats them as a bulleted block, and
+ * persists it as the run's FIRST step (idx 0, a reasoning step) so rebuildMessages
+ * reconstructs it on resume and it shows in the trace. Returns the block text (to
+ * seed the live messages array) or null on a cold start / recall failure — recall
+ * is best-effort and must never block the run.
+ */
+async function primeRunMemory(runId: number): Promise<string | null> {
+  try {
+    const profile = await getLatestProfile();
+    const query = profile?.summary ?? null;
+    if (query === null || query.length === 0) return null;
+
+    const memories = await recallMemories({ query, k: PRIMING_N });
+    if (memories.length === 0) return null;
+
+    const bullets = memories
+      .map((m) => {
+        const scope = m.company !== null ? ` (${m.company})` : "";
+        return `- [${m.kind}]${scope} ${m.content}`;
+      })
+      .join("\n");
+    const block = `What you remember from past runs:\n${bullets}`;
+
+    await appendStep({
+      runId,
+      idx: 0,
+      kind: "reasoning",
+      payload: { text: block },
+    });
+    return block;
+  } catch (e) {
+    // Best-effort priming: a recall/embedding failure degrades to a cold start
+    // rather than failing the run. console.warn is allowed in product code.
+    console.warn(
+      "agent: run priming skipped —",
+      e instanceof Error ? e.message : e,
+    );
+    return null;
+  }
 }
 
 interface LoopState {
@@ -487,16 +534,25 @@ export async function runLoop(
   if (!detail) throw new Error(`run ${runId} not found`);
 
   // Resume: rebuild messages + totals from persisted steps. A fresh run has no
-  // steps, so this yields just the system message.
-  const messages =
-    detail.steps.length > 0
-      ? rebuildMessages(detail.steps)
-      : [{ role: "system", content: SYSTEM_PROMPT } as ChatMessage];
+  // steps, so we seed the system message and prime it with long-term memory
+  // (persisted as idx 0 so a resume reconstructs it via rebuildMessages).
+  const isFresh = detail.steps.length === 0;
 
-  const nextIdx =
-    detail.steps.length > 0
-      ? Math.max(...detail.steps.map((s) => s.idx)) + 1
-      : 0;
+  let messages: ChatMessage[];
+  let nextIdx: number;
+  if (isFresh) {
+    const primed = await primeRunMemory(runId);
+    messages = [{ role: "system", content: SYSTEM_PROMPT }];
+    if (primed !== null) {
+      messages.push({ role: "assistant", content: primed });
+      nextIdx = 1;
+    } else {
+      nextIdx = 0;
+    }
+  } else {
+    messages = rebuildMessages(detail.steps);
+    nextIdx = Math.max(...detail.steps.map((s) => s.idx)) + 1;
+  }
 
   const totals: RunTotals = {
     steps: detail.stepsUsed,
@@ -517,6 +573,28 @@ export async function runLoop(
   try {
     const outcome = await drive(messages, state);
     if (outcome.status === "completed") {
+      // Consolidate this run's assessments into long-term memory before
+      // finalizing, accruing the single distillation call's cost onto the run.
+      // Best-effort: a consolidation fault (e.g. embeddings unavailable) must
+      // not flip a completed run to failed.
+      try {
+        const consolidation = await consolidateRun(runId);
+        if (consolidation.costUsd > 0) {
+          state.totals.usd += consolidation.costUsd;
+          await persistProgress(state);
+        }
+      } catch (e) {
+        await appendStep({
+          runId,
+          idx: state.nextIdx++,
+          kind: "error",
+          payload: {
+            message: `Consolidation skipped: ${e instanceof Error ? e.message : String(e)}`,
+          },
+        }).catch(() => {
+          // Best-effort trace note; nothing to recover if it also fails.
+        });
+      }
       await finalizeRun({ runId, status: "completed" });
     } else if (outcome.status === "cancelled") {
       await finalizeRun({ runId, status: "cancelled" });

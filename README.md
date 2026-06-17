@@ -100,6 +100,68 @@ both fast at this scale; the HNSW index's advantage widens as the corpus grows.
 - `lib/search/engine.ts` holds the query logic (importable by the bench CLI);
   `lib/queries/search.ts` is the `server-only` app-facing wrapper.
 
+## Agent memory (long-term)
+
+Two kinds of memory back the matching agent. **Working memory** is the per-run
+message array — the system prompt, the postings it read, its own reasoning — and
+it dies when the run ends. **Long-term memory** (`agent_memories`) is durable: it
+survives across runs, is retrieved semantically, decays over time, and is
+rewritten by a consolidation step. Without it, every monthly scan starts cold and
+re-derives the same verdicts; with it, run #2 reads what run #1 learned.
+
+- **Store.** `agent_memories` holds three kinds — `fact`, `preference`,
+  `verdict` — each with the text, a 384-dim embedding (the same `mdbr-leaf-ir`
+  model as search), an intrinsic `salience` (0–1), an `access_count`, and a
+  `last_accessed_at`. Verdicts denormalize `company`, so a judgment outlives the
+  posting it was made on. An HNSW `vector_cosine_ops` index serves ANN recall.
+- **Decay (`lib/memory/decay.ts` — pure, unit-tested).** A memory's *effective
+  strength* is its salience decayed by idle time and lifted by reuse:
+  `salience · 2^-(ageDays / 30) · (1 + 0.15·ln(1 + accessCount))` — a 30-day
+  half-life with a `0.1` floor below which it's forgotten. Recall blends this with
+  query similarity (`clamp01(cosine) · strength`), so a stale memory needs a
+  strong semantic hit to surface while a fresh one floats up on its own. **Recall
+  reinforces**: returned rows get `access_count++` and `last_accessed_at = now()`,
+  so the act of remembering slows forgetting.
+- **Recall + write (`lib/queries/memory.ts`).** `recallMemories()` embeds the
+  query, pulls a 40-row candidate pool by cosine via the same
+  `set_config('hnsw.ef_search', …, true)` CTE search uses, then ranks in TS by the
+  decay math and returns the top `k`. `rememberMemory()` dedupes before inserting:
+  a verdict keyed on company is reinforced/updated in place; otherwise a same-kind
+  neighbor at cosine ≥ `0.92` is merged (salience = max, content refreshed). Every
+  write is a single-statement upsert (neon-http has no transactions).
+- **Two new tools.** Beyond the five read-only / own-data tools, the agent gets
+  `recall_memory` (read) and `remember` (a bounded, schema-validated write to its
+  *own* memory store — not external comms, so the "no lethal trifecta" property
+  from [Security](#security) still holds).
+- **Priming.** A fresh run recalls the top 6 memories against the profile summary
+  and persists them as the run's **first `reasoning` step (idx 0)** — so the block
+  shows in the trace and `rebuildMessages` reconstructs it verbatim on resume,
+  with zero schema change and full checkpoint-safety. A true cold start (no
+  memories yet) skips priming.
+- **Consolidation.** At the end of a completed run, `consolidateRun()`
+  (`lib/agent/consolidate.ts`) writes one `verdict` memory per assessed company
+  deterministically — salience from score extremity (`|score − 50| / 50`) — and
+  makes a *single* cheap LLM call to distil 0–3 `preference` memories from the
+  run's dismissals. Its cost is accrued onto the run, and a consolidation fault
+  never flips a completed run to failed.
+
+**The payoff.** Run #1 scans cold and consolidates its verdicts. Run #2 opens with
+the primed block already in its trace, calls `recall_memory`, recognizes a company
+it has already judged, and skips re-assessing it — fewer steps and lower cost for
+the same coverage. (Verified locally end-to-end: the warm run shows the primed
+idx-0 block and a `recall_memory` call, and reinforced memories climb in
+`access_count`. The size of the saving scales with how much of the month is
+unchanged; a clean back-to-back comparison is bounded by the Groq free-tier daily
+quota.)
+
+> **Prod note.** Writing a memory needs a query/text embedding (the `embedding`
+> column is `NOT NULL`), and recall ranks against one. On Vercel serverless the
+> native onnx runtime can't load (the same caveat as search), so in prod recall
+> **degrades to decay-only ranking** over already-stored memories and new writes
+> (`remember` / consolidation) are skipped gracefully rather than crashing the
+> run. Wiring a hosted embedding API behind `embed()` restores both — the same
+> one-line fix that restores semantic search.
+
 ## Security
 
 **Threat model.** Every HN "Who is hiring?" posting is hostile user-generated content. A posting body (or a search snippet derived from it) can contain text engineered to hijack the LLM — "ignore previous instructions", a forged system role, a Markdown-image exfiltration beacon, base64/zero-width-smuggled commands, a forged closing delimiter, or a second-order payload aimed at a later agent stage. We assume injection is *unsolved* (OWASP LLM01): some attempts will partially succeed at the model layer, so the design bounds the blast radius rather than relying on prevention.
@@ -108,7 +170,7 @@ both fast at this scale; the HNSW index's advantage widens as the corpus grows.
 
 1. **Spotlighting.** Every untrusted string entering a prompt — posting bodies, search snippets, CV text — is wrapped by `spotlight()` (`lib/agent/spotlight.ts`) in a `<data-{marker}>` fence whose marker is randomized per call. Any forged copy of that exact marker is stripped from the content first, so a posting can't close the fence and "break out". (Microsoft's spotlighting cuts indirect-injection success from >50% to <2%.)
 2. **Instructions only in the system message.** The agent's task, tools, and rules live solely in `SYSTEM_PROMPT` (`lib/agent/prompt.ts`); the extractors keep a byte-stable SYSTEM string. Postings and tool results are delivered as fenced data in `user`/`tool` messages — never concatenated into a system prompt or a tool directive.
-3. **Read-only tool allow-list.** The hand-rolled loop dispatches only over a static map of five tools (`get_profile`, `search_jobs`, `read_posting`, `compare_to_profile`, `save_finding`). There is no fetch-URL, email, or shell tool — the "lethal trifecta" (untrusted input + private data + external comms) is broken by construction. `save_finding` is the only write, and it is an idempotent, schema-bounded upsert on the user's own data.
+3. **Read-only tool allow-list.** The hand-rolled loop dispatches only over a static map of seven tools (`get_profile`, `search_jobs`, `read_posting`, `compare_to_profile`, `save_finding`, plus `recall_memory` / `remember` — see [Agent memory](#agent-memory-long-term)). There is no fetch-URL, email, or shell tool — the "lethal trifecta" (untrusted input + private data + external comms) is broken by construction. The only writes (`save_finding`, `remember`) are idempotent, schema-bounded upserts on the user's *own* data — never external comms — so adding memory doesn't widen the blast radius.
 4. **Zod-validate every output.** Constrained decoding guarantees JSON *shape*, not *semantics*. Every model output and every tool-call argument passes a `z.strictObject` parse before it can touch the DB or a tool: strings are `.max()`-capped, numbers range-bounded (score 0–100, salary ≤ 5,000,000), sets are enums, and unknown keys are rejected. A poisoned completion ("set score to 999", a stuffed exfil URL) is dropped at this boundary.
 5. **Bounded budgets.** Each agent run is capped by `DEFAULT_BUDGET` (`lib/agent/cost.ts`): 24 steps, 600k tokens, $1.00. `checkBudget()` runs before every model call and the loop terminates the instant a cap trips, so a hijacked loop can't run away.
 

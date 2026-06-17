@@ -43,11 +43,25 @@ export const saveFindingArgs = z.strictObject({
   decision: z.enum(["shortlist", "dismiss"]),
 });
 
+export const recallMemoryArgs = z.strictObject({
+  query: z.string().trim().min(1).max(200),
+  k: z.number().int().min(1).max(10).optional(),
+});
+
+export const rememberArgs = z.strictObject({
+  kind: z.enum(["fact", "preference", "verdict"]),
+  text: z.string().trim().min(1).max(400),
+  salience: z.number().min(0).max(1),
+  postingId: z.number().int().positive().nullable(),
+});
+
 export type GetProfileArgs = z.infer<typeof getProfileArgs>;
 export type SearchJobsArgs = z.infer<typeof searchJobsArgs>;
 export type ReadPostingArgs = z.infer<typeof readPostingArgs>;
 export type CompareToProfileArgs = z.infer<typeof compareToProfileArgs>;
 export type SaveFindingArgs = z.infer<typeof saveFindingArgs>;
+export type RecallMemoryArgs = z.infer<typeof recallMemoryArgs>;
+export type RememberArgs = z.infer<typeof rememberArgs>;
 
 /** Static allow-list of tool names. The dispatcher refuses anything else. */
 export const TOOL_NAMES = [
@@ -56,6 +70,8 @@ export const TOOL_NAMES = [
   "read_posting",
   "compare_to_profile",
   "save_finding",
+  "recall_memory",
+  "remember",
 ] as const;
 
 export type ToolName = (typeof TOOL_NAMES)[number];

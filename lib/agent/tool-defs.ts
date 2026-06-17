@@ -4,6 +4,8 @@ import {
   compareToProfileArgs,
   getProfileArgs,
   readPostingArgs,
+  recallMemoryArgs,
+  rememberArgs,
   saveFindingArgs,
   searchJobsArgs,
 } from "@/lib/agent/tool-schemas";
@@ -75,6 +77,24 @@ export const TOOL_DEFINITIONS: Groq.Chat.ChatCompletionTool[] = [
       description:
         "Record your verdict for one posting. score is 0-100 fit. reasons is a list of {sign:'+'|'-', text} fit/friction signals. decision 'shortlist' adds it to the user's pipeline; 'dismiss' records the assessment only. Call this once per posting you've evaluated.",
       parameters: params(saveFindingArgs),
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "recall_memory",
+      description:
+        "Recall what you learned in past runs about companies/preferences/facts — call this BEFORE re-assessing a company. Returns the top-k most relevant durable memories (verdicts, preferences, facts) by semantic similarity to your query. k defaults to 5.",
+      parameters: params(recallMemoryArgs),
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "remember",
+      description:
+        "Persist a durable fact/preference/verdict for future runs. kind is 'fact', 'preference', or 'verdict'; text is the note (<=400 chars); salience is its importance 0-1; postingId scopes it to a posting (or null). Near-duplicate memories are merged automatically. Use this to record what should carry over to the next scan.",
+      parameters: params(rememberArgs),
     },
   },
 ];

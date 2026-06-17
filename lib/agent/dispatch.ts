@@ -6,6 +6,8 @@ import {
   getProfileArgs,
   isToolName,
   readPostingArgs,
+  recallMemoryArgs,
+  rememberArgs,
   saveFindingArgs,
   searchJobsArgs,
   toolError,
@@ -27,6 +29,8 @@ const SCHEMA_BY_NAME: Record<ToolName, z.ZodType> = {
   read_posting: readPostingArgs,
   compare_to_profile: compareToProfileArgs,
   save_finding: saveFindingArgs,
+  recall_memory: recallMemoryArgs,
+  remember: rememberArgs,
 };
 
 export interface DispatchOutcome {
@@ -52,7 +56,7 @@ export async function dispatchToolCall(
     return {
       result: toolError(
         "Forbidden",
-        `Unknown tool "${rawName}". Allowed: get_profile, search_jobs, read_posting, compare_to_profile, save_finding.`,
+        `Unknown tool "${rawName}". Allowed: get_profile, search_jobs, read_posting, compare_to_profile, save_finding, recall_memory, remember.`,
         false,
       ),
       parsedArgs: null,
