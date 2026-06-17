@@ -3,9 +3,22 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+import { MobileHeader } from "@/components/shell/mobile-header";
+import { MobileTabBar } from "@/components/shell/mobile-tab-bar";
+import { MoreSheet } from "@/components/shell/more-sheet";
 import { ShellCommandPalette } from "@/components/shell/shell-command-palette";
 import { Sidebar } from "@/components/shell/sidebar";
 import { Topbar, type SweepTone } from "@/components/shell/topbar";
+
+// Desktop chrome (sidebar + glass topbar) and mobile chrome (header + tab bar)
+// both render; CSS media queries show exactly one. CSS-toggling keeps it
+// flash-free across SSR/hydration — no JS viewport check for the layout spine.
+const SHELL_RESPONSIVE_CSS = `.hr-mobile-chrome{display:none}
+@media (max-width:768px){
+  .hr-sidebar-slot{display:none!important}
+  .hr-topbar-slot{display:none!important}
+  .hr-mobile-chrome{display:flex}
+}`;
 
 export type { SweepTone };
 
@@ -44,6 +57,7 @@ const isEditable = (target: EventTarget | null): boolean =>
 export function RadarShell({ sweep, lastSweep, months, children }: RadarShellProps) {
   const router = useRouter();
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const chordArmed = useRef(false);
   const chordTimer = useRef<number | null>(null);
 
@@ -93,21 +107,31 @@ export function RadarShell({ sweep, lastSweep, months, children }: RadarShellPro
         fontFamily: "var(--font-ui)",
       }}
     >
-      <Sidebar />
+      <span className="hr-sidebar-slot" style={{ display: "contents" }}>
+        <Sidebar />
+      </span>
       <div className="flex h-full min-w-0 flex-1 flex-col">
-        <Topbar
-          sweep={sweep}
-          lastSweep={lastSweep}
-          months={months}
-          onOpenPalette={() => setPaletteOpen(true)}
-        />
+        <span className="hr-topbar-slot" style={{ display: "contents" }}>
+          <Topbar
+            sweep={sweep}
+            lastSweep={lastSweep}
+            months={months}
+            onOpenPalette={() => setPaletteOpen(true)}
+          />
+        </span>
+        <MobileHeader onOpenMore={() => setMoreOpen(true)} />
         <main className="hr-void relative min-h-0 flex-1 overflow-hidden">{children}</main>
+        <MobileTabBar onOpenMore={() => setMoreOpen(true)} moreOpen={moreOpen} />
       </div>
       <ShellCommandPalette
         open={paletteOpen}
         onClose={() => setPaletteOpen(false)}
         months={months}
       />
+      <MoreSheet open={moreOpen} onClose={() => setMoreOpen(false)} />
+      <style href="hr-shell-responsive" precedence="medium">
+        {SHELL_RESPONSIVE_CSS}
+      </style>
     </div>
   );
 }

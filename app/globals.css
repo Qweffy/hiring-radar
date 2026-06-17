@@ -49,3 +49,19 @@
 @media (prefers-reduced-motion: reduce) {
   .hr-skeleton { animation: none; }
 }
+
+/* Horizontal scroller — hidden scrollbar + optional x-snap. Filter chips,
+   scorecards and stage tabs reuse it where a row overflows a phone viewport. */
+.hr-xscroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.hr-xscroll::-webkit-scrollbar { display: none; }
+
+/* Keyboard hints are meaningless on touch — hide every keycap on phones. */
+@media (max-width: 768px) {
+  .hr-kbd { display: none !important; }
+  /* Fixed bottom-anchored toasts must clear the 62px tab bar + home indicator. */
+  .hr-toast-anchor { bottom: calc(62px + env(safe-area-inset-bottom) + 12px) !important; }
+}

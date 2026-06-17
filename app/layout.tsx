@@ -1,4 +1,4 @@
-import  { type Metadata } from "next";
+import  { type Metadata, type Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
 import "./globals.css";
@@ -25,6 +25,15 @@ export const metadata: Metadata = {
   title: "hiring-radar",
   description:
     "Mission control for the job hunt — HN 'Who is hiring?' threads, parsed, searchable and scanned by an agent.",
+};
+
+// viewport-fit=cover exposes the env(safe-area-inset-*) values the mobile tab
+// bar and sheets pad against; the app is dark-only so themeColor matches the void.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#06080C",
 };
 
 export default function RootLayout({

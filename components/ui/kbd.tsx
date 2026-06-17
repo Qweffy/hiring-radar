@@ -10,7 +10,7 @@ export interface KbdProps extends React.HTMLAttributes<HTMLElement> {
 export function Kbd({ children, className, style, ...rest }: KbdProps) {
   return (
     <kbd
-      className={cn("inline-flex items-center justify-center", className)}
+      className={cn("hr-kbd inline-flex items-center justify-center", className)}
       style={{
         minWidth: 20,
         height: 20,

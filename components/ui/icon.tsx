@@ -12,6 +12,7 @@ import {
   Command,
   Copy,
   Database,
+  Ellipsis,
   EllipsisVertical,
   ExternalLink,
   Funnel,
@@ -59,6 +60,7 @@ export type IconName =
   | "chevron-right"
   | "chevron-left"
   | "command"
+  | "more"
   | "map-pin"
   | "clock"
   | "x-circle"
@@ -93,6 +95,7 @@ const LUCIDE_BY_NAME: Record<IconName, LucideIcon> = {
   "chevron-right": ChevronRight,
   "chevron-left": ChevronLeft,
   command: Command,
+  more: Ellipsis,
   "map-pin": MapPin,
   clock: Clock,
   "x-circle": CircleX,
