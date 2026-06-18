@@ -7,7 +7,8 @@ export type NavKey =
   | "agent"
   | "profile"
   | "pipeline"
-  | "settings";
+  | "settings"
+  | "diagnostics";
 
 export interface ShellNavItem {
   key: NavKey;
@@ -31,6 +32,7 @@ export const MAIN_NAV: ShellNavItem[] = [
 export const ADMIN_NAV: ShellNavItem[] = [
   { key: "pipeline", label: "Pipeline", href: "/pipeline", icon: "server", hint: "g p", enabled: true },
   { key: "settings", label: "Settings", href: "/settings", icon: "settings", hint: "g ,", enabled: true },
+  { key: "diagnostics", label: "Diagnostics", href: "/diagnostics", icon: "alert-triangle", hint: "g e", enabled: true },
 ];
 
 /** Derive the active nav item from the current pathname. */

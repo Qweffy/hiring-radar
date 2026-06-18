@@ -20,7 +20,7 @@ import { SESSION_COOKIE, verifyToken } from "@/lib/auth-token";
  * an unconfigured deploy locks the admin routes rather than exposing them.
  */
 
-const ADMIN_PREFIXES = ["/pipeline", "/settings"] as const;
+const ADMIN_PREFIXES = ["/pipeline", "/settings", "/diagnostics"] as const;
 
 function isAdminPath(pathname: string): boolean {
   return ADMIN_PREFIXES.some(
@@ -50,5 +50,12 @@ export const config = {
   // more, but the bare prefix needs its own entry (`/pipeline/:path*` does not
   // match `/pipeline`). Keeps the proxy off static assets, API routes, and the
   // public app entirely.
-  matcher: ["/pipeline", "/pipeline/:path*", "/settings", "/settings/:path*"],
+  matcher: [
+    "/pipeline",
+    "/pipeline/:path*",
+    "/settings",
+    "/settings/:path*",
+    "/diagnostics",
+    "/diagnostics/:path*",
+  ],
 };

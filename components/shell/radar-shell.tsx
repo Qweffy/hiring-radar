@@ -41,6 +41,7 @@ const CHORDS: Record<string, string> = {
   u: "/profile",
   p: "/pipeline",
   ",": "/settings",
+  e: "/diagnostics",
 };
 
 const isEditable = (target: EventTarget | null): boolean =>
