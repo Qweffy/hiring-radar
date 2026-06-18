@@ -545,13 +545,17 @@ function BlipTooltip({
   const anchored = placement === "anchored";
   const pos = anchored ? tooltipPosition(blip) : null;
   const hnUrl = `https://news.ycombinator.com/item?id=${blip.hnId}`;
+  // A pinned card IS the link: clicking anywhere on it opens HN (the close
+  // button stops propagation). No separate cyan hyperlink in the footer.
+  const openHn = () => window.open(hnUrl, "_blank", "noopener,noreferrer");
   return (
     <div
-      // Transient preview ignores the mouse; a pinned card is interactive
-      // (the close button + the HN link need clicks).
+      // Transient preview ignores the mouse; a pinned card is the clickable
+      // HN link (the close button needs to stop the open).
       className={
         anchored ? (pinned ? "absolute" : "pointer-events-none absolute") : "relative"
       }
+      onClick={pinned ? openHn : undefined}
       style={{
         ...(pos !== null
           ? { left: pos.left, top: pos.top, width: 250, zIndex: 40 }
@@ -563,6 +567,7 @@ function BlipTooltip({
         border: "1px solid var(--border-strong)",
         borderRadius: "var(--radius-card)",
         boxShadow: "var(--shadow-pop), var(--glow-phosphor-sm)",
+        cursor: pinned ? "pointer" : undefined,
       }}
     >
       <div className="flex items-start justify-between" style={{ gap: 14 }}>
@@ -590,10 +595,13 @@ function BlipTooltip({
           {pinned && (
             <button
               type="button"
-              onClick={onClose}
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
               aria-label="Close"
               className="flex cursor-pointer items-center justify-center border-0 bg-transparent p-0"
-              style={{ color: "var(--text-low-content)", width: 18, height: 18 }}
+              style={{ color: "var(--text-low-content)", width: 24, height: 24 }}
             >
               <Icon name="close" size={16} />
             </button>
@@ -622,26 +630,13 @@ function BlipTooltip({
         >
           {blip.category === "AI-ML" ? "AI · ML" : blip.category}
         </span>
-        {pinned ? (
-          <a
-            href={hnUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center"
-            style={{ gap: 4, font: "600 12px/1 var(--font-ui)", color: "var(--cyan)" }}
-          >
-            Open on HN
-            <Icon name="external-link" size={13} style={{ color: "var(--cyan)" }} />
-          </a>
-        ) : (
-          <span
-            className="flex items-center"
-            style={{ gap: 4, font: "600 12px/1 var(--font-ui)", color: "var(--text-low-content)" }}
-          >
-            Click to open
-            <Icon name="arrow-right" size={13} />
-          </span>
-        )}
+        <span
+          className="flex items-center"
+          style={{ gap: 4, font: "600 12px/1 var(--font-ui)", color: "var(--text-low-content)" }}
+        >
+          {pinned ? "Open on HN" : "Click to open"}
+          <Icon name={pinned ? "external-link" : "arrow-right"} size={13} />
+        </span>
       </div>
     </div>
   );
