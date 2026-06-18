@@ -533,3 +533,46 @@ export const agentMemoriesRelations = relations(agentMemories, ({ one }) => ({
     references: [agentRuns.id],
   }),
 }));
+
+/* ------------------------------------------------------------------ */
+/* Observability — durable error/degradation sink (Part D)             */
+/* ------------------------------------------------------------------ */
+
+export const errorLevel = pgEnum("error_level", ["warn", "error", "fatal"]);
+
+/** Where an event originated — kept as a typed union, stored as text. */
+export type ErrorSource =
+  | "request"
+  | "action"
+  | "boundary"
+  | "client"
+  | "search"
+  | "memory"
+  | "agent"
+  | "parse"
+  | "inngest";
+
+/** Arbitrary structured context, secrets/PII redacted before write. */
+export type ErrorContext = Record<string, unknown>;
+
+/**
+ * Durable error + degradation log. The structured logger (`lib/logger.ts`) and
+ * the `onRequestError` instrumentation hook write here best-effort so prod stops
+ * being a black box — queryable from the admin Diagnostics screen and directly
+ * in Neon. Never referenced by a hot path; a write failure is swallowed.
+ */
+export const errorEvents = pgTable(
+  "error_events",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    level: errorLevel("level").notNull(),
+    source: text("source").$type<ErrorSource>().notNull(),
+    message: text("message").notNull(),
+    stack: text("stack"),
+    context: jsonb("context").$type<ErrorContext>(),
+    path: text("path"),
+    digest: text("digest"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("error_events_created_at_idx").on(t.createdAt.desc())],
+);

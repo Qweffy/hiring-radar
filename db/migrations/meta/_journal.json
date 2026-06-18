@@ -43,6 +43,13 @@
       "when": 1781732810897,
       "tag": "0005_burly_nextwave",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781742641193,
+      "tag": "0006_parallel_shockwave",
+      "breakpoints": true
     }
   ]
 }
