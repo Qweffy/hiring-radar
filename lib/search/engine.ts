@@ -6,6 +6,7 @@ import { sql, type SQL } from "drizzle-orm";
 import { db } from "@/db";
 import  { type BrowseFilters } from "@/lib/browse-params";
 import { embed } from "@/lib/embeddings";
+import { logger } from "@/lib/logger";
 
 /**
  * Hybrid retrieval over postings: a lexical branch (tsvector FTS) and a vector
@@ -281,10 +282,9 @@ async function tryEmbed(query: string): Promise<number[] | null> {
   try {
     return await embed(query);
   } catch (e) {
-    console.warn(
-      "search: embeddings unavailable, falling back to full-text —",
-      e instanceof Error ? e.message : e,
-    );
+    void logger.warn("search", "embeddings unavailable — falling back to full-text", {
+      error: e,
+    });
     return null;
   }
 }

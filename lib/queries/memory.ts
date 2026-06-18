@@ -4,6 +4,7 @@ import { and, eq, inArray, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db";
 import { agentMemories, type memoryKind } from "@/db/schema";
 import { embed } from "@/lib/embeddings";
+import { logger } from "@/lib/logger";
 import {
   blendScore,
   CANDIDATE_POOL,
@@ -68,9 +69,10 @@ async function tryEmbed(text: string): Promise<number[] | null> {
   try {
     return await embed(text);
   } catch (e) {
-    console.warn(
-      "memory: embeddings unavailable, degrading to decay-only ranking —",
-      e instanceof Error ? e.message : e,
+    void logger.warn(
+      "memory",
+      "embeddings unavailable — degrading recall to decay-only ranking",
+      { error: e },
     );
     return null;
   }

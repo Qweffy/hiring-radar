@@ -22,6 +22,7 @@ import {
   parsePosting,
 } from "@/lib/ingest/parse";
 import { inngest, postingUpserted, sweepRequested } from "@/lib/inngest/client";
+import { logger as errorLog } from "@/lib/logger";
 
 // Groq free tier resets its window slowly; back off generously on a 429.
 const RATE_LIMIT_RETRY_MS = 60_000;
@@ -222,6 +223,9 @@ export const processPosting = inngest.createFunction(
         // Validation failed twice in extractPosting — retrying won't help.
         const message = error instanceof Error ? error.message : String(error);
         await markParseFailed(postingId, message);
+        errorLog.warn("parse", "posting parse failed", {
+          context: { postingId, hnId, error: message },
+        });
         throw new NonRetriableError(`parse failed for hn-${hnId}: ${message}`, {
           cause: error,
         });
@@ -261,9 +265,11 @@ export const failedFunction = inngest.createFunction(
     // registry, so event.data is `any`. Validate the two fields we log so this
     // boundary stays type-safe instead of leaking an `any` into the logger.
     const failure = functionFailedData.safeParse(event.data);
-    logger.error("inngest function failed", {
-      function: failure.success ? failure.data.function_id : "unknown",
-      runId: failure.success ? failure.data.run_id : "unknown",
+    const fnId = failure.success ? failure.data.function_id : "unknown";
+    const runId = failure.success ? failure.data.run_id : "unknown";
+    logger.error("inngest function failed", { function: fnId, runId });
+    errorLog.error("inngest", `function ${fnId} exhausted retries`, {
+      context: { function: fnId, runId },
     });
     return { acknowledged: true };
   },

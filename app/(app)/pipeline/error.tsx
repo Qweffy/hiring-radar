@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
 import { Icon } from "@/components/ui/icon";
+import { reportClientError } from "@/lib/report-client-error";
 
 interface PipelineErrorProps {
   error: Error & { digest?: string };
@@ -11,6 +14,10 @@ interface PipelineErrorProps {
 
 /** LOST SIGNAL — route error boundary for the pipeline segment. */
 export default function PipelineError({ error, unstable_retry }: PipelineErrorProps) {
+  useEffect(() => {
+    reportClientError(error);
+  }, [error]);
+
   return (
     <div
       className="absolute inset-0 flex flex-col items-center justify-center text-center"

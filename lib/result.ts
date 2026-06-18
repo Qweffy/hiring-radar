@@ -1,3 +1,5 @@
+import { logger } from "@/lib/logger";
+
 export type ActionResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: string };
@@ -28,7 +30,7 @@ export async function runAction<T>(
     return ok(await fn());
   } catch (e) {
     if (e instanceof ActionError) return err(e.message);
-    console.error(`[action] ${fallback}:`, e);
+    void logger.error("action", fallback, { error: e });
     return err(fallback);
   }
 }

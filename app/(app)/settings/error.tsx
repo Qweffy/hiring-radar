@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
+import { reportClientError } from "@/lib/report-client-error";
 
 interface SettingsErrorProps {
   error: Error & { digest?: string };
@@ -14,6 +17,10 @@ interface SettingsErrorProps {
  * server; recovery is Retry. Mirrors the profile error surface.
  */
 export default function SettingsError({ error, unstable_retry }: SettingsErrorProps) {
+  useEffect(() => {
+    reportClientError(error);
+  }, [error]);
+
   return (
     <div className="absolute inset-0 overflow-auto">
       <div style={{ padding: 28 }}>

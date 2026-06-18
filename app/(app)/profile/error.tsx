@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
+import { reportClientError } from "@/lib/report-client-error";
 
 interface ProfileErrorProps {
   error: Error & { digest?: string };
@@ -15,6 +18,10 @@ interface ProfileErrorProps {
  * Retry, never paste-CV. The saved profile is never blanked on a read error.
  */
 export default function ProfileError({ error, unstable_retry }: ProfileErrorProps) {
+  useEffect(() => {
+    reportClientError(error);
+  }, [error]);
+
   return (
     <div className="absolute inset-0 overflow-auto">
       <div style={{ padding: 28 }}>

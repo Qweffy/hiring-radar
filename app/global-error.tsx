@@ -4,6 +4,10 @@
 // own <html>/<body> and import global styles itself (Next 16 contract). Fonts
 // fall back to the token stacks' system fallbacks — next/font lives in the
 // (now unmounted) root layout.
+import { useEffect } from "react";
+
+import { reportClientError } from "@/lib/report-client-error";
+
 import "./globals.css";
 
 export default function GlobalError({
@@ -13,6 +17,10 @@ export default function GlobalError({
   error: Error & { digest?: string };
   unstable_retry: () => void;
 }) {
+  useEffect(() => {
+    reportClientError(error);
+  }, [error]);
+
   return (
     <html lang="en" style={{ colorScheme: "dark" }}>
       <body className="hr-void">

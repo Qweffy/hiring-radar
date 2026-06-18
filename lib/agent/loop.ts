@@ -13,6 +13,7 @@ import { agentModel, groqClient } from "@/lib/agent/groq-client";
 import { SYSTEM_PROMPT } from "@/lib/agent/prompt";
 import { TOOL_DEFINITIONS } from "@/lib/agent/tool-defs";
 import { buildToolContext, type ToolContext } from "@/lib/agent/tools";
+import { logger } from "@/lib/logger";
 import { PRIMING_N } from "@/lib/memory/decay";
 import { getRun, type AgentStepRow } from "@/lib/queries/agent-runs";
 import {
@@ -205,11 +206,8 @@ async function primeRunMemory(runId: number): Promise<string | null> {
     return block;
   } catch (e) {
     // Best-effort priming: a recall/embedding failure degrades to a cold start
-    // rather than failing the run. console.warn is allowed in product code.
-    console.warn(
-      "agent: run priming skipped —",
-      e instanceof Error ? e.message : e,
-    );
+    // rather than failing the run.
+    void logger.warn("agent", "run priming skipped", { error: e, context: { runId } });
     return null;
   }
 }
@@ -584,6 +582,7 @@ export async function runLoop(
           await persistProgress(state);
         }
       } catch (e) {
+        void logger.warn("agent", "consolidation skipped", { error: e, context: { runId } });
         await appendStep({
           runId,
           idx: state.nextIdx++,

@@ -1,9 +1,10 @@
 "use client";
 
-import  { type CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 
 import { Button } from "@/components/ui/button";
 import { HRIllustration } from "@/components/ui/hr-illustration";
+import { reportClientError } from "@/lib/report-client-error";
 
 
 interface ShortlistErrorProps {
@@ -21,7 +22,11 @@ const TAB: CSSProperties = {
  * stay rendered so a failed query never reads as an empty shortlist; the
  * centered panel reassures the user their picks are safe and offers Retry.
  */
-export default function ShortlistError({ unstable_retry }: ShortlistErrorProps) {
+export default function ShortlistError({ error, unstable_retry }: ShortlistErrorProps) {
+  useEffect(() => {
+    reportClientError(error);
+  }, [error]);
+
   return (
     <div className="absolute inset-0 overflow-auto">
       <div style={{ padding: "26px 28px" }}>
