@@ -321,10 +321,19 @@ export async function getDashboardData(): Promise<DashboardData> {
     const region = r.remotePolicy !== null ? REMOTE_LABEL[r.remotePolicy] : null;
     const score = r.matchScore;
     const isAssessed = score !== null;
+    // A null company means one of three distinct things — say which, so the
+    // radar reads "Unparsed"/"Parse failed" (a pipeline state) rather than a
+    // flat "Unknown" that looks like a bug.
+    const parseLabel =
+      r.parseStatus === "pending"
+        ? "Unparsed"
+        : r.parseStatus === "failed"
+          ? "Parse failed"
+          : null;
     return {
       hnId: r.hnId,
-      company: r.company ?? "Unknown",
-      role: r.role ?? "Untitled role",
+      company: r.company ?? parseLabel ?? "—",
+      role: r.role ?? parseLabel ?? "Untitled role",
       salaryLabel: salaryRange(r.salaryMin, r.salaryMax, r.salaryCurrency),
       salaryValue,
       category: classifyCategory(stackTags, r.role),
